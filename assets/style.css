@@ -198,11 +198,41 @@ img { max-width: 100%; display: block; }
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .nav-hamburger { display: flex; }
-
   .footer { flex-direction: column; align-items: flex-start; }
+
+  body { font-size: 16px; }
+  .section-label { font-size: 11px; }
+  .tag { font-size: 10px; padding: 4px 9px; }
+  .footer-copy, .footer-links a { font-size: 12px; }
 }
 
 @media (max-width: 480px) {
   .nav { padding: 18px 5vw; }
   .nav-tagline { display: none; }
+
+  body { font-size: 16px; }
+  .nav-logo svg { width: 180px !important; }
+
+  h1 { font-size: 26px !important; line-height: 1.25; }
+
+  p, .doc-para, .col-body, .principle-body,
+  .pillar-desc, .step-desc, .doc-desc { font-size: 15px !important; line-height: 1.85; }
+
+  .section-label, .doc-section-title,
+  .doc-category, .hero-tag { font-size: 11px !important; }
+
+  .sidebar-link, .meta-value,
+  .doc-date, .doc-read { font-size: 13px !important; }
+
+  .doc-title { font-size: 15px !important; }
+
+  .btn-primary, .btn-ghost {
+    font-size: 12px !important;
+    padding: 14px 24px;
+  }
+
+  .tag { font-size: 11px !important; padding: 4px 10px; }
+  .footer-copy, .footer-links a { font-size: 13px !important; }
+  .stat-num { font-size: 28px !important; }
+  .stat-label { font-size: 11px !important; }
 }
