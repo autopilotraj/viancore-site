@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="About VianCore — built on 18+ years of enterprise systems and security experience."/>
+  <title>About — VianCore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/style.css"/>
+  <style>
+    .about-hero {
+      padding: clamp(48px, 7vw, 80px) 6vw clamp(40px, 5vw, 60px);
+      border-bottom: 0.5px solid rgba(255,255,255,0.07);
+      max-width: 860px;
+    }
+    .about-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.22); margin-bottom: 16px; }
+    .about-title { font-size: clamp(24px, 3.5vw, 38px); font-weight: 300; letter-spacing: 0.04em; line-height: 1.25; color: #fff; margin-bottom: 20px; }
+    .about-title em { color: #20b2aa; font-style: normal; }
+    .about-intro { font-size: clamp(12px, 1.3vw, 14px); font-weight: 300; color: rgba(255,255,255,0.45); line-height: 1.9; max-width: 640px; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+    .col-block { padding: clamp(32px, 4vw, 52px) 6vw; border-right: 0.5px solid rgba(255,255,255,0.07); }
+    .col-block:last-child { border-right: none; }
+    .col-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.22); margin-bottom: 14px; }
+    .col-title { font-size: clamp(14px, 1.5vw, 17px); font-weight: 300; color: #fff; letter-spacing: 0.03em; margin-bottom: 14px; line-height: 1.4; }
+    .col-body { font-size: clamp(11px, 1.2vw, 13px); font-weight: 300; color: rgba(255,255,255,0.38); line-height: 1.9; }
+
+    .principles { padding: clamp(40px, 5vw, 60px) 6vw; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+    .principles-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 0.5px solid rgba(255,255,255,0.07); }
+    .principle { padding: clamp(24px, 3vw, 36px) clamp(20px, 2.5vw, 30px); border-right: 0.5px solid rgba(255,255,255,0.07); }
+    .principle:last-child { border-right: none; }
+    .principle-num { font-size: clamp(22px, 3vw, 30px); font-weight: 300; color: rgba(255,255,255,0.07); margin-bottom: 12px; }
+    .principle-title { font-size: clamp(9px, 1vw, 11px); font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #fff; margin-bottom: 10px; }
+    .principle-body { font-size: clamp(10px, 1.1vw, 12px); font-weight: 300; color: rgba(255,255,255,0.32); line-height: 1.85; }
+
+    .stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+    .stat { padding: clamp(28px, 3.5vw, 44px) clamp(16px, 2.5vw, 32px); border-right: 0.5px solid rgba(255,255,255,0.07); }
+    .stat:last-child { border-right: none; }
+    .stat-num { font-size: clamp(24px, 3vw, 34px); font-weight: 300; color: #fff; margin-bottom: 6px; }
+    .stat-num em { color: #20b2aa; font-style: normal; }
+    .stat-label { font-size: clamp(8px, 0.9vw, 9px); color: rgba(255,255,255,0.25); letter-spacing: 0.15em; text-transform: uppercase; }
+
+    .contact-strip {
+      padding: clamp(36px, 5vw, 56px) 6vw;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 0.5px solid rgba(255,255,255,0.07);
+      flex-wrap: wrap; gap: 24px;
+    }
+    .contact-title { font-size: clamp(16px, 2vw, 20px); font-weight: 300; color: #fff; letter-spacing: 0.03em; margin-bottom: 6px; }
+    .contact-sub { font-size: clamp(11px, 1.1vw, 12px); color: rgba(255,255,255,0.3); font-weight: 300; }
+
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; }
+      .col-block { border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+      .principles-grid { grid-template-columns: 1fr; }
+      .principle { border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+      .principle:last-child { border-bottom: none; }
+      .stats-strip { grid-template-columns: repeat(2, 1fr); }
+      .stat:nth-child(2) { border-right: none; }
+      .stat:nth-child(3) { border-top: 0.5px solid rgba(255,255,255,0.07); }
+      .stat:nth-child(4) { border-top: 0.5px solid rgba(255,255,255,0.07); border-right: none; }
+      .contact-strip { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <a href="../">
+          <svg viewBox="0 0 340 52" xmlns="http://www.w3.org/2000/svg" aria-label="VianCore home">
+            <circle cx="26" cy="26" r="20" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+            <circle cx="26" cy="26" r="12" fill="none" stroke="#aaaaaa" stroke-width="1.4"/>
+            <circle cx="26" cy="26" r="4" fill="#20b2aa"/>
+            <line x1="26" y1="2"  x2="26" y2="14" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="26" y1="38" x2="26" y2="50" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="2"  y1="26" x2="14" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="38" y1="26" x2="50" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+            <text x="58" y="38" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="300" letter-spacing="9" fill="white">VIAN<tspan fill="#20b2aa">C</tspan>ORE</text>
+          </svg>
+        </a>
+      </div>
+      <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="../knowledge/">Knowledge</a></li>
+      <li><a href="../knowledge/#security">Security</a></li>
+      <li><a href="../knowledge/#systems">Systems</a></li>
+      <li><a href="./" class="active">About</a></li>
+    </ul>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="../knowledge/">Knowledge</a>
+    <a href="../knowledge/#security">Security</a>
+    <a href="../knowledge/#systems">Systems</a>
+    <a href="./" class="active">About</a>
+  </div>
+
+  <div class="about-hero">
+    <div class="about-label">About VianCore</div>
+    <div class="about-title">Built by someone who has<br>lived inside <em>enterprise systems</em><br>for a long time.</div>
+    <p class="about-intro">VianCore exists because most enterprise knowledge lives in people's heads, buried in email threads, or locked inside organizations. This site is an attempt to fix that — one documented, refined, honest piece at a time.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="col-block">
+      <div class="col-label">The origin</div>
+      <div class="col-title">18 years of questions nobody had good answers to.</div>
+      <p class="col-body">Over nearly two decades working across enterprise systems and security, the same gaps kept appearing — not in technology, but in knowledge. Good documentation was rare. Honest accounts of what actually works were rarer. VianCore is the resource that didn't exist when it was needed most.</p>
+    </div>
+    <div class="col-block">
+      <div class="col-label">The approach</div>
+      <div class="col-title">No theory. No vendor marketing. No fluff.</div>
+      <p class="col-body">Everything published here comes from direct, hands-on experience. The frameworks, checklists, and guides are battle-tested — not assembled from other people's blog posts. If something didn't work in the real world, it doesn't appear here. That's the only filter that matters.</p>
+    </div>
+  </div>
+
+  <div class="principles">
+    <div class="section-label">What VianCore stands for</div>
+    <div class="principles-grid">
+      <div class="principle">
+        <div class="principle-num">01</div>
+        <div class="principle-title">Depth over breadth</div>
+        <div class="principle-body">One well-documented guide beats ten shallow overviews. Every piece published here earns its place.</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">02</div>
+        <div class="principle-title">Honest over polished</div>
+        <div class="principle-body">Real experience includes mistakes, edge cases, and things that don't work. Those are documented too.</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">03</div>
+        <div class="principle-title">Useful over impressive</div>
+        <div class="principle-body">A checklist you can use tomorrow is worth more than a whitepaper that looks good on a shelf.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stat"><div class="stat-num">18<em>+</em></div><div class="stat-label">Years in the field</div></div>
+    <div class="stat"><div class="stat-num">100<em>+</em></div><div class="stat-label">Documented guides</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Core focus areas</div></div>
+    <div class="stat"><div class="stat-num"><em>&#8734;</em></div><div class="stat-label">Continuously updated</div></div>
+  </div>
+
+  <div class="contact-strip">
+    <div>
+      <div class="contact-title">Have a question or want to connect?</div>
+      <div class="contact-sub">Reach out via email or LinkedIn. No newsletters, no spam.</div>
+    </div>
+    <a href="mailto:contact@viancore.com"><button class="btn-ghost">contact@viancore.com</button></a>
+  </div>
+
+  <footer class="footer">
+    <span class="footer-copy">&copy; 2026 VianCore. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#">RSS</a>
+      <a href="mailto:contact@viancore.com">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>

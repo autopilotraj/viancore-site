@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="VianCore — Where Enterprise Knowledge Gets Serious. Deep technical knowledge on enterprise systems, security architecture, and documentation."/>
+  <title>VianCore — Where Enterprise Knowledge Gets Serious</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <style>
+    /* ── HOME PAGE STYLES ── */
+    .hero {
+      min-height: clamp(380px, 55vh, 520px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: clamp(48px, 8vw, 96px) 6vw clamp(48px, 6vw, 72px);
+    }
+
+    .hero-tag {
+      font-size: clamp(9px, 1vw, 10px);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 4.5vw, 52px);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+      color: #fff;
+      margin-bottom: 18px;
+      max-width: 700px;
+    }
+
+    .hero-sub {
+      font-size: clamp(12px, 1.3vw, 14px);
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.03em;
+      max-width: 460px;
+      line-height: 1.85;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 0.5px solid rgba(255,255,255,0.07);
+      border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    }
+
+    .stat {
+      padding: clamp(24px, 3vw, 40px) clamp(16px, 2.5vw, 32px);
+      border-right: 0.5px solid rgba(255,255,255,0.07);
+    }
+    .stat:last-child { border-right: none; }
+
+    .stat-num {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: clamp(8px, 0.9vw, 10px);
+      color: rgba(255,255,255,0.28);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .pillars-section { padding: clamp(40px, 5vw, 68px) 6vw; }
+
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 0.5px solid rgba(255,255,255,0.07);
+    }
+
+    .pillar {
+      padding: clamp(24px, 3vw, 40px) clamp(20px, 2.5vw, 32px);
+      border-right: 0.5px solid rgba(255,255,255,0.07);
+    }
+    .pillar:last-child { border-right: none; }
+
+    .pillar-icon {
+      font-size: 20px;
+      color: rgba(255,255,255,0.28);
+      margin-bottom: 18px;
+    }
+
+    .pillar-title {
+      font-size: clamp(9px, 1vw, 11px);
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      color: #fff;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .pillar-desc {
+      font-size: clamp(11px, 1.1vw, 13px);
+      color: rgba(255,255,255,0.35);
+      line-height: 1.85;
+      font-weight: 300;
+    }
+
+    @media (max-width: 768px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .stat:nth-child(2) { border-right: none; }
+      .stat:nth-child(3) { border-top: 0.5px solid rgba(255,255,255,0.07); }
+      .stat:nth-child(4) { border-top: 0.5px solid rgba(255,255,255,0.07); border-right: none; }
+      .pillars { grid-template-columns: 1fr; }
+      .pillar { border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+      .pillar:last-child { border-bottom: none; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .hero-btns { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-ghost { width: 100%; max-width: 260px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <svg viewBox="0 0 340 52" xmlns="http://www.w3.org/2000/svg" aria-label="VianCore logo">
+          <circle cx="26" cy="26" r="20" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+          <circle cx="26" cy="26" r="12" fill="none" stroke="#aaaaaa" stroke-width="1.4"/>
+          <circle cx="26" cy="26" r="4" fill="#20b2aa"/>
+          <line x1="26" y1="2"  x2="26" y2="14" stroke="#ffffff" stroke-width="1.5"/>
+          <line x1="26" y1="38" x2="26" y2="50" stroke="#ffffff" stroke-width="1.5"/>
+          <line x1="2"  y1="26" x2="14" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+          <line x1="38" y1="26" x2="50" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+          <text x="58" y="38" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="300" letter-spacing="9" fill="white">VIAN<tspan fill="#20b2aa">C</tspan>ORE</text>
+        </svg>
+      </div>
+      <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="knowledge/">Knowledge</a></li>
+      <li><a href="knowledge/#security">Security</a></li>
+      <li><a href="knowledge/#systems">Systems</a></li>
+      <li><a href="about/">About</a></li>
+    </ul>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="knowledge/">Knowledge</a>
+    <a href="knowledge/#security">Security</a>
+    <a href="knowledge/#systems">Systems</a>
+    <a href="about/">About</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">Enterprise Systems &nbsp;·&nbsp; Security &nbsp;·&nbsp; Documentation</div>
+    <h1 class="hero-title">Where Enterprise Knowledge Gets Serious</h1>
+    <p class="hero-sub">Deep technical knowledge on enterprise systems, security architecture, and the hard lessons that only decades in the field can teach.</p>
+    <div class="hero-btns">
+      <a href="knowledge/"><button class="btn-primary">Explore Knowledge Base</button></a>
+      <a href="about/"><button class="btn-ghost">About VianCore</button></a>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-num">18+</div>
+      <div class="stat-label">Years in the field</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100+</div>
+      <div class="stat-label">Documented guides</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">Zero</div>
+      <div class="stat-label">Fluff, ever</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">Live</div>
+      <div class="stat-label">Continuously updated</div>
+    </div>
+  </div>
+
+  <!-- PILLARS -->
+  <section class="pillars-section">
+    <div class="section-label">What you'll find here</div>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon">&#9632;</div>
+        <div class="pillar-title">Security</div>
+        <div class="pillar-desc">Access control frameworks, audit preparation, role design patterns, and security hardening — from someone who has done it at scale.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">&#9632;</div>
+        <div class="pillar-title">Systems</div>
+        <div class="pillar-desc">Enterprise system administration, patching strategies, environment management, and the operational playbooks that actually work.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">&#9632;</div>
+        <div class="pillar-title">Documentation</div>
+        <div class="pillar-desc">Templates, runbooks, and reference guides refined over years of real-world deployments. Built to use, not just to read.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span class="footer-copy">&copy; 2026 VianCore. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#">RSS</a>
+      <a href="mailto:contact@viancore.com">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>

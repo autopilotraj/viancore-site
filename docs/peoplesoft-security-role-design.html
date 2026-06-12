@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="PeopleSoft Security Role Design — Principles and Pitfalls. VianCore Knowledge Base."/>
+  <title>PeopleSoft Security Role Design — VianCore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/style.css"/>
+  <style>
+    .breadcrumb {
+      padding: 14px 6vw;
+      border-bottom: 0.5px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .breadcrumb span { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+    .breadcrumb a { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); transition: color 0.2s; }
+    .breadcrumb a:hover { color: #20b2aa; }
+    .breadcrumb .sep { color: rgba(255,255,255,0.12); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: clamp(160px, 18vw, 220px) 1fr;
+      min-height: 70vh;
+    }
+
+    .sidebar {
+      border-right: 0.5px solid rgba(255,255,255,0.06);
+      padding: clamp(24px, 3vw, 36px) clamp(16px, 2vw, 28px);
+      display: flex; flex-direction: column; gap: 32px;
+      position: sticky; top: 77px; align-self: start; max-height: calc(100vh - 77px); overflow-y: auto;
+    }
+
+    .sidebar-section-label { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 12px; }
+
+    .sidebar-link {
+      font-size: clamp(9px, 1vw, 10px); letter-spacing: 0.04em; color: rgba(255,255,255,0.32);
+      padding: 6px 0; border-bottom: 0.5px solid rgba(255,255,255,0.04);
+      cursor: pointer; display: block; transition: color 0.2s; font-weight: 300;
+    }
+    .sidebar-link:hover { color: #20b2aa; }
+    .sidebar-link.active { color: #20b2aa; }
+
+    .sidebar-meta { display: flex; flex-direction: column; gap: 12px; }
+    .meta-row { display: flex; flex-direction: column; gap: 2px; }
+    .meta-label { font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.18); }
+    .meta-value { font-size: clamp(9px, 1vw, 10px); color: rgba(255,255,255,0.38); font-weight: 300; }
+
+    .sidebar-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .content {
+      padding: clamp(36px, 5vw, 56px) clamp(32px, 6vw, 72px) clamp(48px, 6vw, 72px);
+      max-width: 800px;
+    }
+
+    .doc-category { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #20b2aa; margin-bottom: 14px; }
+    .doc-title { font-size: clamp(20px, 2.8vw, 28px); font-weight: 300; letter-spacing: 0.03em; color: #fff; line-height: 1.3; margin-bottom: 12px; }
+    .doc-subtitle { font-size: clamp(12px, 1.3vw, 14px); color: rgba(255,255,255,0.38); line-height: 1.8; margin-bottom: 32px; font-weight: 300; }
+    .doc-divider { height: 0.5px; background: rgba(255,255,255,0.07); margin-bottom: 36px; }
+
+    .doc-body { display: flex; flex-direction: column; gap: 28px; }
+
+    .doc-section-title {
+      font-size: clamp(8px, 1vw, 10px); letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4); margin-bottom: 12px;
+    }
+
+    .doc-para {
+      font-size: clamp(12px, 1.3vw, 14px); color: rgba(255,255,255,0.52);
+      line-height: 1.9; font-weight: 300; letter-spacing: 0.02em;
+    }
+
+    .doc-callout {
+      border-left: 2px solid #20b2aa;
+      padding: 16px 20px;
+      background: rgba(32,178,170,0.04);
+    }
+    .doc-callout p { font-size: clamp(11px, 1.2vw, 13px); color: rgba(255,255,255,0.42); line-height: 1.85; font-weight: 300; }
+
+    .doc-list { display: flex; flex-direction: column; gap: 10px; }
+    .doc-list li {
+      font-size: clamp(11px, 1.2vw, 13px); color: rgba(255,255,255,0.42);
+      line-height: 1.75; padding-left: 18px; position: relative; font-weight: 300;
+    }
+    .doc-list li::before { content: "—"; position: absolute; left: 0; color: #20b2aa; font-size: 11px; }
+
+    .doc-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 56px; padding-top: 24px;
+      border-top: 0.5px solid rgba(255,255,255,0.07);
+      flex-wrap: wrap; gap: 12px;
+    }
+
+    .doc-nav-btn {
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 8px 14px; border: 0.5px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.35); cursor: pointer; background: transparent;
+      display: flex; flex-direction: column; gap: 3px; font-family: var(--font);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .doc-nav-btn:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); }
+    .doc-nav-btn .nav-dir { font-size: 8px; color: rgba(255,255,255,0.2); }
+    .doc-nav-btn .nav-title { font-size: 10px; color: rgba(255,255,255,0.42); }
+
+    .back-btn {
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.22); cursor: pointer; background: transparent; border: none;
+      font-family: var(--font); transition: color 0.2s;
+    }
+    .back-btn:hover { color: #20b2aa; }
+
+    /* Mobile sidebar becomes top bar */
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; max-height: none; border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.06); flex-direction: row; flex-wrap: wrap; gap: 16px; padding: 16px 6vw; }
+      .sidebar > div { min-width: 120px; }
+      .content { padding: 32px 6vw 48px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <a href="../">
+          <svg viewBox="0 0 340 52" xmlns="http://www.w3.org/2000/svg" aria-label="VianCore home">
+            <circle cx="26" cy="26" r="20" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+            <circle cx="26" cy="26" r="12" fill="none" stroke="#aaaaaa" stroke-width="1.4"/>
+            <circle cx="26" cy="26" r="4" fill="#20b2aa"/>
+            <line x1="26" y1="2"  x2="26" y2="14" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="26" y1="38" x2="26" y2="50" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="2"  y1="26" x2="14" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="38" y1="26" x2="50" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+            <text x="58" y="38" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="300" letter-spacing="9" fill="white">VIAN<tspan fill="#20b2aa">C</tspan>ORE</text>
+          </svg>
+        </a>
+      </div>
+      <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="../knowledge/" class="active">Knowledge</a></li>
+      <li><a href="../knowledge/#security">Security</a></li>
+      <li><a href="../knowledge/#systems">Systems</a></li>
+      <li><a href="../about/">About</a></li>
+    </ul>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="../knowledge/" class="active">Knowledge</a>
+    <a href="../knowledge/#security">Security</a>
+    <a href="../knowledge/#systems">Systems</a>
+    <a href="../about/">About</a>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="../knowledge/">Knowledge Base</a>
+    <span class="sep">›</span>
+    <a href="../knowledge/#security">Security</a>
+    <span class="sep">›</span>
+    <span>PeopleSoft Security Role Design</span>
+  </div>
+
+  <div class="layout">
+
+    <div class="sidebar">
+      <div>
+        <div class="sidebar-section-label">In this document</div>
+        <a class="sidebar-link active" href="#overview">Overview</a>
+        <a class="sidebar-link" href="#problem">The core problem</a>
+        <a class="sidebar-link" href="#principles">Design principles</a>
+        <a class="sidebar-link" href="#pitfalls">Common pitfalls</a>
+        <a class="sidebar-link" href="#audit">Audit readiness</a>
+        <a class="sidebar-link" href="#summary">Summary</a>
+      </div>
+
+      <div class="sidebar-meta">
+        <div class="sidebar-section-label">Document info</div>
+        <div class="meta-row"><span class="meta-label">Category</span><span class="meta-value">Security</span></div>
+        <div class="meta-row"><span class="meta-label">Published</span><span class="meta-value">Jun 2026</span></div>
+        <div class="meta-row"><span class="meta-label">Read time</span><span class="meta-value">8 min</span></div>
+        <div class="meta-row"><span class="meta-label">Version</span><span class="meta-value">1.2</span></div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-label">Tags</div>
+        <div class="sidebar-tags">
+          <span class="tag">Roles</span>
+          <span class="tag">Audit</span>
+          <span class="tag">Security</span>
+          <span class="tag">Design</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="doc-category">Security</div>
+      <h1 class="doc-title">PeopleSoft Security Role Design — Principles and Pitfalls</h1>
+      <p class="doc-subtitle">A framework for building maintainable, auditable role structures from the ground up — based on real-world deployments across multiple enterprise environments.</p>
+      <div class="doc-divider"></div>
+
+      <div class="doc-body">
+
+        <div id="overview">
+          <div class="doc-section-title">Overview</div>
+          <p class="doc-para">Security role design is one of the most consequential decisions made during a PeopleSoft implementation — and one of the least understood. Done well, it stays invisible. Done poorly, it becomes the root cause of audit findings, privilege creep, and support nightmares that follow a system for years.</p>
+        </div>
+
+        <div class="doc-callout">
+          <p>The most common mistake is designing roles around job titles rather than job functions. Titles change. Functions don't. Build your role model around what people actually do, not what they're called.</p>
+        </div>
+
+        <div id="problem">
+          <div class="doc-section-title">The core problem</div>
+          <p class="doc-para">Most role models fail not at design time, but over time. What starts as a clean structure degrades through accumulated exceptions — a user here who needs one extra permission, a team there that got access "just for the project." Without governance, entropy wins. The goal of good role design is to make that entropy as slow and visible as possible.</p>
+        </div>
+
+        <div id="principles">
+          <div class="doc-section-title">Design principles</div>
+          <ul class="doc-list">
+            <li>Separate permission lists by function, not by department or title</li>
+            <li>Never assign access at the role level that isn't needed by every member of that role</li>
+            <li>Build for least privilege from day one — retrofitting is significantly harder</li>
+            <li>Document the intent of every role at creation time, not after the fact</li>
+            <li>Establish a naming convention and enforce it without exceptions</li>
+            <li>Design for the auditor — if you can't explain a role in one sentence, redesign it</li>
+          </ul>
+        </div>
+
+        <div id="pitfalls">
+          <div class="doc-section-title">Common pitfalls</div>
+          <p class="doc-para">The most damaging pattern seen across implementations is the "super role" — a catch-all role assigned when access requests become too complex to route properly. Once it exists, it proliferates. Within months, a significant portion of the user base has access they never needed and cannot be audited effectively.</p>
+        </div>
+
+        <div id="audit">
+          <div class="doc-section-title">Audit readiness</div>
+          <p class="doc-para">Every role should be defensible in an audit without requiring the system admin to be present. That means clean naming, documented intent, and an access review cycle that runs at least annually. If you can't pull a report that clearly shows who has what and why, your role model has already failed the audit before it starts.</p>
+        </div>
+
+        <div id="summary">
+          <div class="doc-section-title">Summary</div>
+          <p class="doc-para">Good security role design is invisible — nobody notices it until it's gone wrong. Invest the time upfront, document everything, govern it continuously, and treat every exception as a signal that something in the model needs to change.</p>
+        </div>
+
+        <div class="doc-nav">
+          <button class="doc-nav-btn" onclick="location.href='../knowledge/'">
+            <span class="nav-dir">‹ Back to library</span>
+            <span class="nav-title">Knowledge Base</span>
+          </button>
+          <button class="back-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top of page</button>
+          <button class="doc-nav-btn" style="text-align:right" onclick="location.href='access-control-audit-prep.html'">
+            <span class="nav-dir">Next ›</span>
+            <span class="nav-title">Access Control Audit Prep</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span class="footer-copy">&copy; 2026 VianCore. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#">RSS</a>
+      <a href="mailto:contact@viancore.com">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+
+    // Highlight active sidebar link on scroll
+    const sections = document.querySelectorAll('.doc-body [id]');
+    const links    = document.querySelectorAll('.sidebar-link');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      links.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="VianCore Knowledge Base — Enterprise systems and security, documented and refined."/>
+  <title>Knowledge Base — VianCore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/style.css"/>
+  <style>
+    .page-header {
+      padding: clamp(36px, 5vw, 56px) 6vw clamp(24px, 3vw, 36px);
+      border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    }
+    .page-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.22); margin-bottom: 10px; }
+    .page-title { font-size: clamp(22px, 3vw, 30px); font-weight: 300; letter-spacing: 0.04em; color: #fff; margin-bottom: 6px; }
+    .page-sub { font-size: clamp(11px, 1.2vw, 13px); color: rgba(255,255,255,0.3); letter-spacing: 0.04em; font-weight: 300; }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 6vw;
+      border-bottom: 0.5px solid rgba(255,255,255,0.07);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .filter-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+    .tab {
+      font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+      padding: 5px 12px;
+      border: 0.5px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.35);
+      cursor: pointer;
+      background: transparent;
+      transition: all 0.2s;
+      font-family: var(--font);
+    }
+    .tab:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); }
+    .tab.active { border-color: #20b2aa; color: #20b2aa; background: rgba(32,178,170,0.05); }
+
+    .pagination { display: flex; align-items: center; gap: 2px; }
+    .pg-btn {
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 5px 10px;
+      border: 0.5px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.35);
+      cursor: pointer;
+      background: transparent;
+      font-family: var(--font);
+      transition: all 0.2s;
+    }
+    .pg-btn:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); }
+    .pg-btn:disabled { opacity: 0.2; cursor: default; }
+    .pg-divider { font-size: 9px; color: rgba(255,255,255,0.15); padding: 0 8px; letter-spacing: 0.1em; }
+
+    .library { padding: clamp(16px, 2vw, 28px) 6vw clamp(40px, 5vw, 56px); }
+
+    .doc-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 160px 90px;
+      align-items: center;
+      padding: 18px 0;
+      border-bottom: 0.5px solid rgba(255,255,255,0.05);
+      gap: 20px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .doc-row:first-child { border-top: 0.5px solid rgba(255,255,255,0.05); }
+    .doc-row:hover { background: rgba(255,255,255,0.015); }
+    .doc-row:hover .doc-title { color: #20b2aa; }
+
+    .doc-category { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+    .doc-title { font-size: clamp(12px, 1.3vw, 14px); font-weight: 300; color: #fff; margin-bottom: 4px; letter-spacing: 0.02em; transition: color 0.15s; }
+    .doc-desc { font-size: clamp(10px, 1.1vw, 12px); color: rgba(255,255,255,0.28); line-height: 1.6; font-weight: 300; }
+
+    .doc-tags { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
+    .doc-meta { text-align: right; }
+    .doc-date { font-size: 10px; color: rgba(255,255,255,0.22); letter-spacing: 0.06em; font-weight: 300; }
+    .doc-read { font-size: 9px; color: rgba(255,255,255,0.15); margin-top: 3px; letter-spacing: 0.06em; }
+
+    .doc-row.hidden { display: none; }
+
+    @media (max-width: 768px) {
+      .doc-row { grid-template-columns: 1fr; gap: 8px; }
+      .doc-tags { justify-content: flex-start; }
+      .doc-meta { text-align: left; }
+      .controls { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <a href="../">
+          <svg viewBox="0 0 340 52" xmlns="http://www.w3.org/2000/svg" aria-label="VianCore home">
+            <circle cx="26" cy="26" r="20" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+            <circle cx="26" cy="26" r="12" fill="none" stroke="#aaaaaa" stroke-width="1.4"/>
+            <circle cx="26" cy="26" r="4" fill="#20b2aa"/>
+            <line x1="26" y1="2"  x2="26" y2="14" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="26" y1="38" x2="26" y2="50" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="2"  y1="26" x2="14" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="38" y1="26" x2="50" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+            <text x="58" y="38" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="300" letter-spacing="9" fill="white">VIAN<tspan fill="#20b2aa">C</tspan>ORE</text>
+          </svg>
+        </a>
+      </div>
+      <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="./" class="active">Knowledge</a></li>
+      <li><a href="./#security">Security</a></li>
+      <li><a href="./#systems">Systems</a></li>
+      <li><a href="../about/">About</a></li>
+    </ul>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="./" class="active">Knowledge</a>
+    <a href="./#security">Security</a>
+    <a href="./#systems">Systems</a>
+    <a href="../about/">About</a>
+  </div>
+
+  <div class="page-header">
+    <div class="page-label">VianCore / Knowledge Base</div>
+    <div class="page-title">Knowledge Base</div>
+    <div class="page-sub">Enterprise systems and security — documented, refined, and ready to use.</div>
+  </div>
+
+  <div class="controls">
+    <div class="filter-tabs">
+      <button class="tab active" onclick="filterDocs('all', this)">All</button>
+      <button class="tab" onclick="filterDocs('security', this)">Security</button>
+      <button class="tab" onclick="filterDocs('systems', this)">Systems</button>
+      <button class="tab" onclick="filterDocs('documentation', this)">Documentation</button>
+    </div>
+    <div class="pagination">
+      <button class="pg-btn" id="btn-first" onclick="goPage(1)">&#171; First</button>
+      <button class="pg-btn" id="btn-prev"  onclick="goPage(currentPage - 1)">&#8249; Prev</button>
+      <span class="pg-divider" id="pg-info">1 / 2</span>
+      <button class="pg-btn" id="btn-next"  onclick="goPage(currentPage + 1)">Next &#8250;</button>
+      <button class="pg-btn" id="btn-last"  onclick="goPage(totalPages)">Last &#187;</button>
+    </div>
+  </div>
+
+  <div class="library" id="library">
+
+    <div class="doc-row" data-cat="security" data-page="1" onclick="location.href='../docs/peoplesoft-security-role-design.html'">
+      <div class="doc-category">Security</div>
+      <div class="doc-main">
+        <div class="doc-title">PeopleSoft Security Role Design — Principles and Pitfalls</div>
+        <div class="doc-desc">A framework for building maintainable, auditable role structures from the ground up.</div>
+      </div>
+      <div class="doc-tags"><span class="tag">Roles</span><span class="tag">Audit</span></div>
+      <div class="doc-meta"><div class="doc-date">Jun 2026</div><div class="doc-read">8 min read</div></div>
+    </div>
+
+    <div class="doc-row" data-cat="security" data-page="1" onclick="location.href='../docs/access-control-audit-prep.html'">
+      <div class="doc-category">Security</div>
+      <div class="doc-main">
+        <div class="doc-title">Access Control Audit Prep — A Practical Checklist</div>
+        <div class="doc-desc">What auditors actually look for, and how to be ready before they arrive.</div>
+      </div>
+      <div class="doc-tags"><span class="tag">Audit</span><span class="tag">Compliance</span></div>
+      <div class="doc-meta"><div class="doc-date">May 2026</div><div class="doc-read">6 min read</div></div>
+    </div>
+
+    <div class="doc-row" data-cat="security" data-page="1" onclick="location.href='../docs/password-policy-config.html'">
+      <div class="doc-category">Security</div>
+      <div class="doc-main">
+        <div class="doc-title">Password Policy Configuration — What the Docs Don't Tell You</div>
+        <div class="doc-desc">Edge cases, gotchas, and field-tested settings that actually hold up under pressure.</div>
+      </div>
+      <div class="doc-tags"><span class="tag">Password</span><span class="tag">Config</span></div>
+      <div class="doc-meta"><div class="doc-date">May 2026</div><div class="doc-read">5 min read</div></div>
+    </div>
+
+    <div class="doc-row" data-cat="security" data-page="1" onclick="location.href='../docs/enterprise-security-architecture.html'">
+      <div class="doc-category">Security</div>
+      <div class="doc-main">
+        <div class="doc-title">How I Think About Enterprise Security Architecture</div>
+        <div class="doc-desc">Mental models and frameworks built from 18 years of real-world system security work.</div>
+      </div>
+      <div class="doc-tags"><span class="tag">Architecture</span></div>
+      <div class="doc-meta"><div class="doc-date">Apr 2026</div><div class="doc-read">10 min read</div></div>
+    </div>
+
+    <div class="doc-row" data-cat="systems" data-page="1" onclick="location.href='../docs/erp-patching-strategy.html'">
+      <div class="doc-category">Systems</div>
+      <div class="doc-main">
+        <div class="doc-title">Patching Strategy for Enterprise ERP Systems</div>
+        <div class="doc-desc">A structured approach to planning, testing, and deploying patches without breaking production.</div>
+      </div>
+      <div class="doc-tags"><span class="tag">Patching</span><span class="tag">ERP</span></div>
+      <div class="doc-meta"><div class="doc-date">Apr 2026</div><div class="doc-read">7 min read</div></div>
+    </div>
+
+    <div class="doc-row" data-cat="systems" data-page="2" onclick="location.href='../docs/environment-management.html'">
+      <div class="doc-category">Systems</div>
+      <div class="doc-main">
+        <div class="doc-title">Environment Management — Dev, Test, and Prod Done Right</div>
+        <div class="doc-desc">How to keep your environments clean, consistent, and promotable without surprises.</div>
+      </div>
+      <div class="doc-tags"><span class="tag">Environments</span><span class="tag">Admin</span></div>
+      <div class="doc-meta"><div class="doc-date">Mar 2026</div><div class="doc-read">6 min read</div></div>
+    </div>
+
+    <div class="doc-row" data-cat="systems" data-page="2" onclick="location.href='../docs/runbook-template.html'">
+      <div class="doc-category">Systems</div>
+      <div class="doc-main">
+        <div class="doc-title">System Administration Runbook Template</div>
+        <div class="doc-desc">A ready-to-use blank runbook structure for enterprise system admins. Adapt and deploy.</div>
+      </div>
+      <div class="doc-tags"><span class="tag">Template</span><span class="tag">Runbook</span></div>
+      <div class="doc-meta"><div class="doc-date">Mar 2026</div><div class="doc-read">4 min read</div></div>
+    </div>
+
+    <div class="doc-row" data-cat="documentation" data-page="2" onclick="location.href='../docs/technical-documentation.html'">
+      <div class="doc-category">Documentation</div>
+      <div class="doc-main">
+        <div class="doc-title">Writing Technical Documentation That People Actually Read</div>
+        <div class="doc-desc">Lessons from years of writing docs for teams who had no time and no patience.</div>
+      </div>
+      <div class="doc-tags"><span class="tag">Writing</span><span class="tag">Process</span></div>
+      <div class="doc-meta"><div class="doc-date">Feb 2026</div><div class="doc-read">5 min read</div></div>
+    </div>
+
+    <div class="doc-row" data-cat="documentation" data-page="2" onclick="location.href='../docs/incident-response-template.html'">
+      <div class="doc-category">Documentation</div>
+      <div class="doc-main">
+        <div class="doc-title">Security Incident Response — Template and Walkthrough</div>
+        <div class="doc-desc">A generic, reusable incident response template built for enterprise environments.</div>
+      </div>
+      <div class="doc-tags"><span class="tag">Incident</span><span class="tag">Template</span></div>
+      <div class="doc-meta"><div class="doc-date">Feb 2026</div><div class="doc-read">6 min read</div></div>
+    </div>
+
+    <div class="doc-row" data-cat="systems" data-page="2" onclick="location.href='../docs/change-management-checklist.html'">
+      <div class="doc-category">Systems</div>
+      <div class="doc-main">
+        <div class="doc-title">Change Management Checklist for ERP Administrators</div>
+        <div class="doc-desc">Every step you need before, during, and after a system change — nothing left to memory.</div>
+      </div>
+      <div class="doc-tags"><span class="tag">Change Mgmt</span><span class="tag">Checklist</span></div>
+      <div class="doc-meta"><div class="doc-date">Jan 2026</div><div class="doc-read">5 min read</div></div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <span class="footer-copy">&copy; 2026 VianCore. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#">RSS</a>
+      <a href="mailto:contact@viancore.com">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+
+    const ITEMS_PER_PAGE = 5;
+    let currentPage = 1;
+    let currentFilter = 'all';
+    let totalPages = 2;
+
+    function getVisibleRows() {
+      return Array.from(document.querySelectorAll('.doc-row')).filter(row => {
+        return currentFilter === 'all' || row.dataset.cat === currentFilter;
+      });
+    }
+
+    function updateDisplay() {
+      const rows = getVisibleRows();
+      totalPages = Math.max(1, Math.ceil(rows.length / ITEMS_PER_PAGE));
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      // Hide all first
+      document.querySelectorAll('.doc-row').forEach(r => r.style.display = 'none');
+
+      // Show only current page of filtered rows
+      const start = (currentPage - 1) * ITEMS_PER_PAGE;
+      const end   = start + ITEMS_PER_PAGE;
+      rows.slice(start, end).forEach(r => r.style.display = 'grid');
+
+      // Update pagination info
+      document.getElementById('pg-info').textContent = currentPage + ' / ' + totalPages;
+      document.getElementById('btn-first').disabled = currentPage === 1;
+      document.getElementById('btn-prev').disabled  = currentPage === 1;
+      document.getElementById('btn-next').disabled  = currentPage === totalPages;
+      document.getElementById('btn-last').disabled  = currentPage === totalPages;
+    }
+
+    function filterDocs(cat, btn) {
+      currentFilter = cat;
+      currentPage = 1;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      updateDisplay();
+    }
+
+    function goPage(page) {
+      const rows = getVisibleRows();
+      const pages = Math.max(1, Math.ceil(rows.length / ITEMS_PER_PAGE));
+      currentPage = Math.max(1, Math.min(page, pages));
+      updateDisplay();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    updateDisplay();
+  </script>
+
+</body>
+</html>
