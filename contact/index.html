@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Contact VianCore — reach out with questions, feedback, or to connect."/>
+  <title>Contact — VianCore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/style.css"/>
+  <style>
+    .page-header {
+      padding: clamp(48px, 7vw, 80px) 6vw clamp(36px, 4vw, 52px);
+      border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    }
+    .page-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.22); margin-bottom: 12px; }
+    .page-title { font-size: clamp(24px, 3vw, 32px); font-weight: 300; letter-spacing: 0.04em; color: #fff; margin-bottom: 8px; }
+    .page-sub { font-size: clamp(12px, 1.2vw, 13px); color: rgba(255,255,255,0.3); font-weight: 300; letter-spacing: 0.03em; }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      min-height: 60vh;
+    }
+
+    /* LEFT SIDEBAR INFO */
+    .contact-info {
+      padding: clamp(36px, 5vw, 56px) clamp(24px, 4vw, 48px);
+      border-right: 0.5px solid rgba(255,255,255,0.07);
+      display: flex; flex-direction: column; gap: 40px;
+    }
+
+    .info-block {}
+    .info-label { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 12px; }
+    .info-value { font-size: clamp(11px, 1.2vw, 13px); color: rgba(255,255,255,0.45); font-weight: 300; line-height: 1.8; }
+    .info-value a { color: #20b2aa; text-decoration: none; }
+    .info-value a:hover { text-decoration: underline; }
+
+    .response-note {
+      border-left: 2px solid #20b2aa;
+      padding: 12px 16px;
+      background: rgba(32,178,170,0.03);
+    }
+    .response-note p { font-size: clamp(10px, 1.1vw, 12px); color: rgba(255,255,255,0.3); line-height: 1.8; font-weight: 300; }
+
+    /* RIGHT FORM */
+    .contact-form-wrap {
+      padding: clamp(36px, 5vw, 56px) clamp(32px, 6vw, 72px);
+      max-width: 640px;
+    }
+
+    .form-grid { display: flex; flex-direction: column; gap: 20px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .field { display: flex; flex-direction: column; gap: 8px; }
+
+    .field label {
+      font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); font-weight: 400;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      background: rgba(255,255,255,0.03);
+      border: 0.5px solid rgba(255,255,255,0.12);
+      color: #fff;
+      font-family: var(--font);
+      font-size: clamp(12px, 1.2vw, 13px);
+      font-weight: 300;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      border-radius: 0;
+      -webkit-appearance: none;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: #20b2aa;
+      background: rgba(32,178,170,0.03);
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder { color: rgba(255,255,255,0.18); }
+
+    .field select option { background: #111; color: #fff; }
+
+    .field textarea { resize: vertical; min-height: 140px; line-height: 1.7; }
+
+    .form-submit {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+      padding-top: 8px;
+    }
+
+    .submit-note { font-size: 10px; color: rgba(255,255,255,0.2); font-weight: 300; letter-spacing: 0.04em; }
+
+    .btn-submit {
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 13px 36px;
+      background: #fff; color: #000;
+      border: none; cursor: pointer;
+      font-family: var(--font); font-weight: 500;
+      transition: opacity 0.2s;
+      min-width: 160px;
+    }
+    .btn-submit:hover { opacity: 0.88; }
+    .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* SUCCESS / ERROR states */
+    .form-message {
+      display: none;
+      padding: 16px 20px;
+      font-size: 13px; font-weight: 300;
+      letter-spacing: 0.02em; line-height: 1.7;
+    }
+    .form-message.success {
+      display: block;
+      border-left: 2px solid #20b2aa;
+      color: rgba(255,255,255,0.6);
+      background: rgba(32,178,170,0.04);
+    }
+    .form-message.error {
+      display: block;
+      border-left: 2px solid rgba(255,80,80,0.6);
+      color: rgba(255,150,150,0.7);
+      background: rgba(255,80,80,0.04);
+    }
+
+    @media (max-width: 768px) {
+      .contact-layout { grid-template-columns: 1fr; }
+      .contact-info { border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+      .form-row { grid-template-columns: 1fr; }
+      .contact-form-wrap { padding: 32px 6vw; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <a href="../">
+          <svg viewBox="0 0 340 52" xmlns="http://www.w3.org/2000/svg" aria-label="VianCore home">
+            <circle cx="26" cy="26" r="20" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+            <circle cx="26" cy="26" r="12" fill="none" stroke="#aaaaaa" stroke-width="1.4"/>
+            <circle cx="26" cy="26" r="4" fill="#20b2aa"/>
+            <line x1="26" y1="2"  x2="26" y2="14" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="26" y1="38" x2="26" y2="50" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="2"  y1="26" x2="14" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+            <line x1="38" y1="26" x2="50" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+            <text x="58" y="38" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="300" letter-spacing="9" fill="white">VIAN<tspan fill="#20b2aa">C</tspan>ORE</text>
+          </svg>
+        </a>
+      </div>
+      <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="../knowledge/">Knowledge</a></li>
+      <li><a href="../knowledge/#security">Security</a></li>
+      <li><a href="../knowledge/#systems">Systems</a></li>
+      <li><a href="../about/">About</a></li>
+    </ul>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="../knowledge/">Knowledge</a>
+    <a href="../knowledge/#security">Security</a>
+    <a href="../knowledge/#systems">Systems</a>
+    <a href="../about/">About</a>
+  </div>
+
+  <div class="page-header">
+    <div class="page-label">VianCore / Contact</div>
+    <div class="page-title">Get in Touch</div>
+    <div class="page-sub">Questions, feedback, or just want to connect — use the form below.</div>
+  </div>
+
+  <div class="contact-layout">
+
+    <!-- LEFT INFO -->
+    <div class="contact-info">
+      <div class="info-block">
+        <div class="info-label">Email</div>
+        <div class="info-value">
+          <a href="mailto:contact@viancore.com">contact@viancore.com</a>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-label">What to expect</div>
+        <div class="info-value">
+          Questions about anything published here, corrections, suggestions for future topics, or general enterprise systems discussion — all welcome.
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-label">What not to expect</div>
+        <div class="info-value">
+          Consulting engagements, vendor pitches, or recruitment solicitation. Those messages are not replied to.
+        </div>
+      </div>
+
+      <div class="response-note">
+        <p>This is a one-person knowledge hub. Responses may take a few days — but every genuine message gets read.</p>
+      </div>
+    </div>
+
+    <!-- RIGHT FORM -->
+    <div class="contact-form-wrap">
+
+      <div id="formMessage" class="form-message"></div>
+
+      <form id="contactForm" class="form-grid">
+
+        <!-- Web3Forms access key — replace YOUR_ACCESS_KEY with your key from web3forms.com -->
+        <input type="hidden" name="access_key" value="94ee4b69-fe3c-4bcd-a3bf-9c00c3cac88d"/>
+        <input type="hidden" name="subject" value="New message from VianCore contact form"/>
+        <input type="hidden" name="from_name" value="VianCore Contact Form"/>
+        <input type="checkbox" name="botcheck" style="display:none"/>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required/>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required/>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="topic">Topic</label>
+          <select id="topic" name="topic" required>
+            <option value="" disabled selected>Select a topic</option>
+            <option value="Question about a document">Question about a document</option>
+            <option value="Correction or feedback">Correction or feedback</option>
+            <option value="Suggest a topic">Suggest a topic</option>
+            <option value="General enterprise systems discussion">General discussion</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Your message..." required></textarea>
+        </div>
+
+        <div class="form-submit">
+          <span class="submit-note">No newsletters. No follow-up marketing. Ever.</span>
+          <button type="submit" class="btn-submit" id="submitBtn">Send Message</button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <span class="footer-copy">&copy; 2026 VianCore. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#">RSS</a>
+      <a href="mailto:contact@viancore.com">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const btn = document.getElementById('submitBtn');
+      const msg = document.getElementById('formMessage');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      msg.className = 'form-message';
+      msg.style.display = 'none';
+
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData);
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          msg.className = 'form-message success';
+          msg.textContent = 'Message received. Thank you for reaching out — every genuine message gets read.';
+          this.reset();
+        } else {
+          throw new Error(result.message || 'Submission failed');
+        }
+      } catch (err) {
+        msg.className = 'form-message error';
+        msg.textContent = 'Something went wrong. Please email contact@viancore.com directly.';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      }
+    });
+  </script>
+
+</body>
+</html>
