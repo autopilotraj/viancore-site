@@ -65,10 +65,10 @@ img { max-width: 100%; display: block; }
 }
 
 .nav-links a {
-  font-size: clamp(9px, 1vw, 11px);
+  font-size: clamp(11px, 1.1vw, 13px);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.85);
   transition: color 0.2s;
 }
 
@@ -128,7 +128,7 @@ img { max-width: 100%; display: block; }
 
 .footer-copy {
   font-size: clamp(9px, 1vw, 10px);
-  color: rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.4);
   letter-spacing: 0.08em;
   font-weight: var(--fw-light);
 }
@@ -136,7 +136,7 @@ img { max-width: 100%; display: block; }
 .footer-links { display: flex; gap: 24px; }
 .footer-links a {
   font-size: clamp(9px, 1vw, 10px);
-  color: rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.45);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   transition: color 0.2s;
@@ -151,7 +151,7 @@ img { max-width: 100%; display: block; }
   font-size: clamp(8px, 0.9vw, 10px);
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.45);
   margin-bottom: 32px;
 }
 
@@ -185,7 +185,7 @@ img { max-width: 100%; display: block; }
   padding: 12px 32px;
   background: transparent;
   color: var(--white);
-  border: 0.5px solid rgba(255,255,255,0.3);
+  border: 0.5px solid rgba(255,255,255,0.55);
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
 }
