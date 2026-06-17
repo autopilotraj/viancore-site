@@ -51,7 +51,31 @@
     .contact-title { font-size: clamp(16px, 2vw, 20px); font-weight: 300; color: #fff; letter-spacing: 0.03em; margin-bottom: 6px; }
     .contact-sub { font-size: clamp(11px, 1.1vw, 12px); color: rgba(255,255,255,0.3); font-weight: 300; }
 
+  .not-section {
+    padding: clamp(40px, 5vw, 60px) 6vw;
+    border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    background: #000;
+  }
+  .not-inner { max-width: 900px; }
+  .not-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.22); margin-bottom: 12px; }
+  .not-title { font-size: clamp(22px, 3vw, 32px); font-weight: 300; color: #fff; letter-spacing: 0.04em; margin-bottom: 36px; }
+  .not-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 0.5px solid rgba(255,255,255,0.07); margin-bottom: 32px; }
+  .not-item { padding: clamp(24px, 3vw, 32px) clamp(20px, 2.5vw, 28px); border-right: 0.5px solid rgba(255,255,255,0.07); }
+  .not-item:last-child { border-right: none; }
+  .not-item-head { font-size: clamp(11px, 1.2vw, 13px); font-weight: 500; color: #20b2aa; letter-spacing: 0.04em; margin-bottom: 10px; }
+  .not-item-body { font-size: clamp(11px, 1.2vw, 13px); font-weight: 300; color: rgba(255,255,255,0.35); line-height: 1.85; }
+  .currently-line {
+    font-size: clamp(11px, 1.2vw, 13px); font-weight: 300;
+    color: rgba(255,255,255,0.28); letter-spacing: 0.06em;
+    border-left: 2px solid #20b2aa;
+    padding: 10px 16px;
+    background: rgba(32,178,170,0.03);
+  }
+
     @media (max-width: 768px) {
+      .not-grid { grid-template-columns: 1fr; }
+      .not-item { border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+      .not-item:last-child { border-bottom: none; }
       .two-col { grid-template-columns: 1fr; }
       .col-block { border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
       .principles-grid { grid-template-columns: 1fr; }
@@ -118,6 +142,28 @@
       <div class="col-label">The approach</div>
       <div class="col-title">No theory. No vendor marketing. No fluff.</div>
       <p class="col-body">Everything published here comes from direct, hands-on experience. The frameworks, checklists, and guides are battle-tested — not assembled from other people's blog posts. If something didn't work in the real world, it doesn't appear here. That's the only filter that matters.</p>
+    </div>
+  </div>
+
+  <div class="not-section">
+    <div class="not-inner">
+      <div class="not-label">For the record</div>
+      <div class="not-title">What this is not.</div>
+      <div class="not-grid">
+        <div class="not-item">
+          <div class="not-item-head">Not a consulting pitch.</div>
+          <div class="not-item-body">There is nothing here to sell. No services page, no pricing, no call to action disguised as content.</div>
+        </div>
+        <div class="not-item">
+          <div class="not-item-head">Not a resume.</div>
+          <div class="not-item-body">No name, no LinkedIn badge, no employment history. The knowledge speaks for itself or it doesn't.</div>
+        </div>
+        <div class="not-item">
+          <div class="not-item-head">Not a vendor blog.</div>
+          <div class="not-item-body">No sponsored content, no affiliate links, no product placements. What works gets documented. What doesn't, gets said.</div>
+        </div>
+      </div>
+      <div class="currently-line">Currently — Active in enterprise systems administration. Writing here in parallel.</div>
     </div>
   </div>
 
