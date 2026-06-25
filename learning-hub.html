@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Learning Hub | VianCore</title>
+<meta name="description" content="Free study resources, quizzes, guides, and tools for lifelong learners — curated by VianCore." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  * { -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --black:        #000000;
+    --surface:      #0a0a0a;
+    --card:         #0f0f0f;
+    --card-hover:   #141414;
+    --border:       #1e1e1e;
+    --border-hover: #2a2a2a;
+    --accent:       #20b2aa;
+    --accent-dim:   rgba(32,178,170,0.10);
+    --accent-glow:  rgba(32,178,170,0.20);
+    --text:         rgba(255,255,255,0.88);
+    --text-muted:   rgba(255,255,255,0.50);
+    --text-faint:   rgba(255,255,255,0.28);
+    --tag-quiz:     rgba(32,178,170,0.12);
+    --tag-guide:    rgba(99,102,241,0.14);
+    --tag-article:  rgba(245,158,11,0.12);
+    --tag-tool:     rgba(34,197,94,0.12);
+    --tag-quiz-c:   #20b2aa;
+    --tag-guide-c:  #818cf8;
+    --tag-article-c:#f59e0b;
+    --tag-tool-c:   #22c55e;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 58px;
+  }
+  .logo {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover,
+  .nav-links a.active { color: var(--accent); }
+
+  @media (max-width: 620px) {
+    .nav-links { gap: 16px; }
+    .nav-links .hide-mobile { display: none; }
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    border-bottom: 1px solid var(--border);
+    padding: 52px 24px 44px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--accent);
+  }
+  h1 {
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .page-desc {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 540px;
+    line-height: 1.7;
+  }
+
+  /* ── Filter bar ── */
+  .filter-bar {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 24px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-right: 4px;
+  }
+  .filter-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    padding: 6px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.12s;
+    -webkit-appearance: none;
+    min-height: 34px;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+  /* ── Grid ── */
+  .hub-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 24px 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  /* ── Cards ── */
+  .hub-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .hub-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .hub-card:hover {
+    border-color: var(--border-hover);
+    background: var(--card-hover);
+    transform: translateY(-2px);
+  }
+  .hub-card:hover::before { opacity: 1; }
+
+  .hub-card:not([href]):not([data-href]) { cursor: default; }
+  .hub-card:not([href]):not([data-href]):hover { transform: none; }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .card-tag {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 2px;
+  }
+  .card-tag.quiz    { background: var(--tag-quiz);    color: var(--tag-quiz-c); }
+  .card-tag.guide   { background: var(--tag-guide);   color: var(--tag-guide-c); }
+  .card-tag.article { background: var(--tag-article); color: var(--tag-article-c); }
+  .card-tag.tool    { background: var(--tag-tool);    color: var(--tag-tool-c); }
+
+  .card-meta-right {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-faint);
+    letter-spacing: 0.04em;
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(32,178,170,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+  }
+  .card-icon.guide-icon   { background: rgba(99,102,241,0.1);  border-color: rgba(99,102,241,0.2); }
+  .card-icon.article-icon { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2); }
+  .card-icon.tool-icon    { background: rgba(34,197,94,0.08);  border-color: rgba(34,197,94,0.2); }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    flex: 1;
+    margin-bottom: 20px;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .card-stats {
+    display: flex;
+    gap: 14px;
+  }
+  .card-stat {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-faint);
+    letter-spacing: 0.04em;
+  }
+  .card-stat span { color: var(--text-muted); }
+  .card-action {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card-action svg { transition: transform 0.15s; }
+  .hub-card:hover .card-action svg { transform: translateX(3px); }
+
+  /* Coming soon card */
+  .hub-card.coming-soon {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+  .coming-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  /* ── Empty state (when filter returns nothing) ── */
+  .empty-state {
+    display: none;
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-faint);
+    font-size: 14px;
+  }
+
+  /* ── Footer strip ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-faint);
+    letter-spacing: 0.04em;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav>
+  <a class="logo" href="index.html">Vian<span>C</span>ore</a>
+  <ul class="nav-links">
+    <li class="hide-mobile"><a href="index.html">Home</a></li>
+    <li class="hide-mobile"><a href="knowledge-base.html">Knowledge Base</a></li>
+    <li><a href="learning-hub.html" class="active">Learning Hub</a></li>
+    <li class="hide-mobile"><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── Page Header ── -->
+<div class="page-header">
+  <div class="eyebrow">Learning Hub</div>
+  <h1>Free Resources for<br>Serious Learners</h1>
+  <p class="page-desc">Curated quizzes, guides, articles, and tools — open to everyone. No login, no paywall, no catch.</p>
+</div>
+
+<!-- ── Filter Bar ── -->
+<div class="filter-bar">
+  <span class="filter-label">Filter:</span>
+  <button class="filter-btn active" data-filter="all" onclick="filterCards('all', this)">All</button>
+  <button class="filter-btn" data-filter="quiz" onclick="filterCards('quiz', this)">Quizzes</button>
+  <button class="filter-btn" data-filter="guide" onclick="filterCards('guide', this)">Guides</button>
+  <button class="filter-btn" data-filter="article" onclick="filterCards('article', this)">Articles</button>
+  <button class="filter-btn" data-filter="tool" onclick="filterCards('tool', this)">Tools</button>
+</div>
+
+<!-- ── Card Grid ── -->
+<div class="hub-grid" id="hub-grid">
+
+  <!-- ════════════════════════════════════
+       CARD 1 — Civics Quiz (LIVE)
+       To add more cards, copy the block
+       below and change the fields.
+  ════════════════════════════════════ -->
+  <a class="hub-card" href="civics-quiz.html" data-type="quiz">
+    <div class="card-top">
+      <span class="card-tag quiz">Quiz</span>
+      <span class="card-meta-right">Updated Jun 2026</span>
+    </div>
+    <div class="card-icon">🗽</div>
+    <div class="card-title">U.S. Citizenship Civics Practice Quiz</div>
+    <div class="card-desc">20 randomly selected questions from the official USCIS 2025 bank of 128. Score tracked, correct answers revealed. Matches the format for N-400 applications filed on or after Oct 20, 2025.</div>
+    <div class="card-footer">
+      <div class="card-stats">
+        <div class="card-stat">Questions <span>128</span></div>
+        <div class="card-stat">Per round <span>20</span></div>
+      </div>
+      <div class="card-action">
+        Open
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 6h8M6 2l4 4-4 4" stroke="#20b2aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </a>
+
+  <!-- ════════════════════════════════════
+       PLACEHOLDER — Study Guide
+       Replace href="#", title, desc, stats
+  ════════════════════════════════════ -->
+  <div class="hub-card coming-soon" data-type="guide">
+    <div class="card-top">
+      <span class="card-tag guide">Guide</span>
+      <span class="coming-badge">Coming Soon</span>
+    </div>
+    <div class="card-icon guide-icon">📘</div>
+    <div class="card-title">Your Next Study Guide</div>
+    <div class="card-desc">Add a description here. Keep it to 2–3 sentences — what is it, who is it for, and what will they walk away knowing.</div>
+    <div class="card-footer">
+      <div class="card-stats">
+        <div class="card-stat">Pages <span>—</span></div>
+      </div>
+      <div class="card-action">Coming Soon</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       PLACEHOLDER — Article
+  ════════════════════════════════════ -->
+  <div class="hub-card coming-soon" data-type="article">
+    <div class="card-top">
+      <span class="card-tag article">Article</span>
+      <span class="coming-badge">Coming Soon</span>
+    </div>
+    <div class="card-icon article-icon">📝</div>
+    <div class="card-title">Your Next Article</div>
+    <div class="card-desc">Field notes, commentary, or explainers. Great for sharing expertise without it reading as a formal knowledge-base entry.</div>
+    <div class="card-footer">
+      <div class="card-stats">
+        <div class="card-stat">Read time <span>—</span></div>
+      </div>
+      <div class="card-action">Coming Soon</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       PLACEHOLDER — Tool
+  ════════════════════════════════════ -->
+  <div class="hub-card coming-soon" data-type="tool">
+    <div class="card-top">
+      <span class="card-tag tool">Tool</span>
+      <span class="coming-badge">Coming Soon</span>
+    </div>
+    <div class="card-icon tool-icon">🛠️</div>
+    <div class="card-title">Your Next Tool</div>
+    <div class="card-desc">Calculators, checklists, templates, or interactive utilities. Practical resources the community can use directly.</div>
+    <div class="card-footer">
+      <div class="card-stats">
+        <div class="card-stat">Type <span>—</span></div>
+      </div>
+      <div class="card-action">Coming Soon</div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" id="empty-state">No resources in this category yet — check back soon.</div>
+
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <a href="index.html">VianCore</a> &nbsp;·&nbsp; All resources are free and open access
+  <span style="display:block;margin-top:10px;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.7;">
+    Resources on this site are unofficial practice tools. They are not affiliated with, endorsed by, or approved by USCIS or any U.S. government agency. Always verify current answers using the official USCIS website at <a href="https://www.uscis.gov" target="_blank" rel="noopener">uscis.gov</a>.
+  </span>
+</footer>
+
+<script>
+  // ── Filter logic ──
+  function filterCards(type, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cards = document.querySelectorAll('.hub-card');
+    let visible = 0;
+    cards.forEach(card => {
+      const match = type === 'all' || card.dataset.type === type;
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+
+    document.getElementById('empty-state').style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  // ── Make non-anchor cards with data-href clickable ──
+  document.querySelectorAll('.hub-card[data-href]').forEach(card => {
+    card.addEventListener('click', () => window.location.href = card.dataset.href);
+  });
+</script>
+
+</body>
+</html>

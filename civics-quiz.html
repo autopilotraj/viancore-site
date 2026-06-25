@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>U.S. Citizenship Civics Quiz | VianCore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── iOS / Safari fixes ── */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  button {
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :root {
+    --black: #000000;
+    --surface: #0a0a0a;
+    --card: #111111;
+    --border: #1e1e1e;
+    --accent: #20b2aa;
+    --accent-dim: rgba(32,178,170,0.12);
+    --accent-glow: rgba(32,178,170,0.25);
+    --text: rgba(255,255,255,0.88);
+    --text-muted: rgba(255,255,255,0.5);
+    --text-faint: rgba(255,255,255,0.3);
+    --correct: #22c55e;
+    --correct-dim: rgba(34,197,94,0.12);
+    --wrong: #ef4444;
+    --wrong-dim: rgba(239,68,68,0.12);
+    --warn: #f59e0b;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+  .badge {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(32,178,170,0.35);
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  /* ── Main container ── */
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── Screens ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── Start screen ── */
+  .start-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 600;
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  .start-desc {
+    color: var(--text-muted);
+    font-size: 15px;
+    max-width: 560px;
+    margin-bottom: 36px;
+    line-height: 1.7;
+  }
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px 20px;
+  }
+  .info-card .val {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .info-card .lbl {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-decoration: none;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    padding: 14px 32px;
+    min-height: 48px;
+    touch-action: manipulation;
+  }
+  .btn-primary:hover { background: #25cec5; box-shadow: 0 0 20px var(--accent-glow); }
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid rgba(32,178,170,0.4);
+    padding: 12px 24px;
+    min-height: 48px;
+    touch-action: manipulation;
+  }
+  .btn-outline:hover { border-color: var(--accent); background: var(--accent-dim); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 12px 24px;
+    min-height: 48px;
+    touch-action: manipulation;
+  }
+  .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    margin-bottom: 32px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .q-counter {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .q-counter span { color: var(--accent); }
+  .score-live {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-faint);
+  }
+  .progress-bar {
+    height: 2px;
+    background: var(--border);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 1px;
+    transition: width 0.4s ease;
+  }
+
+  /* ── Question card ── */
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+  .q-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 14px;
+  }
+  .q-text {
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+  .q-instruction {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+
+  /* ── Options ── */
+  .options-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .option-item {
+    position: relative;
+  }
+  .option-btn {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 18px 16px 52px;
+    text-align: left;
+    cursor: pointer;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    transition: all 0.12s ease;
+    position: relative;
+    min-height: 52px;
+    touch-action: manipulation;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: rgba(32,178,170,0.4);
+    background: var(--accent-dim);
+    color: #fff;
+  }
+  .option-btn.selected {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    color: #fff;
+  }
+  .option-btn.correct {
+    border-color: var(--correct);
+    background: var(--correct-dim);
+    color: #fff;
+  }
+  .option-btn.wrong {
+    border-color: var(--wrong);
+    background: var(--wrong-dim);
+    color: var(--text-muted);
+  }
+  .option-btn.missed {
+    border-color: var(--correct);
+    background: var(--correct-dim);
+    color: #fff;
+    opacity: 0.7;
+  }
+  .option-btn:disabled { cursor: default; }
+
+  .option-letter {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-faint);
+    transition: all 0.12s ease;
+    background: transparent;
+  }
+  .option-btn.selected .option-letter {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+  .option-btn.correct .option-letter {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: #000;
+  }
+  .option-btn.wrong .option-letter {
+    background: var(--wrong);
+    border-color: var(--wrong);
+    color: #fff;
+  }
+  .option-btn.missed .option-letter {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: #000;
+  }
+
+  /* ── Feedback strip ── */
+  .feedback {
+    display: none;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--correct-dim); border: 1px solid rgba(34,197,94,0.25); color: var(--correct); }
+  .feedback.wrong { background: var(--wrong-dim); border: 1px solid rgba(239,68,68,0.25); color: #fca5a5; }
+  .feedback-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .feedback-text strong { display: block; margin-bottom: 2px; }
+
+  /* ── Action row ── */
+  .action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* ── Results screen ── */
+  .result-header { text-align: center; padding: 40px 0 32px; }
+  .result-score-ring {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+  .result-score-ring.pass { border-color: var(--correct); box-shadow: 0 0 30px rgba(34,197,94,0.2); }
+  .result-score-ring.fail { border-color: var(--wrong); box-shadow: 0 0 30px rgba(239,68,68,0.15); }
+  .result-score-ring.warn { border-color: var(--warn); box-shadow: 0 0 30px rgba(245,158,11,0.2); }
+  .result-num { font-size: 42px; font-weight: 700; color: #fff; line-height: 1; }
+  .result-denom { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
+  .result-verdict {
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .result-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; }
+
+  .result-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-val { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .stat-val.c { color: var(--correct); }
+  .stat-val.w { color: var(--wrong); }
+  .stat-val.p { color: var(--accent); }
+  .stat-lbl { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
+
+  /* ── Review section ── */
+  .review-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .review-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+  }
+  .review-item.correct-r { border-left-color: var(--correct); }
+  .review-item.wrong-r { border-left-color: var(--wrong); }
+  .review-q {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .review-q .qnum { color: var(--text-faint); margin-right: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+  .review-answers { font-size: 12px; color: var(--text-muted); display: flex; flex-direction: column; gap: 3px; }
+  .review-answers .yours { color: var(--wrong); }
+  .review-answers .correct-a { color: var(--correct); }
+
+  .result-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  /* ── Divider ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* ── Disclaimer ── */
+  .disclaimer {
+    margin-top: 48px;
+    padding: 16px 20px;
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--text-faint);
+    line-height: 1.6;
+  }
+  .disclaimer strong { color: var(--warn); }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    main { padding: 24px 16px 80px; }
+    .q-card { padding: 20px 16px; }
+    .q-text { font-size: 16px; }
+    .result-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stat-box { padding: 12px 8px; }
+    .stat-val { font-size: 18px; }
+    .info-grid { grid-template-columns: repeat(2, 1fr); }
+    .result-actions { flex-direction: column; align-items: stretch; }
+    .result-actions .btn { text-align: center; justify-content: center; }
+    .action-row { flex-direction: column; align-items: stretch; }
+    .action-row .btn { width: 100%; justify-content: center; }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">Vian<span>C</span>ore</a>
+  <span class="badge">Civics 2025</span>
+</header>
+
+<main>
+
+  <!-- ══ START SCREEN ══ -->
+  <section id="screen-start" class="screen active">
+    <p class="start-eyebrow">U.S. Citizenship Test Prep</p>
+    <h1>2025 Civics<br>Practice Quiz</h1>
+    <p class="start-desc">
+      Practice with the official USCIS 2025 naturalization civics test — 128 questions, 20 randomly selected each session. Matches the format for N-400 applications filed on or after October 20, 2025.
+    </p>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="val">20</div>
+        <div class="lbl">Questions per round</div>
+      </div>
+      <div class="info-card">
+        <div class="val">128</div>
+        <div class="lbl">Total question bank</div>
+      </div>
+      <div class="info-card">
+        <div class="val">12</div>
+        <div class="lbl">Correct to pass real test</div>
+      </div>
+      <div class="info-card">
+        <div class="val">60%</div>
+        <div class="lbl">Passing threshold</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="startQuiz()">Start Practice ›</button>
+    <div class="disclaimer" style="margin-top:32px;">
+      <strong>Disclaimer:</strong> This is an unofficial practice tool. It is not affiliated with, endorsed by, or approved by USCIS or any U.S. government agency. Questions are sourced from the official public domain USCIS 2025 civics test. Always verify current answers — especially officeholder names — at <a href="https://www.uscis.gov/citizenship/testupdates" target="_blank" rel="noopener" style="color:var(--warn);">uscis.gov/citizenship/testupdates</a>.
+    </div>
+  </section>
+
+  <!-- ══ QUIZ SCREEN ══ -->
+  <section id="screen-quiz" class="screen">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <div class="q-counter">Question <span id="q-num">1</span> of 20</div>
+        <div class="score-live" id="score-live">0 correct</div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-tag" id="q-tag">American Government · Principles</div>
+      <div class="q-text" id="q-text">Loading question...</div>
+      <div class="q-instruction" id="q-instruction"></div>
+    </div>
+
+    <ul class="options-list" id="options-list"></ul>
+
+    <div class="feedback" id="feedback">
+      <div class="feedback-icon" id="feedback-icon"></div>
+      <div class="feedback-text" id="feedback-text"></div>
+    </div>
+
+    <div class="action-row">
+      <span id="select-hint" style="font-size:12px;color:var(--text-faint);"></span>
+      <button class="btn btn-primary" id="btn-submit" onclick="submitAnswer()" style="display:none;">Submit Answer</button>
+      <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()" style="display:none;">Next →</button>
+    </div>
+  </section>
+
+  <!-- ══ RESULTS SCREEN ══ -->
+  <section id="screen-results" class="screen">
+    <div class="result-header">
+      <div class="result-score-ring" id="score-ring">
+        <div class="result-num" id="res-score">—</div>
+        <div class="result-denom">out of 20</div>
+      </div>
+      <div class="result-verdict" id="res-verdict">—</div>
+      <div class="result-sub" id="res-sub">—</div>
+    </div>
+
+    <div class="result-stats">
+      <div class="stat-box"><div class="stat-val c" id="res-correct">—</div><div class="stat-lbl">Correct</div></div>
+      <div class="stat-box"><div class="stat-val w" id="res-wrong">—</div><div class="stat-lbl">Wrong</div></div>
+      <div class="stat-box"><div class="stat-val p" id="res-pct">—</div><div class="stat-lbl">Score</div></div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="review-title">Question Review</div>
+    <div id="review-list"></div>
+
+    <div class="result-actions">
+      <button class="btn btn-primary" onclick="startQuiz()">Retake with New Questions</button>
+      <button class="btn btn-ghost" onclick="showScreen('screen-start')">Back to Start</button>
+    </div>
+
+    <div class="disclaimer">
+      <strong>Disclaimer:</strong> This is an unofficial practice tool. It is not affiliated with, endorsed by, or approved by USCIS or any U.S. government agency. Questions are sourced from the official public domain USCIS 2025 civics test. The actual test is oral — an officer asks up to 20 questions and stops when you answer 12 correctly or 9 incorrectly. Always verify current answers at <a href="https://www.uscis.gov/citizenship/testupdates" target="_blank" rel="noopener" style="color:var(--warn);">uscis.gov/citizenship/testupdates</a>.
+    </div>
+  </section>
+
+</main>
+
+<script>
+// ══════════════════════════════════════════════════
+//  QUESTION BANK — all 128 official questions
+//  Format: { q, answers:[], pick:N, tag, opts:[] }
+//  pick = how many correct answers required
+//  opts = multiple-choice pool (correct + distractors)
+// ══════════════════════════════════════════════════
+
+const QUESTIONS = [
+  // ── AMERICAN GOVERNMENT: PRINCIPLES ──
+  { q:"What is the form of government of the United States?", answers:["Republic","Constitutional republic","Representative democracy"], pick:1, tag:"Government · Principles",
+    opts:["Republic","Monarchy","Theocracy","Direct democracy"] },
+  { q:"What is the supreme law of the land?", answers:["The Constitution","(U.S.) Constitution"], pick:1, tag:"Government · Principles",
+    opts:["The Constitution","The Declaration of Independence","The Bill of Rights","Federal law"] },
+  { q:"Name one thing the U.S. Constitution does.", answers:["Forms the government","Defines powers of government","Defines the parts of government","Protects the rights of the people"], pick:1, tag:"Government · Principles",
+    opts:["Forms the government","Declares war on foreign nations","Establishes the national religion","Sets tax rates for citizens"] },
+  { q:"The U.S. Constitution starts with the words \"We the People.\" What does \"We the People\" mean?", answers:["Self-government","Popular sovereignty","Consent of the governed","People should govern themselves"], pick:1, tag:"Government · Principles",
+    opts:["Self-government","Government rules the people","Power belongs to the President","States control all power"] },
+  { q:"How are changes made to the U.S. Constitution?", answers:["Amendments","(Constitutional) amendments"], pick:1, tag:"Government · Principles",
+    opts:["Amendments","Presidential orders","Congressional votes alone","Supreme Court decisions"] },
+  { q:"What does the Bill of Rights protect? ★", answers:["Rights of people living in the United States","(Basic) rights of Americans"], pick:1, tag:"Government · Rights",
+    opts:["Rights of people living in the United States","Rights of the federal government","Rights of states only","Military powers"] },
+  { q:"How many amendments does the U.S. Constitution have?", answers:["27"], pick:1, tag:"Government · Principles",
+    opts:["27","10","15","33"] },
+  { q:"Why is the Declaration of Independence important?", answers:["It says America is free from British control","It announced our independence from Great Britain","It said the American colonies were free from Britain"], pick:1, tag:"History · Colonial",
+    opts:["It says America is free from British control","It created the Constitution","It established the Supreme Court","It declared war on France"] },
+  { q:"What founding document said the American colonies were free from Britain?", answers:["The Declaration of Independence"], pick:1, tag:"History · Colonial",
+    opts:["The Declaration of Independence","The Constitution","The Federalist Papers","The Magna Carta"] },
+  { q:"Name two important ideas from the Declaration of Independence and the U.S. Constitution.", answers:["Equality","Liberty","Freedom","Democracy"], pick:2, tag:"Government · Principles",
+    opts:["Equality","Liberty","Monarchy","Theocracy","Colonialism","Imperialism"] },
+  { q:"The words \"Life, Liberty, and the pursuit of Happiness\" are in what founding document?", answers:["The Declaration of Independence"], pick:1, tag:"History · Colonial",
+    opts:["The Declaration of Independence","The U.S. Constitution","The Bill of Rights","The Federalist Papers"] },
+  { q:"What is the economic system of the United States?", answers:["Free market economy","Capitalism","Market economy"], pick:1, tag:"Government · Principles",
+    opts:["Free market economy","Communist economy","Centrally planned economy","Feudal economy"] },
+  { q:"What is the rule of law?", answers:["Everyone must follow the law","No one is above the law","Government must also follow the law"], pick:1, tag:"Government · Principles",
+    opts:["Everyone must follow the law","Only citizens follow the law","Only leaders follow the law","Laws apply only to criminals"] },
+  { q:"Many documents influenced the U.S. Constitution. Name one.", answers:["Declaration of Independence","Articles of Confederation","Federalist Papers","Anti-Federalist Papers","Magna Carta"], pick:1, tag:"Government · Principles",
+    opts:["Declaration of Independence","Treaty of Paris","Monroe Doctrine","Emancipation Proclamation"] },
+  { q:"There are three branches of government. Why?", answers:["Checks and balances","Separation of powers"], pick:1, tag:"Government · Structure",
+    opts:["Checks and balances","Tradition from Britain","Efficiency","Equal representation"] },
+  { q:"Name the three branches of government.", answers:["Legislative","Executive","Judicial"], pick:3, tag:"Government · Structure",
+    opts:["Legislative","Executive","Judicial","Presidential","Federal","State"] },
+
+  // ── AMERICAN GOVERNMENT: STRUCTURE ──
+  { q:"The President of the United States is in charge of which branch of government?", answers:["Executive branch","Executive"], pick:1, tag:"Government · Structure",
+    opts:["Executive branch","Legislative branch","Judicial branch","Federal branch"] },
+  { q:"What part of the federal government writes laws?", answers:["Congress","(U.S. or national) Congress","Senate and House","Legislature"], pick:1, tag:"Government · Congress",
+    opts:["Congress","The President","The Supreme Court","The Cabinet"] },
+  { q:"What are the two parts of the U.S. Congress?", answers:["Senate","House of Representatives"], pick:2, tag:"Government · Congress",
+    opts:["Senate","House of Representatives","Cabinet","Supreme Court","Electoral College","Federal Reserve"] },
+  { q:"Name one power of the U.S. Congress.", answers:["Writes laws","Declares war","Creates a budget","Approves treaties"], pick:1, tag:"Government · Congress",
+    opts:["Writes laws","Appoints judges","Commands the military","Issues executive orders"] },
+  { q:"How many U.S. Senators are there?", answers:["100"], pick:1, tag:"Government · Congress",
+    opts:["100","50","435","535"] },
+  { q:"How long is a term for a U.S. Senator?", answers:["6 years","Six (6)"], pick:1, tag:"Government · Congress",
+    opts:["6 years","2 years","4 years","8 years"] },
+  { q:"How many voting members are there in the House of Representatives?", answers:["435"], pick:1, tag:"Government · Congress",
+    opts:["435","100","535","270"] },
+  { q:"How long is a term for a member of the House of Representatives?", answers:["2 years","Two (2)"], pick:1, tag:"Government · Congress",
+    opts:["2 years","4 years","6 years","8 years"] },
+  { q:"Why do U.S. representatives serve shorter terms than U.S. Senators?", answers:["To more closely follow public opinion","To be more responsive to the people"], pick:1, tag:"Government · Congress",
+    opts:["To more closely follow public opinion","To save money","Because of term limits","Because they represent fewer people"] },
+  { q:"How many senators does each state have?", answers:["2","Two (2)"], pick:1, tag:"Government · Congress",
+    opts:["2","1","3","Depends on population"] },
+  { q:"Why does each state have two senators?", answers:["Equal representation","Equal representation of each state"], pick:1, tag:"Government · Congress",
+    opts:["Equal representation","Population representation","Historical tradition","To balance the Supreme Court"] },
+  { q:"What is the name of the Speaker of the House of Representatives now?", answers:["Mike Johnson"], pick:1, tag:"Government · Current Officials",
+    opts:["Mike Johnson","Nancy Pelosi","Kevin McCarthy","Hakeem Jeffries"] },
+  { q:"Who does a U.S. Senator represent? ★", answers:["People of their state","All people of the state","Citizens of their state"], pick:1, tag:"Government · Congress",
+    opts:["People of their state","People of their district","All Americans","The President"] },
+  { q:"Who elects U.S. Senators?", answers:["Citizens from their state","Voters of their state"], pick:1, tag:"Government · Congress",
+    opts:["Citizens from their state","The Electoral College","The President","State legislators"] },
+  { q:"Who does a member of the House of Representatives represent? ★", answers:["People in their district","Citizens of their congressional district"], pick:1, tag:"Government · Congress",
+    opts:["People in their district","All people of their state","All Americans","The President"] },
+  { q:"Who elects members of the House of Representatives?", answers:["Citizens from their district","Voters of their congressional district"], pick:1, tag:"Government · Congress",
+    opts:["Citizens from their district","The entire state","The Electoral College","Congress itself"] },
+  { q:"Some states have more representatives than other states. Why?", answers:["(Because) they have more people","(Because of) the state's population","(Because) some states have more people"], pick:1, tag:"Government · Congress",
+    opts:["(Because) they have more people","Because they are larger geographically","Because they joined the union first","Because the President chose them"] },
+  { q:"The President of the United States is elected for how many years?", answers:["4 years","Four (4)"], pick:1, tag:"Government · Executive",
+    opts:["4 years","2 years","6 years","8 years"] },
+  { q:"The President of the United States can serve only two terms. Why?", answers:["(Because of) the 22nd Amendment","To prevent dictatorship"], pick:1, tag:"Government · Executive",
+    opts:["(Because of) the 22nd Amendment","(Because of) the 1st Amendment","It is tradition only","(Because of) the 14th Amendment"] },
+  { q:"What is the name of the President of the United States now?", answers:["Donald Trump","Donald J. Trump"], pick:1, tag:"Government · Current Officials",
+    opts:["Donald Trump","Joe Biden","Barack Obama","George W. Bush"] },
+  { q:"What is the name of the Vice President of the United States now?", answers:["JD Vance","J.D. Vance"], pick:1, tag:"Government · Current Officials",
+    opts:["JD Vance","Kamala Harris","Mike Pence","Tim Walz"] },
+  { q:"If the President can no longer serve, who becomes President?", answers:["The Vice President"], pick:1, tag:"Government · Executive",
+    opts:["The Vice President","The Speaker of the House","The Secretary of State","The Chief Justice"] },
+  { q:"Name one power of the President.", answers:["Signs bills into law","Vetoes bills","Enforces laws","Commander in Chief of the military","Appoints judges"], pick:1, tag:"Government · Executive",
+    opts:["Signs bills into law","Writes laws","Declares war without Congress","Appoints Supreme Court justices without Senate"] },
+  { q:"Who is the Commander in Chief of the U.S. military?", answers:["The President"], pick:1, tag:"Government · Executive",
+    opts:["The President","The Secretary of Defense","The Chairman of the Joint Chiefs","Congress"] },
+  { q:"Who signs bills to become laws?", answers:["The President"], pick:1, tag:"Government · Executive",
+    opts:["The President","The Speaker of the House","The Vice President","The Chief Justice"] },
+  { q:"Who vetoes bills?", answers:["The President"], pick:1, tag:"Government · Executive",
+    opts:["The President","The Supreme Court","The Senate majority leader","The Vice President"] },
+  { q:"Who appoints federal judges?", answers:["The President"], pick:1, tag:"Government · Executive",
+    opts:["The President","The Senate","The Chief Justice","Congress"] },
+  { q:"The executive branch has many parts. Name one.", answers:["The President","The Vice President","The Cabinet","Departments"], pick:1, tag:"Government · Executive",
+    opts:["The President","The Supreme Court","The Senate","The House of Representatives"] },
+  { q:"What does the President's Cabinet do?", answers:["Advises the President"], pick:1, tag:"Government · Executive",
+    opts:["Advises the President","Writes laws","Commands the military","Approves treaties"] },
+  { q:"What are two Cabinet-level positions? ★", answers:["Secretary of State","Secretary of Treasury","Secretary of Defense","Attorney General","Secretary of Interior","Secretary of Agriculture","Secretary of Commerce","Secretary of Labor","Secretary of Transportation","Secretary of Energy","Secretary of Education","Secretary of Veterans Affairs"], pick:2, tag:"Government · Executive",
+    opts:["Secretary of State","Secretary of Defense","Chief Justice","Speaker of the House","Senate Majority Leader","Vice Chairman of the Joint Chiefs"] },
+  { q:"Why is the Electoral College important?", answers:["It decides who is elected President","It elects the President"], pick:1, tag:"Government · Executive",
+    opts:["It decides who is elected President","It writes the Constitution","It confirms Cabinet members","It declares war"] },
+
+  // ── JUDICIAL BRANCH ──
+  { q:"What is one part of the judicial branch?", answers:["Supreme Court","Federal courts","District courts","Courts"], pick:1, tag:"Government · Judicial",
+    opts:["Supreme Court","The Senate","The Cabinet","The Electoral College"] },
+  { q:"What does the judicial branch do?", answers:["Explains laws","Reviews laws","Reviews or explains laws","Interprets the Constitution"], pick:1, tag:"Government · Judicial",
+    opts:["Explains laws","Writes laws","Enforces laws","Appoints officials"] },
+  { q:"What is the highest court in the United States?", answers:["The Supreme Court"], pick:1, tag:"Government · Judicial",
+    opts:["The Supreme Court","The Federal Court of Appeals","The District Court","The Court of International Trade"] },
+  { q:"How many seats are on the Supreme Court?", answers:["9","Nine (9)"], pick:1, tag:"Government · Judicial",
+    opts:["9","7","11","13"] },
+  { q:"How many Supreme Court justices are usually needed to decide a case?", answers:["5","Five (5)","A majority"], pick:1, tag:"Government · Judicial",
+    opts:["5","4","6","9"] },
+  { q:"How long do Supreme Court justices serve?", answers:["For life","Their entire life","Life tenure"], pick:1, tag:"Government · Judicial",
+    opts:["For life","6 years","4 years","Until they choose to retire"] },
+  { q:"Supreme Court justices serve for life. Why?", answers:["To be independent","(So they can be) independent from politics"], pick:1, tag:"Government · Judicial",
+    opts:["To be independent","To save money","Because the Constitution requires it specifically","To serve longer than the President"] },
+  { q:"Who is the Chief Justice of the United States now?", answers:["John Roberts","John G. Roberts, Jr."], pick:1, tag:"Government · Current Officials",
+    opts:["John Roberts","Sonia Sotomayor","Clarence Thomas","Amy Coney Barrett"] },
+
+  // ── FEDERALISM ──
+  { q:"Name one power that is only for the federal government.", answers:["Print paper money","Declare war","Create an army","Make treaties"], pick:1, tag:"Government · Federalism",
+    opts:["Print paper money","Give a driver's license","Approve zoning laws","Provide public schools"] },
+  { q:"Name one power that is only for the states.", answers:["Give a driver's license","Provide schooling","Provide safety","Give a marriage license","Create a local government"], pick:1, tag:"Government · Federalism",
+    opts:["Give a driver's license","Print money","Declare war","Make treaties with foreign nations"] },
+  { q:"What is the purpose of the 10th Amendment?", answers:["Powers not given to the federal government belong to the states or the people"], pick:1, tag:"Government · Federalism",
+    opts:["Powers not given to the federal government belong to the states or the people","The right to bear arms","Freedom of speech","Equal protection under the law"] },
+
+  // ── RIGHTS AND RESPONSIBILITIES ──
+  { q:"There are four amendments to the U.S. Constitution about who can vote. Describe one of them.", answers:["Any citizen can vote","Citizens 18 or older can vote","You don't have to pay to vote","Women can vote","Any race can vote"], pick:1, tag:"Government · Rights",
+    opts:["Any citizen can vote","Only property owners can vote","Only men can vote","Only those who pass a literacy test can vote"] },
+  { q:"Who can vote in federal elections, run for federal office, and serve on a jury in the United States?", answers:["Citizens","U.S. citizens","American citizens"], pick:1, tag:"Government · Rights",
+    opts:["Citizens","Any resident","Legal permanent residents","Anyone born in the U.S."] },
+  { q:"What are three rights of everyone living in the United States?", answers:["Freedom of speech","Freedom of religion","Freedom of the press","Freedom of assembly","Freedom to petition the government"], pick:3, tag:"Government · Rights",
+    opts:["Freedom of speech","Freedom of religion","Freedom of assembly","Right to vote","Right to own a passport","Right to run for President"] },
+  { q:"What do we show loyalty to when we say the Pledge of Allegiance?", answers:["The United States","The flag"], pick:1, tag:"Government · Rights",
+    opts:["The United States","The President","The Constitution","The military"] },
+  { q:"Name two promises that new citizens make in the Oath of Allegiance.", answers:["Obey the laws of the United States","Be loyal to the United States","Serve in the military","Serve on a jury","Give up loyalty to other countries"], pick:2, tag:"Government · Rights",
+    opts:["Obey the laws of the United States","Be loyal to the United States","Give up loyalty to other countries","Vote in every election","Pay all state taxes","Never travel abroad"] },
+  { q:"How can people become United States citizens?", answers:["Naturalization","By being born in the U.S.","Through their parents"], pick:1, tag:"Government · Rights",
+    opts:["Naturalization","By paying a fee","By serving in the military only","By living here for 1 year"] },
+  { q:"What are two examples of civic participation in the United States?", answers:["Vote","Run for office","Join a political party","Help with a campaign","Join a civic group","Give an elected official your opinion","Contact elected officials","Write to a newspaper"], pick:2, tag:"Government · Rights",
+    opts:["Vote","Run for office","Join a civic group","Avoid jury duty","Ignore elections","Pay no taxes"] },
+  { q:"What is one way Americans can serve their country?", answers:["Vote","Serve in the military","Run for office","Join the Peace Corps"], pick:1, tag:"Government · Rights",
+    opts:["Vote","Leave the country","Avoid jury duty","Refuse to pay taxes"] },
+  { q:"Why is it important to pay federal taxes?", answers:["Required by law","All people pay to fund the federal government","Required by the (U.S.) Constitution (16th Amendment)","Civic duty"], pick:1, tag:"Government · Rights",
+    opts:["Required by law","Optional civic duty","Only required if you earn a high income","Required only for naturalized citizens"] },
+  { q:"It is important for all men age 18 through 25 to register for the Selective Service. Name one reason why.", answers:["Required by law","Civic duty","Makes the draft fair, if needed"], pick:1, tag:"Government · Rights",
+    opts:["Required by law","Civic duty","It is completely voluntary","Only required for immigrants"] },
+
+  // ── AMERICAN HISTORY: COLONIAL ──
+  { q:"The colonists came to America for many reasons. Name one.", answers:["Freedom","Political liberty","Religious freedom","Economic opportunity","To escape persecution"], pick:1, tag:"History · Colonial",
+    opts:["Freedom","To conquer other nations","For tropical weather","At the British king's order"] },
+  { q:"Who lived in America before the Europeans arrived?", answers:["Native Americans","American Indians"], pick:1, tag:"History · Colonial",
+    opts:["Native Americans","African Americans","European settlers","No one"] },
+  { q:"What group of people was taken and sold as slaves?", answers:["Africans","African Americans"], pick:1, tag:"History · Colonial",
+    opts:["Africans","Native Americans","Asian immigrants","European immigrants"] },
+  { q:"What war did the Americans fight to win independence from Britain?", answers:["The American Revolution","The Revolutionary War"], pick:1, tag:"History · Colonial",
+    opts:["The American Revolution","The Civil War","The War of 1812","The French and Indian War"] },
+  { q:"Name one reason why the Americans declared independence from Britain.", answers:["High taxes","Because of high taxes (taxation without representation)","The British army stayed in their houses","They did not have self-government"], pick:1, tag:"History · Colonial",
+    opts:["High taxes","Religious differences","Desire for monarchy","Trade disputes with France"] },
+  { q:"Who wrote the Declaration of Independence?", answers:["(Thomas) Jefferson"], pick:1, tag:"History · Colonial",
+    opts:["Thomas Jefferson","Benjamin Franklin","George Washington","John Adams"] },
+  { q:"When was the Declaration of Independence adopted?", answers:["July 4, 1776"], pick:1, tag:"History · Colonial",
+    opts:["July 4, 1776","July 4, 1787","June 15, 1775","September 17, 1787"] },
+  { q:"The American Revolution had many important events. Name one.", answers:["(Battle of) Bunker Hill","Declaration of Independence","Washington Crossing the Delaware","Valley Forge","Battle of Yorktown","Battle of Saratoga"], pick:1, tag:"History · Colonial",
+    opts:["Declaration of Independence","Battle of Gettysburg","Emancipation Proclamation","Louisiana Purchase"] },
+  { q:"There were 13 original states. Name five. ★", answers:["New Hampshire","Massachusetts","Rhode Island","Connecticut","New York","New Jersey","Pennsylvania","Delaware","Maryland","Virginia","North Carolina","South Carolina","Georgia"], pick:5, tag:"History · Colonial",
+    opts:["New Hampshire","Massachusetts","New York","Pennsylvania","Virginia","Georgia","Delaware","Rhode Island","Connecticut","New Jersey","Maryland","North Carolina","South Carolina","Texas","California","Ohio","Florida"] },
+
+  // ── AMERICAN HISTORY: 1800s ──
+  { q:"What founding document was written in 1787?", answers:["The Constitution","The U.S. Constitution"], pick:1, tag:"History · Founding",
+    opts:["The Constitution","The Declaration of Independence","The Bill of Rights","The Federalist Papers"] },
+  { q:"The Federalist Papers supported the passage of the U.S. Constitution. Name one of the writers.", answers:["(James) Madison","(Alexander) Hamilton","(John) Jay","Publius"], pick:1, tag:"History · Founding",
+    opts:["James Madison","Alexander Hamilton","John Jay","Thomas Jefferson","Benjamin Franklin","John Adams"] },
+  { q:"Why were the Federalist Papers important?", answers:["They helped people understand the Constitution","They supported the passage of the Constitution"], pick:1, tag:"History · Founding",
+    opts:["They helped people understand the Constitution","They declared independence from Britain","They established the Supreme Court","They ended the Civil War"] },
+  { q:"Benjamin Franklin is famous for many things. Name one. ★", answers:["U.S. diplomat","Oldest member of the Constitutional Convention","First Postmaster General","Writer of 'Poor Richard's Almanac'","Started the first free libraries"], pick:1, tag:"History · Founding",
+    opts:["U.S. diplomat","First President","Wrote the Declaration of Independence","Commanded the Continental Army"] },
+  { q:"George Washington is famous for many things. Name one.", answers:["First President of the United States","Commander of the Continental Army","Father of our country"], pick:1, tag:"History · Founding",
+    opts:["First President of the United States","Wrote the Constitution","Declared independence","Founded the Supreme Court"] },
+  { q:"Thomas Jefferson is famous for many things. Name one.", answers:["Writer of the Declaration of Independence","Third President of the U.S.","Doubled the size of the U.S."], pick:1, tag:"History · Founding",
+    opts:["Writer of the Declaration of Independence","First President","Commanded the Continental Army","Chief Justice"] },
+  { q:"James Madison is famous for many things. Name one.", answers:["One of the writers of the Federalist Papers","Father of the Constitution","Fourth President of the U.S."], pick:1, tag:"History · Founding",
+    opts:["One of the writers of the Federalist Papers","First President","Wrote the Declaration of Independence","Commander of the Continental Army"] },
+  { q:"Alexander Hamilton is famous for many things. Name one.", answers:["One of the writers of the Federalist Papers","First Secretary of the Treasury","Helped shape the U.S. financial system"], pick:1, tag:"History · Founding",
+    opts:["One of the writers of the Federalist Papers","First President","Wrote the Declaration of Independence","Third President"] },
+  { q:"What territory did the United States buy from France in 1803?", answers:["Louisiana (Territory)","Louisiana"], pick:1, tag:"History · 1800s",
+    opts:["Louisiana Territory","Florida","Alaska","Texas"] },
+  { q:"Name one war fought by the United States in the 1800s.", answers:["Civil War","Mexican-American War","War of 1812","Spanish-American War"], pick:1, tag:"History · 1800s",
+    opts:["Civil War","World War I","World War II","Korean War"] },
+  { q:"Name the U.S. war between the North and the South.", answers:["The Civil War","The War Between the States"], pick:1, tag:"History · 1800s",
+    opts:["The Civil War","The Revolutionary War","The War of 1812","World War I"] },
+  { q:"The Civil War had many important events. Name one.", answers:["(Battle of) Fort Sumter","Emancipation Proclamation","(Battle of) Gettysburg","(Burning of) Sherman's March","(Surrender at) Appomattox"], pick:1, tag:"History · 1800s",
+    opts:["Emancipation Proclamation","Declaration of Independence","Louisiana Purchase","Battle of Bunker Hill"] },
+  { q:"Abraham Lincoln is famous for many things. Name one.", answers:["Freed the slaves","Saved (or preserved) the Union","Led the United States during the Civil War","Issued the Emancipation Proclamation"], pick:1, tag:"History · 1800s",
+    opts:["Freed the slaves","Wrote the Constitution","Led the country during World War II","Purchased Alaska"] },
+  { q:"What did the Emancipation Proclamation do?", answers:["Freed the slaves","Freed slaves in the Confederacy","Freed slaves in the Confederate states"], pick:1, tag:"History · 1800s",
+    opts:["Freed the slaves","Ended the Civil War","Gave women the right to vote","Established Reconstruction"] },
+  { q:"What U.S. war ended slavery?", answers:["The Civil War"], pick:1, tag:"History · 1800s",
+    opts:["The Civil War","The Revolutionary War","World War I","The War of 1812"] },
+  { q:"What amendment says all persons born or naturalized in the United States, and subject to the jurisdiction thereof, are U.S. Citizens?", answers:["14th Amendment","Fourteenth Amendment"], pick:1, tag:"History · 1800s",
+    opts:["14th Amendment","13th Amendment","15th Amendment","1st Amendment"] },
+  { q:"When did all men get the right to vote?", answers:["After the Civil War","(When the) 15th Amendment (was ratified)","1870"], pick:1, tag:"History · 1800s",
+    opts:["After the Civil War","After World War I","After the American Revolution","At the founding of the nation"] },
+  { q:"Name one leader of the women's rights movement in the 1800s.", answers:["Susan B. Anthony","Elizabeth Cady Stanton","Sojourner Truth","Harriet Tubman","Lucretia Mott"], pick:1, tag:"History · 1800s",
+    opts:["Susan B. Anthony","Harriet Beecher Stowe","Eleanor Roosevelt","Rosa Parks"] },
+
+  // ── AMERICAN HISTORY: 1900s ──
+  { q:"Name one war fought by the United States in the 1900s.", answers:["World War I","World War II","Korean War","Vietnam War","(Persian) Gulf War"], pick:1, tag:"History · 1900s",
+    opts:["World War I","The Civil War","The American Revolution","The War of 1812"] },
+  { q:"Why did the United States enter World War I?", answers:["To support the allied powers","Because Germany attacked U.S. ships","To protect American interests"], pick:1, tag:"History · 1900s",
+    opts:["To support the allied powers","To gain territory in Europe","Because of the attack on Pearl Harbor","To stop communism"] },
+  { q:"When did all women get the right to vote?", answers:["After World War I","(When the) 19th Amendment (was ratified)","1920"], pick:1, tag:"History · 1900s",
+    opts:["After World War I","After World War II","After the Civil War","After the American Revolution"] },
+  { q:"What was the Great Depression?", answers:["Longest economic recession in modern history","Period of severe economic hardship in the 1930s","When the economy was very bad in the 1930s"], pick:1, tag:"History · 1900s",
+    opts:["Longest economic recession in modern history","A major war in the 1930s","A period of rapid economic growth","A drought that destroyed farmland"] },
+  { q:"When did the Great Depression start?", answers:["Stock market crash of 1929","(Crash of) 1929","October 29, 1929"], pick:1, tag:"History · 1900s",
+    opts:["Stock market crash of 1929","World War I","The Dust Bowl of 1932","The bank failures of 1933"] },
+  { q:"Who was President during the Great Depression and World War II?", answers:["(Franklin) Roosevelt","FDR"], pick:1, tag:"History · 1900s",
+    opts:["Franklin Roosevelt","Harry Truman","Woodrow Wilson","Herbert Hoover"] },
+  { q:"Why did the United States enter World War II?", answers:["(Because the) Japanese attacked Pearl Harbor","To support the allied powers","To stop German expansion in Europe"], pick:1, tag:"History · 1900s",
+    opts:["(Because the) Japanese attacked Pearl Harbor","To stop communism in Asia","Because of the Great Depression","Because Germany invaded France only"] },
+  { q:"Dwight Eisenhower is famous for many things. Name one. ★", answers:["General during World War II","34th President of the United States","Interstate Highway System"], pick:1, tag:"History · 1900s",
+    opts:["General during World War II","Led the country during the Great Depression","President during World War II","Ended the Korean War only"] },
+  { q:"Who was the United States' main rival during the Cold War?", answers:["Russia","The Soviet Union (USSR)"], pick:1, tag:"History · 1900s",
+    opts:["Russia","China","Germany","Cuba"] },
+  { q:"During the Cold War, what was one main concern of the United States?", answers:["Communism","Nuclear war","Expansion of the Soviet Union"], pick:1, tag:"History · 1900s",
+    opts:["Communism","Fascism","Colonial expansion","Economic recession"] },
+  { q:"Why did the United States enter the Korean War?", answers:["To stop the spread of communism"], pick:1, tag:"History · 1900s",
+    opts:["To stop the spread of communism","To avenge Pearl Harbor","To support France","To gain territory in Asia"] },
+  { q:"Why did the United States enter the Vietnam War?", answers:["To stop the spread of communism"], pick:1, tag:"History · 1900s",
+    opts:["To stop the spread of communism","To avenge the Korean War","At the request of China","To protect oil interests"] },
+  { q:"What did the civil rights movement do?", answers:["Fought to end racial discrimination","Worked for equal rights for all Americans","Fought to end segregation"], pick:1, tag:"History · 1900s",
+    opts:["Fought to end racial discrimination","Ended the Vietnam War","Gave women the right to vote","Ended the Great Depression"] },
+  { q:"Martin Luther King, Jr. is famous for many things. Name one.", answers:["Fought for civil rights","Worked to ensure racial equality","Led civil rights movement","'I Have a Dream' speech","Nonviolent protest"], pick:1, tag:"History · 1900s",
+    opts:["Fought for civil rights","First Black President","Led the women's suffrage movement","Founded the NAACP"] },
+  { q:"Why did the United States enter the Persian Gulf War?", answers:["To force the Iraqi military from Kuwait","Because Iraq invaded Kuwait"], pick:1, tag:"History · 1900s",
+    opts:["To force the Iraqi military from Kuwait","To stop communism","Because of 9/11 attacks","To protect U.S. military bases"] },
+
+  // ── AMERICAN HISTORY: RECENT ──
+  { q:"What major event happened on September 11, 2001 in the United States?", answers:["Terrorists attacked the United States","Al-Qaeda attacked the United States","Terrorist attacks on the U.S."], pick:1, tag:"History · Recent",
+    opts:["Terrorists attacked the United States","A major hurricane hit New York","The stock market crashed","A foreign country declared war on the U.S."] },
+  { q:"Name one U.S. military conflict after the September 11, 2001 attacks.", answers:["War in Afghanistan","War in Iraq","(Global) War on Terror","War on Terror"], pick:1, tag:"History · Recent",
+    opts:["War in Afghanistan","War in Iraq","Korean War","Vietnam War"] },
+
+  // ── INTEGRATED CIVICS ──
+  { q:"Name one American Indian tribe in the United States.", answers:["Cherokee","Navajo","Sioux","Chippewa","Choctaw","Pueblo","Apache","Iroquois","Creek","Blackfeet","Seminole","Cheyenne","Arawak","Shawnee","Mohegan","Huron","Oneida","Lakota","Crow","Teton","Hopi","Inupiat"], pick:1, tag:"Integrated Civics · Geography",
+    opts:["Cherokee","Navajo","Sioux","Apache","Roman","Greek","Norse","Aztec"] },
+  { q:"Name one example of an American innovation.", answers:["Light bulb","Automobile","Skyscrapers","Airplane","Assembly line","Landing on the moon","Integrated circuit","Internet"], pick:1, tag:"Integrated Civics · Symbols",
+    opts:["Light bulb","Airplane","Assembly line","Steam engine (British)","Telephone (also contested)","Cotton gin","Nuclear reactor"] },
+  { q:"What is the capital of the United States?", answers:["Washington, D.C."], pick:1, tag:"Integrated Civics · Geography",
+    opts:["Washington, D.C.","New York City","Philadelphia","Boston"] },
+  { q:"Where is the Statue of Liberty?", answers:["New York (Harbor)","Liberty Island","New Jersey","Near New York City","On the Hudson (River)"], pick:1, tag:"Integrated Civics · Geography",
+    opts:["New York Harbor","Washington, D.C.","Boston Harbor","Philadelphia"] },
+  { q:"Why does the flag have 13 stripes?", answers:["(Because there were) 13 original colonies","(Because the stripes) represent the original colonies"], pick:1, tag:"Integrated Civics · Symbols",
+    opts:["(Because there were) 13 original colonies","(Because there are) 13 Supreme Court justices","(Because there were) 13 founding fathers","(Because there are) 13 original amendments"] },
+  { q:"Why does the flag have 50 stars?", answers:["(Because there is) one star for each state","(Because) each star represents a state","(Because there are) 50 states"], pick:1, tag:"Integrated Civics · Symbols",
+    opts:["(Because there are) 50 states","(Because there were) 50 founding fathers","(Because there are) 50 amendments","(Because there are) 50 original colonies"] },
+  { q:"What is the name of the national anthem?", answers:["The Star-Spangled Banner"], pick:1, tag:"Integrated Civics · Symbols",
+    opts:["The Star-Spangled Banner","America the Beautiful","God Bless America","My Country, 'Tis of Thee"] },
+  { q:"The Nation's first motto was \"E Pluribus Unum.\" What does that mean?", answers:["Out of many, one"], pick:1, tag:"Integrated Civics · Symbols",
+    opts:["Out of many, one","In God we trust","Liberty and justice for all","United we stand"] },
+  { q:"What is Independence Day?", answers:["The country's birthday","A holiday celebrating independence from Britain","July 4th"], pick:1, tag:"Integrated Civics · Holidays",
+    opts:["The country's birthday","Veterans Day","Memorial Day","Thanksgiving"] },
+  { q:"Name three national U.S. holidays.", answers:["New Year's Day","Martin Luther King, Jr. Day","Presidents' Day","Memorial Day","Independence Day","Labor Day","Columbus Day","Veterans Day","Thanksgiving","Christmas"], pick:3, tag:"Integrated Civics · Holidays",
+    opts:["Thanksgiving","Independence Day","Christmas","New Year's Day","Memorial Day","Veterans Day","St. Patrick's Day","Valentine's Day","Groundhog Day","Halloween"] },
+  { q:"What is Memorial Day?", answers:["A holiday to honor soldiers who died in military service","A holiday to honor soldiers who have died","A day to remember soldiers who died defending the country"], pick:1, tag:"Integrated Civics · Holidays",
+    opts:["A holiday to honor soldiers who died in military service","A holiday to honor all veterans","The country's birthday","A holiday to honor the President"] },
+  { q:"What is Veterans Day?", answers:["A holiday to honor people in the (U.S.) military","A day to honor all who served in the U.S. military","A holiday honoring American veterans"], pick:1, tag:"Integrated Civics · Holidays",
+    opts:["A holiday to honor people in the (U.S.) military","A holiday to honor soldiers who died","The country's birthday","A day to honor the President"] },
+];
+
+// ══════════════════════════════════════════════════
+//  QUIZ STATE
+// ══════════════════════════════════════════════════
+let sessionQuestions = [];
+let currentIndex = 0;
+let correctCount = 0;
+let wrongCount = 0;
+let answered = false;
+let selectedOptions = new Set();
+let results = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function startQuiz() {
+  sessionQuestions = shuffle(QUESTIONS).slice(0, 20);
+  currentIndex = 0;
+  correctCount = 0;
+  wrongCount = 0;
+  answered = false;
+  selectedOptions = new Set();
+  results = [];
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  selectedOptions = new Set();
+  const q = sessionQuestions[currentIndex];
+  const num = currentIndex + 1;
+
+  // Progress
+  document.getElementById('q-num').textContent = num;
+  document.getElementById('progress-fill').style.width = ((num - 1) / 20 * 100) + '%';
+  document.getElementById('score-live').textContent = correctCount + ' correct';
+
+  // Question
+  document.getElementById('q-tag').textContent = q.tag;
+  document.getElementById('q-text').textContent = q.q;
+
+  const pick = q.pick;
+  const instruction = document.getElementById('q-instruction');
+  if (pick === 1) {
+    instruction.textContent = '';
+  } else {
+    instruction.textContent = `Select ${pick} answers`;
+  }
+
+  // Shuffle options
+  const shuffledOpts = shuffle(q.opts);
+  const letters = ['A','B','C','D','E','F'];
+  const list = document.getElementById('options-list');
+  list.innerHTML = '';
+
+  shuffledOpts.forEach((opt, i) => {
+    const li = document.createElement('li');
+    li.className = 'option-item';
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.dataset.value = opt;
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span>${opt}`;
+    btn.addEventListener('click', () => toggleOption(btn, opt, pick));
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+
+  // Reset feedback & buttons
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.style.display = '';
+
+  document.getElementById('btn-submit').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('select-hint').textContent = pick > 1 ? `Choose ${pick} before submitting` : '';
+}
+
+function toggleOption(btn, value, pick) {
+  if (answered) return;
+
+  if (pick === 1) {
+    // Single select: auto-submit
+    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedOptions = new Set([value]);
+    evaluateAnswer();
+  } else {
+    // Multi-select
+    if (selectedOptions.has(value)) {
+      selectedOptions.delete(value);
+      btn.classList.remove('selected');
+    } else {
+      selectedOptions.add(value);
+      btn.classList.add('selected');
+    }
+    const submitBtn = document.getElementById('btn-submit');
+    const hint = document.getElementById('select-hint');
+    if (selectedOptions.size === pick) {
+      submitBtn.style.display = 'inline-flex';
+      hint.textContent = `${pick} selected — ready to submit`;
+    } else {
+      submitBtn.style.display = 'none';
+      hint.textContent = `${selectedOptions.size} of ${pick} selected`;
+    }
+  }
+}
+
+function submitAnswer() {
+  const q = sessionQuestions[currentIndex];
+  if (selectedOptions.size < q.pick) return;
+  evaluateAnswer();
+}
+
+function evaluateAnswer() {
+  answered = true;
+  const q = sessionQuestions[currentIndex];
+
+  // Normalize answers for comparison
+  const normalize = s => s.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+  const correctSet = q.answers.map(normalize);
+
+  // Score: count how many of the user's picks are correct
+  let hits = 0;
+  selectedOptions.forEach(sel => {
+    if (correctSet.some(ca => normalize(sel) === ca || ca.includes(normalize(sel)) || normalize(sel).includes(ca))) {
+      hits++;
+    }
+  });
+
+  const isCorrect = hits >= q.pick;
+
+  if (isCorrect) {
+    correctCount++;
+  } else {
+    wrongCount++;
+  }
+
+  results.push({
+    q: q.q,
+    tag: q.tag,
+    pick: q.pick,
+    userAnswers: [...selectedOptions],
+    correctAnswers: q.answers,
+    isCorrect
+  });
+
+  // Style option buttons
+  document.querySelectorAll('.option-btn').forEach(btn => {
+    btn.disabled = true;
+    const val = btn.dataset.value;
+    const valNorm = normalize(val);
+    const isCorrectOption = correctSet.some(ca => valNorm === ca || ca.includes(valNorm) || valNorm.includes(ca));
+    const wasSelected = selectedOptions.has(val);
+
+    if (wasSelected && isCorrectOption) btn.className = 'option-btn correct';
+    else if (wasSelected && !isCorrectOption) btn.className = 'option-btn wrong';
+    else if (!wasSelected && isCorrectOption) btn.className = 'option-btn missed';
+    else btn.className = 'option-btn';
+  });
+
+  // Feedback strip
+  const fb = document.getElementById('feedback');
+  const icon = document.getElementById('feedback-icon');
+  const text = document.getElementById('feedback-text');
+
+  if (isCorrect) {
+    fb.className = 'feedback show correct';
+    icon.textContent = '✓';
+    text.innerHTML = `<strong>Correct!</strong> ${q.answers.slice(0, 3).join(' / ')}`;
+  } else {
+    fb.className = 'feedback show wrong';
+    icon.textContent = '✗';
+    const accepted = q.answers.slice(0, 4).join(', ');
+    text.innerHTML = `<strong>Not quite.</strong> Accepted: ${accepted}`;
+  }
+
+  document.getElementById('btn-submit').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'inline-flex';
+  document.getElementById('select-hint').textContent = '';
+  document.getElementById('score-live').textContent = correctCount + ' correct';
+}
+
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex >= 20) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  const pct = Math.round((correctCount / 20) * 100);
+
+  document.getElementById('res-score').textContent = correctCount;
+  document.getElementById('res-correct').textContent = correctCount;
+  document.getElementById('res-wrong').textContent = wrongCount;
+  document.getElementById('res-pct').textContent = pct + '%';
+
+  // Update progress bar to 100%
+  document.getElementById('progress-fill').style.width = '100%';
+
+  // Verdict
+  const ring = document.getElementById('score-ring');
+  const verdict = document.getElementById('res-verdict');
+  const sub = document.getElementById('res-sub');
+
+  if (pct >= 80) {
+    ring.className = 'result-score-ring pass';
+    verdict.textContent = 'Excellent work.';
+    sub.textContent = `${pct}% — You\'re well prepared for your naturalization interview.`;
+  } else if (pct >= 60) {
+    ring.className = 'result-score-ring warn';
+    verdict.textContent = 'Keep practicing.';
+    sub.textContent = `${pct}% — Passing threshold is 60%. You\'re close — review missed questions below.`;
+  } else {
+    ring.className = 'result-score-ring fail';
+    verdict.textContent = 'More study needed.';
+    sub.textContent = `${pct}% — Review the missed questions and try again. You've got this.`;
+  }
+
+  // Review list
+  const reviewEl = document.getElementById('review-list');
+  reviewEl.innerHTML = '';
+  results.forEach((r, i) => {
+    const div = document.createElement('div');
+    div.className = `review-item ${r.isCorrect ? 'correct-r' : 'wrong-r'}`;
+    const yourStr = r.userAnswers.join(', ') || '(none)';
+    const correctStr = r.correctAnswers.slice(0, 4).join(', ');
+    div.innerHTML = `
+      <div class="review-q"><span class="qnum">Q${i+1}</span>${r.q}</div>
+      <div class="review-answers">
+        ${r.isCorrect
+          ? `<span class="correct-a">✓ ${yourStr}</span>`
+          : `<span class="yours">✗ You chose: ${yourStr}</span><span class="correct-a">✓ Accepted: ${correctStr}</span>`
+        }
+      </div>`;
+    reviewEl.appendChild(div);
+  });
+
+  showScreen('screen-results');
+}
+</script>
+</body>
+</html>
