@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IB Node Ping Failure After GoDaddy SSL Renewal | VianCore</title>
+  <meta name="description" content="How a GoDaddy certificate chain change from G2 to R1 hierarchy broke PeopleSoft Integration Broker node ping — and how to fix it." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #000000;
+      --surface:      #0d0d0d;
+      --surface-2:    #141414;
+      --border:       #1e1e1e;
+      --accent:       #20b2aa;
+      --accent-dim:   rgba(32,178,170,0.12);
+      --accent-glow:  rgba(32,178,170,0.25);
+      --text:         #e8e8e8;
+      --text-muted:   #888;
+      --text-faint:   #555;
+      --warn:         #e6a817;
+      --warn-dim:     rgba(230,168,23,0.10);
+      --danger:       #e05252;
+      --danger-dim:   rgba(224,82,82,0.10);
+      --success:      #4caf88;
+      --success-dim:  rgba(76,175,136,0.10);
+      --font:         'Inter', sans-serif;
+      --radius:       8px;
+      --radius-lg:    12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(0,0,0,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .nav-brand {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 4rem 2rem 3rem;
+      max-width: 860px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+    .hero h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+    .hero-sub {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 680px;
+      margin-bottom: 1.75rem;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      font-size: 0.78rem;
+      color: var(--text-faint);
+    }
+    .meta-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    /* ── SUMMARY CARD ── */
+    .summary-card {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .summary-card h2 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .summary-card p { color: var(--text); font-size: 0.95rem; }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 3rem; }
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.5rem;
+    }
+    .section h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section p { color: var(--text); margin-bottom: 0.75rem; }
+    .section p:last-child { margin-bottom: 0; }
+
+    /* ── ERROR BLOCK ── */
+    .error-block {
+      background: var(--danger-dim);
+      border: 1px solid var(--danger);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.88rem;
+      color: #f0a0a0;
+    }
+
+    /* ── CHAIN COMPARE ── */
+    .chain-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 600px) { .chain-grid { grid-template-columns: 1fr; } }
+
+    .chain-box {
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--border);
+    }
+    .chain-box.old { background: var(--surface-2); }
+    .chain-box.new { background: var(--accent-dim); border-color: var(--accent); }
+
+    .chain-box-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.85rem;
+    }
+    .chain-box.old .chain-box-label { color: var(--text-muted); }
+    .chain-box.new .chain-box-label { color: var(--accent); }
+
+    .chain-step {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .cert-name {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.78rem;
+      font-family: 'Courier New', monospace;
+      color: var(--text);
+    }
+    .chain-box.new .cert-name { color: #7de8e4; border-color: rgba(32,178,170,0.3); }
+    .chain-arrow {
+      text-align: center;
+      color: var(--text-faint);
+      font-size: 0.8rem;
+      line-height: 1.4;
+      padding: 2px 0;
+    }
+    .chain-box.new .chain-arrow { color: var(--accent); }
+    .cert-new-badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--accent);
+      color: #000;
+      border-radius: 3px;
+      padding: 1px 5px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ── CALLOUT BOXES ── */
+    .callout {
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.9rem;
+      border-left: 3px solid;
+    }
+    .callout.warn {
+      background: var(--warn-dim);
+      border-color: var(--warn);
+      color: #f0d080;
+    }
+    .callout.info {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--text);
+    }
+    .callout.success {
+      background: var(--success-dim);
+      border-color: var(--success);
+      color: #a0e0c0;
+    }
+    .callout strong { display: block; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.35rem; opacity: 0.8; }
+
+    /* ── CHECKLIST ── */
+    .checklist { list-style: none; margin: 1rem 0; }
+    .checklist li {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .check-num {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 1px;
+    }
+
+    /* ── CHANGE CONTROL TABLE ── */
+    .cc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    @media (max-width: 540px) { .cc-grid { grid-template-columns: 1fr; } }
+    .cc-item {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      font-size: 0.82rem;
+    }
+    .cc-item .cc-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.2rem;
+    }
+    .cc-item .cc-val { color: var(--text); }
+
+    /* ── GODADDY NOTE ── */
+    .vendor-note {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+    .vendor-note .vn-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.5rem;
+    }
+    .vendor-note p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .vendor-note p:last-child { margin-bottom: 0; }
+    .vendor-note a { color: var(--accent); text-decoration: none; }
+    .vendor-note a:hover { text-decoration: underline; }
+
+    /* ── LESSON CARD ── */
+    .lesson-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin: 1.25rem 0;
+    }
+    .lesson-card h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .lesson-card p { font-size: 0.88rem; color: var(--text-muted); }
+
+    /* ── DIVIDER ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-faint);
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ── RESPONSIVE NAV ── */
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero { padding: 2.5rem 1.25rem 2rem; }
+      .page-wrap { padding: 2rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/index.html">VianCore</a>
+  <ul class="nav-links">
+    <li><a href="/knowledge.html">Knowledge Base</a></li>
+    <li><a href="/learning-hub.html">Learning Hub</a></li>
+    <li><a href="/about.html">About</a></li>
+    <li><a href="/contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow">Field Notes · PeopleSoft Integration</div>
+  <h1>IB Node Ping Failure After GoDaddy SSL Certificate Renewal</h1>
+  <p class="hero-sub">
+    A GoDaddy certificate chain change — from the legacy G2 hierarchy to the new R1 hierarchy — caused Integration Broker node ping to fail silently after a routine SSL renewal. Here is what happened and how it was resolved.
+  </p>
+  <div class="hero-meta">
+    <span class="meta-tag">PeopleSoft Integration Broker</span>
+    <span class="meta-tag">WebLogic SSL</span>
+    <span class="meta-tag">GoDaddy R1 Chain</span>
+    <span class="meta-tag">Digital Certificates</span>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="page-wrap">
+
+  <!-- SUMMARY -->
+  <div class="summary-card">
+    <h2>What Happened</h2>
+    <p>
+      After renewing an SSL certificate on WebLogic, PeopleSoft Integration Broker node ping began failing with error <strong>158,10836 — General Connection Failed</strong>. Network connectivity was confirmed working. The real problem was that the renewed GoDaddy certificate was issued under a new certificate hierarchy (R1) that was not yet trusted in PeopleSoft Digital Certificates. Importing the new root and intermediate chain resolved the issue immediately.
+    </p>
+  </div>
+
+  <!-- SECTION 1: THE ERROR -->
+  <section class="section">
+    <div class="section-label">01 · Error Observed</div>
+    <h2>What PeopleSoft Reported</h2>
+    <p>PeopleSoft displayed the following error when attempting a node ping through the Integration Broker Gateway:</p>
+    <div class="error-block">Integration Gateway: General Connection Failed (158,10836)</div>
+    <p>PeopleSoft's own guidance for this error lists possible causes including a bad Gateway URL, a Sync Service timeout, or a Java exception on the application server. In this case, none of those were the actual cause.</p>
+  </section>
+
+  <!-- SECTION 2: INITIAL VALIDATION -->
+  <section class="section">
+    <div class="section-label">02 · Initial Validation</div>
+    <h2>What curl Told Us — And What It Didn't</h2>
+    <p>The application server was tested using <code style="background:var(--surface-2);padding:1px 5px;border-radius:3px;font-size:0.85em;color:var(--accent);">curl</code> against the load balancer Gateway URL. The test succeeded.</p>
+    <p>This confirmed that DNS, routing, and firewall paths were working. The Gateway URL was reachable at the operating system level.</p>
+    <div class="callout warn">
+      <strong>Important distinction</strong>
+      <code>curl</code> success only proves network reachability. It does not prove that PeopleSoft's Java runtime and Integration Broker SSL validation stack trust the certificate chain. These are different trust stores operating at different layers.
+    </div>
+    <p>PeopleSoft node ping runs through the PeopleSoft application server, the Java runtime, Integration Broker, and the PeopleSoft Digital Certificates trust configuration. All four layers must succeed for a node ping to complete.</p>
+  </section>
+
+  <!-- SECTION 3: CHAIN COMPARISON -->
+  <section class="section">
+    <div class="section-label">03 · Root Cause</div>
+    <h2>The Certificate Chain Changed</h2>
+    <p>Comparing the old working certificate against the newly renewed certificate revealed a different GoDaddy hierarchy:</p>
+
+    <div class="chain-grid">
+      <div class="chain-box old">
+        <div class="chain-box-label">Old Chain — Previously Working</div>
+        <div class="chain-step">
+          <div class="cert-name">Go Daddy Root CA — G2</div>
+          <div class="chain-arrow">↓</div>
+          <div class="cert-name">Go Daddy Secure CA — G2</div>
+          <div class="chain-arrow">↓</div>
+          <div class="cert-name">Server / Leaf Certificate</div>
+        </div>
+      </div>
+      <div class="chain-box new">
+        <div class="chain-box-label">New Chain — After Renewal</div>
+        <div class="chain-step">
+          <div class="cert-name">Go Daddy Root CA — G2</div>
+          <div class="chain-arrow">↓</div>
+          <div class="cert-name">GoDaddy TLS Root CA — R1 <span class="cert-new-badge">New</span></div>
+          <div class="chain-arrow">↓</div>
+          <div class="cert-name">GoDaddy TLS Intermediate CA DV — R1v1 <span class="cert-new-badge">New</span></div>
+          <div class="chain-arrow">↓</div>
+          <div class="cert-name">Server / Leaf Certificate</div>
+        </div>
+      </div>
+    </div>
+
+    <p>The renewed certificate introduced two additional certificate chain components — the R1 root and the R1v1 intermediate — that were not present in PeopleSoft Digital Certificates. Because PeopleSoft could not build a complete trust path to the leaf certificate, the SSL handshake failed and node ping returned the General Connection Failed error.</p>
+
+    <div class="callout info">
+      <strong>Why this surprised the team</strong>
+      The assumption was that renewing from the same vendor (GoDaddy) would reuse the same root and intermediate hierarchy. That assumption is not safe. GoDaddy officially transitioned DV certificate issuance to the R1 hierarchy. Any renewal after this transition will produce a certificate with a different chain than the one previously trusted.
+    </div>
+  </section>
+
+  <!-- GODADDY VENDOR NOTE -->
+  <div class="vendor-note">
+    <div class="vn-label">GoDaddy — Official Vendor Context</div>
+    <p>GoDaddy has formally migrated public DV certificate issuance to the <strong>GoDaddy TLS Root CA – R1</strong> hierarchy using the <strong>GoDaddy TLS Intermediate CA DV – R1v1</strong> issuing CA. This is a deliberate architectural change, not a temporary variation.</p>
+    <p>During the transition, GoDaddy maintains a cross-signed trust path from R1 back to G2, which allows browsers to validate the chain. However, systems like PeopleSoft that maintain their own internal trust store (Digital Certificates) must be updated manually — they do not benefit from the cross-signed path automatically.</p>
+    <p>Certificate bundle files (including the R1 root and R1v1 intermediate) are available from GoDaddy's certificate repository at <a href="https://certs.godaddy.com" target="_blank" rel="noopener">certs.godaddy.com</a>.</p>
+  </div>
+
+  <!-- SECTION 4: 2048 vs 4096 -->
+  <section class="section">
+    <div class="section-label">04 · Observation</div>
+    <h2>Key Size Change — 2048 to 4096 bit</h2>
+    <p>The old certificate used a 2048-bit RSA key. The renewed certificate used a 4096-bit RSA key, reflecting stronger current security standards.</p>
+    <div class="callout warn">
+      <strong>Common misdiagnosis risk</strong>
+      The key size change is real but was not the cause of the failure. The failure was entirely due to the missing certificate chain in PeopleSoft Digital Certificates. Do not conflate RSA key size with certificate chain trust — they are separate concerns.
+    </div>
+  </section>
+
+  <!-- SECTION 5: RESOLUTION -->
+  <section class="section">
+    <div class="section-label">05 · Resolution</div>
+    <h2>What Fixed It</h2>
+    <p>The new GoDaddy certificate bundle was downloaded and compared against the certificates present in PeopleSoft Digital Certificates. The following certificates were imported:</p>
+    <div class="callout success">
+      <strong>Certificates Imported</strong>
+      GoDaddy TLS Root CA – R1 (new root) · GoDaddy TLS Intermediate CA DV – R1v1 (intermediate 1) · any additional intermediate in the bundle
+    </div>
+    <p>After importing the complete chain, PeopleSoft was able to validate the WebLogic SSL certificate. Integration Broker node ping completed successfully. No Gateway URL changes and no load balancer routing changes were needed.</p>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- SECTION 6: CHECKLIST -->
+  <section class="section">
+    <div class="section-label">06 · Future Reference</div>
+    <h2>SSL Renewal Checklist for PeopleSoft / WebLogic</h2>
+    <p>Use this checklist for any future WebLogic or PeopleSoft SSL renewal to prevent the same issue from recurring.</p>
+    <ul class="checklist">
+      <li><span class="check-num">1</span>Capture a screenshot of the old certificate hierarchy <em>before</em> renewal begins.</li>
+      <li><span class="check-num">2</span>Capture a screenshot of the new certificate hierarchy <em>immediately after</em> renewal.</li>
+      <li><span class="check-num">3</span>Compare old and new root and intermediate certificate names explicitly — do not assume they match.</li>
+      <li><span class="check-num">4</span>Confirm whether the chain changed hierarchy (e.g., G2 to R1) or introduced additional intermediates.</li>
+      <li><span class="check-num">5</span>Download the official certificate bundle from the certificate authority (e.g., certs.godaddy.com).</li>
+      <li><span class="check-num">6</span>Import any new required root and intermediate certificates into PeopleSoft Digital Certificates.</li>
+      <li><span class="check-num">7</span>Confirm WebLogic or the load balancer is presenting the full chain (not just the leaf certificate).</li>
+      <li><span class="check-num">8</span>Restart required PeopleSoft / WebLogic services if applicable.</li>
+      <li><span class="check-num">9</span>Test Gateway Ping from the Integration Broker Gateway configuration page.</li>
+      <li><span class="check-num">10</span>Load Gateway Connectors and confirm they respond correctly.</li>
+      <li><span class="check-num">11</span>Test Node Ping from the Integration Broker Network configuration page.</li>
+      <li><span class="check-num">12</span>Save screenshots and logs as change evidence before closing the record.</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 7: CHANGE CONTROL -->
+  <section class="section">
+    <div class="section-label">07 · Change Control</div>
+    <h2>Recommended Change Record Fields</h2>
+    <p>SSL renewal changes should carry formal change control because they can directly break production integrations. Future change records for this type of work should include:</p>
+    <div class="cc-grid">
+      <div class="cc-item"><div class="cc-label">Field</div><div class="cc-val">Existing certificate expiration date</div></div>
+      <div class="cc-item"><div class="cc-label">Field</div><div class="cc-val">Old certificate hierarchy screenshot</div></div>
+      <div class="cc-item"><div class="cc-label">Field</div><div class="cc-val">New certificate hierarchy screenshot</div></div>
+      <div class="cc-item"><div class="cc-label">Field</div><div class="cc-val">Certificate authority bundle used</div></div>
+      <div class="cc-item"><div class="cc-label">Field</div><div class="cc-val">List of certificates imported into Digital Certificates</div></div>
+      <div class="cc-item"><div class="cc-label">Field</div><div class="cc-val">Gateway Ping validation evidence</div></div>
+      <div class="cc-item"><div class="cc-label">Field</div><div class="cc-val">Node Ping validation evidence</div></div>
+      <div class="cc-item"><div class="cc-label">Field</div><div class="cc-val">Rollback plan</div></div>
+      <div class="cc-item"><div class="cc-label">Field</div><div class="cc-val">Approval and implementation timestamp</div></div>
+      <div class="cc-item"><div class="cc-label">Field</div><div class="cc-val">Post-change verification sign-off</div></div>
+    </div>
+  </section>
+
+  <!-- SECTION 8: LESSON LEARNED -->
+  <section class="section">
+    <div class="section-label">08 · Lesson Learned</div>
+    <h2>Key Takeaways</h2>
+
+    <div class="lesson-card">
+      <h3>Certificate renewal is not just a file swap</h3>
+      <p>Even when using the same certificate authority, the renewed certificate may be issued under a different root or intermediate hierarchy. Compare chains explicitly every time.</p>
+    </div>
+
+    <div class="lesson-card">
+      <h3>curl success does not mean PeopleSoft SSL success</h3>
+      <p>Operating system network reachability and PeopleSoft's Java-based SSL trust validation are independent. Always complete a full node ping test as part of SSL renewal validation.</p>
+    </div>
+
+    <div class="lesson-card">
+      <h3>GoDaddy's R1 migration is permanent and ongoing</h3>
+      <p>GoDaddy has formally moved DV certificate issuance to the R1 hierarchy. Any environment that has not yet renewed its certificate under the R1 chain will encounter this issue on next renewal. Proactive preparation eliminates unplanned downtime.</p>
+    </div>
+
+    <div class="lesson-card">
+      <h3>PeopleSoft Digital Certificates requires manual trust chain updates</h3>
+      <p>Unlike browsers, which benefit from GoDaddy's cross-signed trust path automatically, PeopleSoft maintains an internal trust store that must be managed explicitly. Certificate chain updates to Digital Certificates must be planned as part of every SSL renewal.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    <a href="/index.html">VianCore</a> &nbsp;·&nbsp;
+    <a href="/knowledge.html">Knowledge Base</a> &nbsp;·&nbsp;
+    <a href="/learning-hub.html">Learning Hub</a> &nbsp;·&nbsp;
+    <a href="/contact.html">Contact</a>
+  </p>
+  <p style="margin-top:0.75rem;">© 2025 VianCore. Enterprise knowledge for practitioners.</p>
+</footer>
+
+</body>
+</html>
