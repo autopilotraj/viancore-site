@@ -7,7 +7,8 @@
   <meta name="description" content="How a GoDaddy certificate chain change from G2 to R1 hierarchy broke PeopleSoft Integration Broker node ping — and how to fix it." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/style.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -44,38 +45,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── NAV ── */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(0,0,0,0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 60px;
-    }
-    .nav-brand {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--accent);
-      text-decoration: none;
-      letter-spacing: -0.02em;
-    }
-    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--accent); }
-
-    /* ── HERO ── */
+    /* ── LAYOUT ── */
     .hero {
       padding: 4rem 2rem 3rem;
       max-width: 860px;
@@ -397,15 +367,40 @@
 <body>
 
 <!-- NAV -->
-<nav>
-  <a class="nav-brand" href="/index.html">VianCore</a>
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <a href="../">
+        <svg viewBox="0 0 340 52" xmlns="http://www.w3.org/2000/svg" aria-label="VianCore home">
+          <circle cx="26" cy="26" r="20" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+          <circle cx="26" cy="26" r="12" fill="none" stroke="#aaaaaa" stroke-width="1.4"/>
+          <circle cx="26" cy="26" r="4" fill="#20b2aa"/>
+          <line x1="26" y1="2"  x2="26" y2="14" stroke="#ffffff" stroke-width="1.5"/>
+          <line x1="26" y1="38" x2="26" y2="50" stroke="#ffffff" stroke-width="1.5"/>
+          <line x1="2"  y1="26" x2="14" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+          <line x1="38" y1="26" x2="50" y2="26" stroke="#ffffff" stroke-width="1.5"/>
+          <text x="58" y="38" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="300" letter-spacing="9" fill="white">VIAN<tspan fill="#20b2aa">C</tspan>ORE</text>
+        </svg>
+      </a>
+    </div>
+    <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
+  </div>
   <ul class="nav-links">
-    <li><a href="/knowledge.html">Knowledge Base</a></li>
-    <li><a href="/learning-hub.html">Learning Hub</a></li>
-    <li><a href="/about.html">About</a></li>
-    <li><a href="/contact.html">Contact</a></li>
+    <li><a href="../knowledge/" class="active">Knowledge</a></li>
+    <li><a href="../knowledge/#security">Security</a></li>
+    <li><a href="../knowledge/#systems">Systems</a></li>
+    <li><a href="../about/">About</a></li>
   </ul>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="nav-mobile" id="mobileMenu">
+  <a href="../knowledge/" class="active">Knowledge</a>
+  <a href="../knowledge/#security">Security</a>
+  <a href="../knowledge/#systems">Systems</a>
+  <a href="../about/">About</a>
+</div>
 
 <!-- HERO -->
 <header class="hero">
@@ -527,15 +522,36 @@
 
   <hr class="divider" />
 
+  <!-- SECTION 6: CHECKLIST -->
+  <section class="section">
+    <div class="section-label">06 · Future Reference</div>
+    <h2>SSL Renewal Checklist for PeopleSoft / WebLogic</h2>
+    <p>Use this checklist for any future WebLogic or PeopleSoft SSL renewal to prevent the same issue from recurring.</p>
+    <ul class="checklist">
+      <li><span class="check-num">1</span>Capture a screenshot of the old certificate hierarchy <em>before</em> renewal begins.</li>
+      <li><span class="check-num">2</span>Capture a screenshot of the new certificate hierarchy <em>immediately after</em> renewal.</li>
+      <li><span class="check-num">3</span>Compare old and new root and intermediate certificate names explicitly — do not assume they match.</li>
+      <li><span class="check-num">4</span>Confirm whether the chain changed hierarchy (e.g., G2 to R1) or introduced additional intermediates.</li>
+      <li><span class="check-num">5</span>Download the official certificate bundle from the certificate authority (e.g., certs.godaddy.com).</li>
+      <li><span class="check-num">6</span>Import any new required root and intermediate certificates into PeopleSoft Digital Certificates.</li>
+      <li><span class="check-num">7</span>Confirm WebLogic or the load balancer is presenting the full chain (not just the leaf certificate).</li>
+      <li><span class="check-num">8</span>Restart required PeopleSoft / WebLogic services if applicable.</li>
+      <li><span class="check-num">9</span>Test Gateway Ping from the Integration Broker Gateway configuration page.</li>
+      <li><span class="check-num">10</span>Load Gateway Connectors and confirm they respond correctly.</li>
+      <li><span class="check-num">11</span>Test Node Ping from the Integration Broker Network configuration page.</li>
+      <li><span class="check-num">12</span>Save screenshots and logs as change evidence before closing the record.</li>
+    </ul>
+  </section>
+
 </main>
 
 <!-- FOOTER -->
 <footer>
   <p>
-    <a href="/index.html">VianCore</a> &nbsp;·&nbsp;
-    <a href="/knowledge.html">Knowledge Base</a> &nbsp;·&nbsp;
-    <a href="/learning-hub.html">Learning Hub</a> &nbsp;·&nbsp;
-    <a href="/contact.html">Contact</a>
+    <a href="../">VianCore</a> &nbsp;·&nbsp;
+    <a href="../knowledge/">Knowledge Base</a> &nbsp;·&nbsp;
+    <a href="../about/">About</a> &nbsp;·&nbsp;
+    <a href="../contact/">Contact</a>
   </p>
   <p style="margin-top:0.75rem;">© 2025 VianCore. Enterprise knowledge for practitioners.</p>
 </footer>
