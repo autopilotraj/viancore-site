@@ -490,6 +490,55 @@
         </ul>
       </section>
 
+      <!-- 07 CHANGE CONTROL -->
+      <section id="change-control" class="doc-section">
+        <div class="doc-section-title">07 · Change Control</div>
+        <h2>Recommended Change Record Fields</h2>
+        <p class="doc-para">SSL renewal changes should carry formal change control because they can directly break production integrations. Future change records for this type of work should include:</p>
+        <div class="cc-grid">
+          <div class="cc-item"><div class="cc-label">Required Field</div><div class="cc-val">Existing certificate expiration date</div></div>
+          <div class="cc-item"><div class="cc-label">Required Field</div><div class="cc-val">Old certificate hierarchy screenshot</div></div>
+          <div class="cc-item"><div class="cc-label">Required Field</div><div class="cc-val">New certificate hierarchy screenshot</div></div>
+          <div class="cc-item"><div class="cc-label">Required Field</div><div class="cc-val">Certificate authority bundle used</div></div>
+          <div class="cc-item"><div class="cc-label">Required Field</div><div class="cc-val">List of certificates imported into Digital Certificates</div></div>
+          <div class="cc-item"><div class="cc-label">Required Field</div><div class="cc-val">Gateway Ping validation evidence</div></div>
+          <div class="cc-item"><div class="cc-label">Required Field</div><div class="cc-val">Node Ping validation evidence</div></div>
+          <div class="cc-item"><div class="cc-label">Required Field</div><div class="cc-val">Rollback plan</div></div>
+          <div class="cc-item"><div class="cc-label">Required Field</div><div class="cc-val">Approval and implementation timestamp</div></div>
+          <div class="cc-item"><div class="cc-label">Required Field</div><div class="cc-val">Post-change verification sign-off</div></div>
+        </div>
+      </section>
+
+      <!-- 08 LESSONS -->
+      <section id="lessons" class="doc-section">
+        <div class="doc-section-title">08 · Lessons Learned</div>
+        <h2>Key Takeaways</h2>
+        <div class="lesson-card">
+          <h3>Certificate renewal is not just a file swap</h3>
+          <p>Even when using the same certificate authority, the renewed certificate may be issued under a different root or intermediate hierarchy. Compare chains explicitly every time.</p>
+        </div>
+        <div class="lesson-card">
+          <h3>curl success does not mean PeopleSoft SSL success</h3>
+          <p>OS-level network reachability and PeopleSoft's Java-based SSL trust validation are independent. Always complete a full node ping test as part of SSL renewal validation.</p>
+        </div>
+        <div class="lesson-card">
+          <h3>GoDaddy's R1 migration is permanent and ongoing</h3>
+          <p>Any environment that has not yet renewed its certificate under the R1 chain will encounter this issue on next renewal. Proactive preparation eliminates unplanned downtime.</p>
+        </div>
+        <div class="lesson-card">
+          <h3>PeopleSoft Digital Certificates requires manual trust chain updates</h3>
+          <p>Unlike browsers that benefit from GoDaddy's cross-signed trust path automatically, PeopleSoft's internal trust store must be managed explicitly on every renewal.</p>
+        </div>
+      </section>
+
+      <!-- DOC FOOTER NAV -->
+      <div class="doc-footer">
+        <a href="../knowledge/#systems">← Back to Knowledge Base</a>
+        <a href="../knowledge/#systems">Systems</a>
+      </div>
+
+    </div><!-- /doc-body -->
+
       <!-- DOC FOOTER NAV -->
       <div class="doc-footer">
         <a href="../knowledge/#systems">← Back to Knowledge Base</a>
