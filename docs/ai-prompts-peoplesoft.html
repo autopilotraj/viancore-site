@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Prompts for PeopleSoft & Enterprise IT Professionals | VianCore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000000;
+    --surface:#0e0e0e;
+    --surface-2:#151515;
+    --border:#262626;
+    --text:#f2f2f2;
+    --text-dim:#a3a3a3;
+    --accent:#20b2aa;
+    --accent-dim:rgba(32,178,170,0.12);
+    --warn:#e0a72e;
+    --warn-bg:rgba(224,167,46,0.08);
+    --info-bg:rgba(32,178,170,0.08);
+    --success:#3ecf8e;
+    --success-bg:rgba(62,207,142,0.08);
+    --radius:8px;
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.6;
+  }
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  /* breadcrumb */
+  .breadcrumb{
+    border-bottom:1px solid var(--border);
+    padding:14px 24px;
+    font-size:13px;
+    color:var(--text-dim);
+  }
+  .breadcrumb a{color:var(--text-dim);}
+  .breadcrumb a:hover{color:var(--accent);}
+
+  /* hero */
+  .hero{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:56px 24px 40px;
+    border-bottom:1px solid var(--border);
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    background:var(--accent-dim);
+    padding:6px 12px;
+    border-radius:20px;
+    margin-bottom:18px;
+  }
+  h1{
+    font-size:2.4rem;
+    font-weight:800;
+    margin:0 0 14px;
+    letter-spacing:-0.01em;
+  }
+  .subtitle{
+    font-size:1.05rem;
+    color:var(--text-dim);
+    max-width:760px;
+    margin:0 0 20px;
+  }
+  .meta-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:8px;
+  }
+  .meta-tag{
+    font-size:12px;
+    color:var(--text-dim);
+    border:1px solid var(--border);
+    padding:4px 10px;
+    border-radius:16px;
+  }
+  .hero-disclaimer{
+    margin-top:24px;
+    font-size:13.5px;
+    color:var(--warn);
+    border-left:3px solid var(--warn);
+    padding:10px 14px;
+    background:var(--warn-bg);
+    border-radius:0 6px 6px 0;
+    max-width:760px;
+  }
+
+  /* layout */
+  .layout{
+    max-width:var(--maxw);
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:260px 1fr;
+    gap:48px;
+    padding:40px 24px 100px;
+  }
+  @media (max-width:860px){
+    .layout{grid-template-columns:1fr;}
+    .sidebar{position:static !important;order:2;}
+  }
+
+  /* sidebar */
+  .sidebar{
+    position:sticky;
+    top:24px;
+    align-self:start;
+  }
+  .sidebar-block{
+    margin-bottom:28px;
+  }
+  .sidebar-title{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin-bottom:12px;
+  }
+  .toc-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    border-left:1px solid var(--border);
+  }
+  .toc-list li{margin:0;}
+  .toc-list a{
+    display:block;
+    font-size:13.5px;
+    color:var(--text-dim);
+    padding:7px 0 7px 14px;
+    border-left:2px solid transparent;
+    margin-left:-1px;
+  }
+  .toc-list a:hover, .toc-list a.active{
+    color:var(--text);
+    border-left-color:var(--accent);
+    text-decoration:none;
+  }
+  .doc-info{
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px;
+    font-size:13px;
+    color:var(--text-dim);
+  }
+  .doc-info div{margin-bottom:8px;}
+  .doc-info div:last-child{margin-bottom:0;}
+  .doc-info strong{color:var(--text);font-weight:600;}
+  .tag-list{display:flex;flex-wrap:wrap;gap:6px;}
+  .tag-pill{
+    font-size:11.5px;
+    color:var(--accent);
+    background:var(--accent-dim);
+    padding:4px 9px;
+    border-radius:14px;
+  }
+
+  /* main content */
+  .content section{
+    margin-bottom:52px;
+    scroll-margin-top:24px;
+  }
+  .section-label{
+    font-size:13px;
+    font-weight:700;
+    color:var(--accent);
+    letter-spacing:0.04em;
+  }
+  h2{
+    font-size:1.5rem;
+    font-weight:700;
+    margin:6px 0 18px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--border);
+  }
+  h3{
+    font-size:1.05rem;
+    font-weight:600;
+    margin:28px 0 6px;
+    color:var(--text);
+  }
+  p{color:#d4d4d4;}
+  .lede{color:var(--text-dim);font-size:0.98rem;}
+
+  .prompt-card{
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    background:var(--surface);
+    padding:18px 20px;
+    margin:14px 0 22px;
+  }
+  .prompt-card .label{
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--text-dim);
+    margin-bottom:8px;
+  }
+  .prompt-text{
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+    font-size:13.5px;
+    line-height:1.55;
+    color:#e8e8e8;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:14px;
+    white-space:pre-wrap;
+  }
+  .copy-btn{
+    display:inline-block;
+    margin-top:10px;
+    font-size:12px;
+    color:var(--accent);
+    border:1px solid var(--accent);
+    background:transparent;
+    padding:5px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .copy-btn:hover{background:var(--accent-dim);}
+
+  .callout{
+    border-radius:6px;
+    padding:14px 16px;
+    margin:16px 0;
+    font-size:14px;
+    border-left:3px solid;
+  }
+  .callout.info{background:var(--info-bg);border-color:var(--accent);}
+  .callout.warn{background:var(--warn-bg);border-color:var(--warn);color:#f0d9a8;}
+  .callout.success{background:var(--success-bg);border-color:var(--success);}
+  .callout strong{display:block;margin-bottom:4px;color:var(--text);}
+
+  .stub{
+    border:1px dashed var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+    color:var(--text-dim);
+    font-size:14px;
+    text-align:left;
+  }
+  .stub strong{color:var(--text);}
+
+  footer.doc-footer{
+    border-top:1px solid var(--border);
+    padding-top:24px;
+    margin-top:12px;
+    font-size:13px;
+    color:var(--text-dim);
+  }
+</style>
+</head>
+<body>
+
+<div class="breadcrumb">
+  <a href="/">VianCore</a> / <a href="/knowledge">Knowledge Base</a> / AI Prompts for PeopleSoft & Enterprise IT Professionals
+</div>
+
+<div class="hero">
+  <span class="eyebrow">Enterprise Knowledge · AI Practices</span>
+  <h1>AI Prompts for PeopleSoft & Enterprise IT Professionals</h1>
+  <p class="subtitle">A working library of tested, generic prompt templates for PeopleSoft functional documentation, security and audit work, and upgrade cutover planning. Built for admins, not for general AI use.</p>
+  <div class="meta-tags">
+    <span class="meta-tag">AI</span>
+    <span class="meta-tag">PeopleSoft</span>
+    <span class="meta-tag">Prompt Engineering</span>
+    <span class="meta-tag">Security</span>
+    <span class="meta-tag">PSAdmin</span>
+  </div>
+  <div class="hero-disclaimer">
+    ⚠️ Prompts are tested starting points, not guaranteed outputs. Verify all AI-generated content against your own environment and official documentation before use.
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-block">
+      <div class="sidebar-title">In This Document</div>
+      <ul class="toc-list">
+        <li><a href="#sec01">01 · Why a Prompt Library Matters</a></li>
+        <li><a href="#sec02">02 · Functional & Technical Docs</a></li>
+        <li><a href="#sec03">03 · Code & Configuration Review</a></li>
+        <li><a href="#sec04">04 · Security & Audit Support</a></li>
+        <li><a href="#sec05">05 · Patching & Upgrade Prep</a></li>
+        <li><a href="#sec06">06 · Data Safety & Due Diligence</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-block">
+      <div class="sidebar-title">Document Info</div>
+      <div class="doc-info">
+        <div><strong>Category:</strong> Enterprise Knowledge / AI Practices</div>
+        <div><strong>Last updated:</strong> July 3, 2026</div>
+        <div><strong>Read time:</strong> ~9 min</div>
+        <div><strong>Status:</strong> Living document. Sections 03 and part of 05 are in progress.</div>
+      </div>
+    </div>
+
+    <div class="sidebar-block">
+      <div class="sidebar-title">Tags</div>
+      <div class="tag-list">
+        <span class="tag-pill">AI</span>
+        <span class="tag-pill">PeopleSoft</span>
+        <span class="tag-pill">Prompt Engineering</span>
+        <span class="tag-pill">PeopleTools Upgrade</span>
+        <span class="tag-pill">Security</span>
+        <span class="tag-pill">PSAdmin</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+
+    <section id="sec01">
+      <div class="section-label">01·</div>
+      <h2>Why a Personal Prompt Library Matters</h2>
+      <p>Most AI prompt libraries are generic. Thousands of templates built for marketing, sales, or general business writing. Almost none are built for the work PeopleSoft system and security administrators actually do: documenting configuration changes, reviewing access, and preparing for upgrade cutovers without missing a step.</p>
+      <p class="lede">Every prompt here has been tested, not just written. Each one is generic and sanitized. No client names, no environment-specific details, no real system data. They're grounded in real PeopleSoft terminology and, where possible, Oracle's own documentation. Save the ones that work for you, adapt the wording to your environment, and build your own version over time.</p>
+    </section>
+
+    <section id="sec02">
+      <div class="section-label">02·</div>
+      <h2>Functional & Technical Documentation</h2>
+      <p class="lede">Prompts for drafting the documentation admins write constantly: functional spec outlines, change control summaries, operational runbooks, and incident write-ups.</p>
+
+      <h3>Functional Spec Outline</h3>
+      <div class="prompt-card">
+        <div class="label">Prompt</div>
+        <div class="prompt-text">Act as a PeopleSoft functional analyst. I need a functional specification outline for a new [module/process] enhancement. The business requirement is: [1-2 sentence description]. Generate a structured outline covering business requirements, current state, proposed solution, impacted PeopleSoft objects, security/role considerations, and testing scope. Do not fill in speculative details, flag each section I need to provide input for.</div>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">Copy prompt</button>
+      </div>
+      <div class="callout info"><strong>Tested result</strong>It refuses to invent object, page, or role names. It flags what you need to supply instead of guessing, which is the right behavior for a documentation scaffold.</div>
+
+      <h3>Configuration Change Summary</h3>
+      <div class="prompt-card">
+        <div class="label">Prompt</div>
+        <div class="prompt-text">I need to document a configuration change for change control records. Change made: [describe change]. Write a concise, audit-ready summary covering what was changed, why, systems/modules affected, and rollback consideration. Keep it factual, do not add justification I haven't provided.</div>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">Copy prompt</button>
+      </div>
+      <div class="callout info"><strong>Tested result</strong>It flags downstream dependency risk, like reports or queries referencing a changed translate value, without inventing a justification you didn't give it. That's a common PeopleSoft gotcha worth catching early.</div>
+
+      <h3>Operational Runbook Template</h3>
+      <div class="prompt-card">
+        <div class="label">Prompt</div>
+        <div class="prompt-text">I need to create a runbook for a recurring PeopleSoft operational task. Task: [describe task]. Generate a step-by-step runbook template covering pre-checks, execution steps, validation steps, and rollback/escalation path. Use placeholders for environment-specific details, do not assume specific server names, job names, or credentials.</div>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">Copy prompt</button>
+      </div>
+      <div class="callout info"><strong>Tested result</strong>It uses placeholders correctly instead of guessing at job or table names. Structurally solid, with no fabricated specifics.</div>
+
+      <h3>Incident / Issue Write-Up</h3>
+      <div class="prompt-card">
+        <div class="label">Prompt</div>
+        <div class="prompt-text">Help me write an incident summary for documentation. Issue: [describe issue and resolution]. Structure it as: issue description, impact, root cause (mark as confirmed or suspected), resolution steps taken, and preventive action. Do not speculate on root cause beyond what I've told you. Mark unclear causes as "under investigation."</div>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">Copy prompt</button>
+      </div>
+      <div class="callout success"><strong>Strongest prompt in this section</strong>It distinguishes "suspected" from "confirmed" root cause and doesn't fabricate preventive actions. Output came close to publish-ready with minimal editing.</div>
+    </section>
+
+    <section id="sec03">
+      <div class="section-label">03·</div>
+      <h2>Code & Configuration Review</h2>
+      <div class="stub">
+        <strong>In development.</strong> This section covers prompts for reviewing PeopleCode logic, App Engine program structure, and Integration Broker service configuration before editing or debugging. These prompts have not yet been tested against real output and are intentionally left out until they meet the same verification standard as the sections above. Check back soon.
+      </div>
+    </section>
+
+    <section id="sec04">
+      <div class="section-label">04·</div>
+      <h2>Security & Audit Support</h2>
+      <p class="lede">The most differentiated section in this library. PeopleSoft security is structured as permission lists attached to roles, and roles attached to user profiles, plus four permission list types assigned directly to the user outside of any role. These prompts are built around that real structure, confirmed against Oracle's official Security Administration documentation.</p>
+
+      <h3>User Access Review / Recertification</h3>
+      <div class="prompt-card">
+        <div class="label">Prompt</div>
+        <div class="prompt-text">Act as a PeopleSoft security administrator conducting a periodic user access review. Generate a structured checklist for reviewing a user's access, covering: assigned roles, role-based permission lists, the four user-level permission lists (navigation homepage, process profile, primary, row security), and any direct permission list assignments outside standard roles. Flag anything that would indicate excessive or stale access. Do not assume specific role names, use placeholders.</div>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">Copy prompt</button>
+      </div>
+      <div class="callout success"><strong>Standout prompt in this library</strong>It separates role-based access from the four permission lists assigned directly to the user. That's a distinction reviewers commonly miss, and it's confirmed directly in Oracle's Security Administration documentation.</div>
+
+      <h3>Permission List / Role Change Summary</h3>
+      <div class="prompt-card">
+        <div class="label">Prompt</div>
+        <div class="prompt-text">Write an audit-ready summary of a security change for change control records. Change made: [describe]. Include: what changed, which permission list(s)/role(s) affected, who requested it, business justification, and scope of impact (how many users affected, if known). Keep it factual, do not add justification I haven't provided, and flag if scope of impact is unknown.</div>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">Copy prompt</button>
+      </div>
+      <div class="callout info"><strong>Tested result</strong>Without being asked, it flags that modifying a shared permission list changes access for every user tied to it. That's a real risk Oracle's own documentation calls out directly.</div>
+
+      <h3>Segregation of Duties (SoD) Conflict Check</h3>
+      <div class="prompt-card">
+        <div class="label">Prompt</div>
+        <div class="prompt-text">Act as a PeopleSoft security administrator reviewing a user's combined access for segregation of duties concerns. Given this list of roles/permission lists assigned to a user: [list]. Identify potential SoD conflicts (e.g., ability to both create and approve the same transaction type). Do not assume this is a complete or accurate conflict list, flag that a formal SoD matrix/tool should be used to confirm findings.</div>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">Copy prompt</button>
+      </div>
+      <div class="callout warn"><strong>Use with care</strong>This output is a pattern-based observation, not a confirmed conflict. Always validate against your organization's formal SoD matrix or GRC tool before treating a finding as confirmed.</div>
+
+      <div class="callout warn">
+        <strong>Section due-diligence note</strong>
+        Security and audit findings from these prompts are starting points for investigation, not audit conclusions. Confirm all access findings against actual permission list contents in your environment, your organization's formal SoD matrix, and Oracle's delivered audit queries before documenting any finding as confirmed.
+      </div>
+    </section>
+
+    <section id="sec05">
+      <div class="section-label">05·</div>
+      <h2>Patching & Upgrade Prep</h2>
+      <p class="lede">Not a PMO-level project checklist. These are the admin and security-admin-specific technical steps that are easy to miss during a PeopleTools or application upgrade cutover.</p>
+
+      <h3>PSAdmin Cutover Checklist: PeopleTools Upgrade</h3>
+      <div class="prompt-card">
+        <div class="label">Prompt</div>
+        <div class="prompt-text">Act as a PeopleSoft system and security administrator preparing a cutover checklist for a PeopleTools upgrade in a client environment. This is not a PMO-level project checklist. I need the admin/security-admin-specific technical steps: environment prereqs, backup/rollback points, security and role considerations, integration/interface impacts, and post-upgrade validation steps. Structure it in phases: pre-cutover, cutover execution, post-cutover validation. Flag any step that is version-specific or that I must confirm against Oracle's official upgrade documentation for my exact release. Do not state version-specific details as fact.</div>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">Copy prompt</button>
+      </div>
+      <div class="callout info">
+        <strong>Confirmed against Oracle documentation</strong>
+        PeopleTools upgrades run through PeopleSoft Change Assistant, which drives data conversion through Application Engine and applies Oracle's change package for the target release. On PeopleTools 8.57 and higher, Application Server and Process Scheduler configuration files are preserved automatically during the upgrade. Web server configuration is <em>not</em> preserved and gets fully redeployed. Oracle recommends a full environment backup before starting.
+      </div>
+      <div class="callout warn">
+        <strong>Read before using this checklist</strong>
+        This is a planning aid to catch commonly missed steps. It does not replace Oracle's official upgrade documentation, the PeopleTools Upgrade Home Page for your exact release, or your Change Assistant job template. Don't execute a cutover step in production based on this checklist's wording alone. Confirm it against the official source for your release first.
+      </div>
+
+      <h3>PSAdmin Cutover Checklist: Application Upgrade</h3>
+      <div class="stub">
+        <strong>In development.</strong> A separate checklist for full application upgrades (as distinct from PeopleTools-only upgrades) is planned but has not yet been tested and verified. It will be added once it meets the same standard as the PeopleTools checklist above.
+      </div>
+    </section>
+
+    <section id="sec06">
+      <div class="section-label">06·</div>
+      <h2>Data Safety & Due Diligence</h2>
+      <div class="callout warn">
+        <strong>A note on these prompts</strong>
+        These are tested starting templates, not guaranteed outputs. AI responses vary by model, version, and the context you provide. Always review AI-generated content against your own environment, official Oracle documentation, and your organization's change control process before acting on it. This matters most for anything touching security, permissions, or production configuration.
+      </div>
+      <div class="callout warn">
+        <strong>Never share sensitive data in public AI tools</strong>
+        Do not paste PII, confidential business data, real hostnames, real permission list or role names, or proprietary PeopleSoft configuration details into any public AI tool. Every prompt in this library is written to work with placeholders. Use them.
+      </div>
+    </section>
+
+    <footer class="doc-footer">
+      This is a living document. Sections marked "in development" are left incomplete on purpose rather than filled with untested content. They'll be added once verified against real output and, where applicable, official Oracle documentation.
+    </footer>
+
+  </main>
+</div>
+
+</body>
+</html>
