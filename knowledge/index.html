@@ -57,6 +57,38 @@
     .tab:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); }
     .tab.active { border-color: #20b2aa; color: #20b2aa; background: rgba(32,178,170,0.05); }
 
+    .search-box {
+      display: flex; align-items: center; gap: 8px;
+      border: 0.5px solid rgba(255,255,255,0.15);
+      padding: 6px 12px;
+      min-width: 220px;
+      color: rgba(255,255,255,0.45);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .search-box:focus-within { border-color: #20b2aa; color: #20b2aa; }
+    .search-box svg { flex-shrink: 0; }
+    .search-box input {
+      background: transparent; border: none; outline: none;
+      font-family: var(--font); font-size: 11px; color: rgba(255,255,255,0.85);
+      width: 100%; letter-spacing: 0.02em;
+    }
+    .search-box input::placeholder { color: rgba(255,255,255,0.35); }
+    .search-clear {
+      background: none; border: none; cursor: pointer; padding: 0;
+      color: rgba(255,255,255,0.3); font-size: 14px; line-height: 1; display: none;
+    }
+    .search-clear.visible { display: block; }
+    .search-clear:hover { color: #20b2aa; }
+
+    .empty-state {
+      display: none;
+      padding: 48px 0;
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 12px;
+      letter-spacing: 0.03em;
+    }
+
     .pagination { display: flex; align-items: center; gap: 2px; }
     .pg-btn {
       font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
@@ -104,6 +136,7 @@
       .doc-tags { justify-content: flex-start; }
       .doc-meta { text-align: left; }
       .controls { flex-direction: column; align-items: flex-start; }
+      .search-box { width: 100%; order: -1; }
     }
   </style>
 </head>
@@ -128,7 +161,7 @@
       <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
     </div>
     <ul class="nav-links">
-      <li><a href="./" class="active">Knowledge</a></li>
+      <li><a href="./" class="active">Knowledge Base</a></li>
       <li><a href="./#security">Security</a></li>
       <li><a href="./#systems">Systems</a></li>
       <li><a href="../learning-hub.html">Learning Hub</a></li>
@@ -139,7 +172,7 @@
     </button>
   </nav>
   <div class="nav-mobile" id="mobileMenu">
-    <a href="./" class="active">Knowledge</a>
+    <a href="./" class="active">Knowledge Base</a>
     <a href="./#security">Security</a>
     <a href="./#systems">Systems</a>
     <a href="../learning-hub.html">Learning Hub</a>
@@ -153,8 +186,13 @@
   </div>
 
   <div class="controls">
+    <div class="search-box">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="doc-search" placeholder="Search documents…" oninput="searchDocs(this.value)" autocomplete="off"/>
+      <button class="search-clear" id="search-clear-btn" onclick="clearSearch()" aria-label="Clear search">&times;</button>
+    </div>
     <div class="filter-tabs">
-      <button class="tab active" onclick="filterDocs('all', this)">All</button>
+      <button class="tab active" id="tab-all" onclick="filterDocs('all', this)">All</button>
       <button class="tab" onclick="filterDocs('security', this)">Security</button>
       <button class="tab" onclick="filterDocs('systems', this)">Systems</button>
       <button class="tab" onclick="filterDocs('documentation', this)">Reference</button>
@@ -170,7 +208,7 @@
 
   <div class="library" id="library">
 
-    <div class="doc-row" data-cat="systems" data-page="1" onclick="location.href='../docs/how-to-apply-oracle-poc-peopletools.html'">
+    <div class="doc-row" data-cat="systems" data-page="1" data-date="2023-12-01" onclick="location.href='../docs/how-to-apply-oracle-poc-peopletools.html'">
       <div class="doc-category">Systems</div>
       <div class="doc-main">
         <div class="doc-title">How to Apply an Oracle POC to Your PeopleTools Environment</div>
@@ -180,7 +218,7 @@
       <div class="doc-meta"><div class="doc-date">Dec 2023</div><div class="doc-read">12 min read</div></div>
     </div>
 
-<div class="doc-row" data-cat="systems" data-page="1" onclick="location.href='../docs/godaddy-ssl-ib-node-ping.html'">
+<div class="doc-row" data-cat="systems" data-page="1" data-date="2026-06-01" onclick="location.href='../docs/godaddy-ssl-ib-node-ping.html'">
   <div class="doc-category">Systems</div>
   <div class="doc-main">
     <div class="doc-title">IB Node Ping Failure After GoDaddy SSL Renewal</div>
@@ -190,7 +228,7 @@
   <div class="doc-meta"><div class="doc-date">Jun 2026</div><div class="doc-read">8 min read</div></div>
 </div>
 
-<div class="doc-row" data-cat="ai" data-page="1" onclick="location.href='../docs/ai-prompts-peoplesoft.html'">
+<div class="doc-row" data-cat="ai" data-page="1" data-date="2026-07-01" onclick="location.href='../docs/ai-prompts-peoplesoft.html'">
   <div class="doc-category">AI Practices</div>
   <div class="doc-main">
     <div class="doc-title">AI Prompts for PeopleSoft & Enterprise IT Professionals</div>
@@ -200,7 +238,7 @@
   <div class="doc-meta"><div class="doc-date">Jul 2026</div><div class="doc-read">9 min read</div></div>
 </div>
 
-    <div class="doc-row" data-cat="security" data-page="1" onclick="location.href='../docs/peoplesoft-security-role-design.html'">
+    <div class="doc-row" data-cat="security" data-page="1" data-date="2026-06-01" onclick="location.href='../docs/peoplesoft-security-role-design.html'">
       <div class="doc-category">Security</div>
       <div class="doc-main">
         <div class="doc-title">PeopleSoft Security Role Design — Principles and Pitfalls</div>
@@ -210,7 +248,7 @@
       <div class="doc-meta"><div class="doc-date">Jun 2026</div><div class="doc-read">8 min read</div></div>
     </div>
 
-                                        <div class="doc-row" data-cat="systems" data-page="3" onclick="location.href='../docs/hcm-dpk-install-linux.html'">
+                                        <div class="doc-row" data-cat="systems" data-page="3" data-date="2026-08-01" onclick="location.href='../docs/hcm-dpk-install-linux.html'">
       <div class="doc-category">Systems</div>
       <div class="doc-main">
         <div class="doc-title">Installing a PeopleSoft HCM Deployment Package (DPK) on Linux</div>
@@ -220,7 +258,7 @@
       <div class="doc-meta"><div class="doc-date">Aug 2026</div><div class="doc-read">7 min read</div></div>
     </div>
 
-    <div class="doc-row" data-cat="systems" data-page="3" onclick="location.href='../docs/jre-upgrade-ps-home.html'">
+    <div class="doc-row" data-cat="systems" data-page="3" data-date="2026-08-01" onclick="location.href='../docs/jre-upgrade-ps-home.html'">
       <div class="doc-category">Systems</div>
       <div class="doc-main">
         <div class="doc-title">Upgrading the JRE Under PS_HOME</div>
@@ -230,7 +268,7 @@
       <div class="doc-meta"><div class="doc-date">Aug 2026</div><div class="doc-read">4 min read</div></div>
     </div>
 
-    <div class="doc-row" data-cat="systems" data-page="3" onclick="location.href='../docs/weblogic-patch-spbat.html'">
+    <div class="doc-row" data-cat="systems" data-page="3" data-date="2026-08-01" onclick="location.href='../docs/weblogic-patch-spbat.html'">
       <div class="doc-category">Systems</div>
       <div class="doc-main">
         <div class="doc-title">Applying a WebLogic Patch Using SPBAT</div>
@@ -240,7 +278,7 @@
       <div class="doc-meta"><div class="doc-date">Aug 2026</div><div class="doc-read">4 min read</div></div>
     </div>
 
-    <div class="doc-row" data-cat="systems" data-page="3" onclick="location.href='../docs/micro-focus-visual-cobol-setup.html'">
+    <div class="doc-row" data-cat="systems" data-page="3" data-date="2026-08-01" onclick="location.href='../docs/micro-focus-visual-cobol-setup.html'">
       <div class="doc-category">Systems</div>
       <div class="doc-main">
         <div class="doc-title">Setting Up Micro Focus Visual COBOL for PeopleSoft</div>
@@ -250,7 +288,7 @@
       <div class="doc-meta"><div class="doc-date">Aug 2026</div><div class="doc-read">9 min read</div></div>
     </div>
 
-    <div class="doc-row" data-cat="systems" data-page="3" onclick="location.href='../docs/peoplesoft-https-oci-setup.html'">
+    <div class="doc-row" data-cat="systems" data-page="3" data-date="2026-08-29" onclick="location.href='../docs/peoplesoft-https-oci-setup.html'">
       <div class="doc-category">Systems</div>
       <div class="doc-main">
         <div class="doc-title">Enabling Public HTTPS for PeopleSoft on OCI</div>
@@ -260,7 +298,7 @@
       <div class="doc-meta"><div class="doc-date">Aug 2026</div><div class="doc-read">7 min read</div></div>
     </div>
 
-    <div class="doc-row" data-cat="ai" data-page="3" onclick="location.href='../docs/rag-chatbot-peoplesoft-oci-genai.html'">
+    <div class="doc-row" data-cat="ai" data-page="3" data-date="2026-08-30" onclick="location.href='../docs/rag-chatbot-peoplesoft-oci-genai.html'">
       <div class="doc-category">AI · Integration</div>
       <div class="doc-main">
         <div class="doc-title">Building a RAG Chatbot for PeopleSoft with OCI GenAI Agent</div>
@@ -270,7 +308,7 @@
       <div class="doc-meta"><div class="doc-date">Aug 2026</div><div class="doc-read">11 min read</div></div>
     </div>
 
-    <div class="doc-row" data-cat="ai" data-page="3" onclick="location.href='../docs/peoplesoft-oda-sidecar-architecture.html'">
+    <div class="doc-row" data-cat="ai" data-page="3" data-date="2026-08-31" onclick="location.href='../docs/peoplesoft-oda-sidecar-architecture.html'">
       <div class="doc-category">Systems · AI</div>
       <div class="doc-main">
         <div class="doc-title">The PeopleSoft + ODA Sidecar Pattern</div>
@@ -279,6 +317,8 @@
       <div class="doc-tags"><span class="tag">PeopleSoft</span><span class="tag">ODA</span><span class="tag">Architecture</span></div>
       <div class="doc-meta"><div class="doc-date">Aug 2026</div><div class="doc-read">9 min read</div></div>
     </div>
+
+    <div class="empty-state" id="empty-state">No documents match your search.</div>
 
   </div>
 
@@ -299,16 +339,29 @@
     const ITEMS_PER_PAGE = 5;
     let currentPage = 1;
     let currentFilter = 'all';
+    let currentSearch = '';
     let totalPages = 2;
 
     function getVisibleRows() {
-      return Array.from(document.querySelectorAll('.doc-row')).filter(row => {
-        return currentFilter === 'all' || row.dataset.cat === currentFilter;
+      const term = currentSearch.trim().toLowerCase();
+      const rows = Array.from(document.querySelectorAll('.doc-row')).filter(row => {
+        const matchesCat = currentFilter === 'all' || row.dataset.cat === currentFilter;
+        const matchesSearch = !term || row.textContent.toLowerCase().includes(term);
+        return matchesCat && matchesSearch;
       });
+      // Newest first, using each document's data-date (YYYY-MM-DD)
+      rows.sort((a, b) => (b.dataset.date || '').localeCompare(a.dataset.date || ''));
+      return rows;
     }
 
     function updateDisplay() {
       const rows = getVisibleRows();
+
+      // Reorder the actual DOM nodes to match the sort, so display order (not just filtering) reflects it
+      const library = document.getElementById('library');
+      const emptyState = document.getElementById('empty-state');
+      rows.forEach(r => library.insertBefore(r, emptyState));
+
       totalPages = Math.max(1, Math.ceil(rows.length / ITEMS_PER_PAGE));
       if (currentPage > totalPages) currentPage = totalPages;
 
@@ -319,6 +372,8 @@
       const start = (currentPage - 1) * ITEMS_PER_PAGE;
       const end   = start + ITEMS_PER_PAGE;
       rows.slice(start, end).forEach(r => r.style.display = 'grid');
+
+      emptyState.style.display = rows.length === 0 ? 'block' : 'none';
 
       // Update pagination info
       document.getElementById('pg-info').textContent = currentPage + ' / ' + totalPages;
@@ -334,6 +389,26 @@
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       btn.classList.add('active');
       updateDisplay();
+    }
+
+    function searchDocs(value) {
+      currentSearch = value;
+      currentPage = 1;
+      document.getElementById('search-clear-btn').classList.toggle('visible', value.length > 0);
+      // A search that spans categories shouldn't be hidden behind an unrelated active tab
+      if (value.trim() !== '' && currentFilter !== 'all') {
+        currentFilter = 'all';
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-all').classList.add('active');
+      }
+      updateDisplay();
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('doc-search');
+      input.value = '';
+      input.focus();
+      searchDocs('');
     }
 
     function goPage(page) {
