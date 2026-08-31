@@ -214,6 +214,24 @@
   .correct-btn:hover { background: #3ddc7a; box-shadow: 0 0 20px rgba(34,197,94,0.25); }
   .wrong-btn { border-color: rgba(239,68,68,0.4); color: #fca5a5; }
   .wrong-btn:hover { border-color: var(--wrong); background: var(--wrong-dim); }
+  .interview-hint {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: var(--accent-dim);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .interview-hint-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
 
   /* ── Buttons ── */
   .btn {
@@ -640,8 +658,12 @@
     <div class="interview-panel" id="interview-panel" style="display:none;">
       <button class="btn btn-outline" id="btn-reveal" onclick="revealAnswer()" style="width:100%;justify-content:center;" type="button">Reveal Answer</button>
       <div class="interview-answer" id="interview-answer" style="display:none;">
-        <div class="interview-answer-label">Accepted Answer</div>
+        <div class="interview-answer-label" id="interview-answer-label">Accepted Answer</div>
         <div class="interview-answer-text" id="interview-answer-text"></div>
+        <div class="interview-hint" id="interview-hint" style="display:none;">
+          <div class="interview-hint-label">Memory Tip</div>
+          <div id="interview-hint-text"></div>
+        </div>
         <div class="self-grade-row">
           <button class="btn self-grade-btn correct-btn" onclick="selfGrade(true)" type="button">✓ I got it right</button>
           <button class="btn btn-outline self-grade-btn wrong-btn" onclick="selfGrade(false)" type="button">✗ I missed it</button>
@@ -706,270 +728,394 @@
 const QUESTIONS = [
   // ── AMERICAN GOVERNMENT: PRINCIPLES ──
   { q:"What is the form of government of the United States?", answers:["Republic","Constitutional republic","Representative democracy"], pick:1, tag:"Government · Principles",
+    hint:"Republic — or 'representative democracy.' Either comes out fine; pick whichever feels natural.",
     opts:["Republic","Monarchy","Theocracy","Direct democracy"] },
   { q:"What is the supreme law of the land?", answers:["The Constitution","(U.S.) Constitution"], pick:1, tag:"Government · Principles",
+    hint:"SUPREME law = the Constitution. Nothing outranks it.",
     opts:["The Constitution","The Declaration of Independence","The Bill of Rights","Federal law"] },
   { q:"Name one thing the U.S. Constitution does.", answers:["Forms the government","Defines powers of government","Defines the parts of government","Protects the rights of the people"], pick:1, tag:"Government · Principles",
+    hint:"Constitution = the government's blueprint. Easiest answer: it FORMS the government.",
     opts:["Forms the government","Declares war on foreign nations","Establishes the national religion","Sets tax rates for citizens"] },
   { q:"The U.S. Constitution starts with the words \"We the People.\" What does \"We the People\" mean?", answers:["Self-government","Popular sovereignty","Consent of the governed","People should govern themselves"], pick:1, tag:"Government · Principles",
+    hint:"'WE' the people govern ourselves -> Self-government.",
     opts:["Self-government","Government rules the people","Power belongs to the President","States control all power"] },
   { q:"How are changes made to the U.S. Constitution?", answers:["Amendments","(Constitutional) amendments"], pick:1, tag:"Government · Principles",
+    hint:"AMEND means 'to change.' Changes to the Constitution = Amendments.",
     opts:["Amendments","Presidential orders","Congressional votes alone","Supreme Court decisions"] },
   { q:"What does the Bill of Rights protect? ★", answers:["Rights of people living in the United States","(Basic) rights of Americans"], pick:1, tag:"Government · Rights",
+    hint:"Bill of RIGHTS protects RIGHTS — the word is right there in the name.",
     opts:["Rights of people living in the United States","Rights of the federal government","Rights of states only","Military powers"] },
   { q:"How many amendments does the U.S. Constitution have?", answers:["27"], pick:1, tag:"Government · Principles",
+    hint:"27. No trick here, just drill the number: twenty-seven.",
     opts:["27","10","15","33"] },
   { q:"Why is the Declaration of Independence important?", answers:["It says America is free from British control","It announced our independence from Great Britain","It said the American colonies were free from Britain"], pick:1, tag:"History · Colonial",
+    hint:"Declares freedom from Britain -> Declaration of Independence. One document, several of these questions.",
     opts:["It says America is free from British control","It created the Constitution","It established the Supreme Court","It declared war on France"] },
   { q:"What founding document said the American colonies were free from Britain?", answers:["The Declaration of Independence"], pick:1, tag:"History · Colonial",
+    hint:"Same document as above: colonies free from Britain = the Declaration of Independence.",
     opts:["The Declaration of Independence","The Constitution","The Federalist Papers","The Magna Carta"] },
   { q:"Name two important ideas from the Declaration of Independence and the U.S. Constitution.", answers:["Equality","Liberty","Freedom","Democracy"], pick:2, tag:"Government · Principles",
+    hint:"Pick the easy pair: Equality + Liberty.",
     opts:["Equality","Liberty","Monarchy","Theocracy","Colonialism","Imperialism"] },
   { q:"The words \"Life, Liberty, and the pursuit of Happiness\" are in what founding document?", answers:["The Declaration of Independence"], pick:1, tag:"History · Colonial",
+    hint:"Same document again: 'Life, Liberty, and the pursuit of Happiness' is from the Declaration of Independence.",
     opts:["The Declaration of Independence","The U.S. Constitution","The Bill of Rights","The Federalist Papers"] },
   { q:"What is the economic system of the United States?", answers:["Free market economy","Capitalism","Market economy"], pick:1, tag:"Government · Principles",
+    hint:"Capitalism — or say 'free market economy.' Either is accepted.",
     opts:["Free market economy","Communist economy","Centrally planned economy","Feudal economy"] },
   { q:"What is the rule of law?", answers:["Everyone must follow the law","No one is above the law","Government must also follow the law"], pick:1, tag:"Government · Principles",
+    hint:"Rule OF law = the law rules over everyone, including leaders. No one is above it.",
     opts:["Everyone must follow the law","Only citizens follow the law","Only leaders follow the law","Laws apply only to criminals"] },
   { q:"Many documents influenced the U.S. Constitution. Name one.", answers:["Declaration of Independence","Articles of Confederation","Federalist Papers","Anti-Federalist Papers","Magna Carta"], pick:1, tag:"Government · Principles",
+    hint:"Reuse what you already know: the Declaration of Independence influenced the Constitution.",
     opts:["Declaration of Independence","Treaty of Paris","Monroe Doctrine","Emancipation Proclamation"] },
   { q:"There are three branches of government. Why?", answers:["Checks and balances","Separation of powers"], pick:1, tag:"Government · Structure",
+    hint:"Splitting power 3 ways means no ONE branch can take over — that's the whole point.",
     opts:["Checks and balances","Tradition from Britain","Efficiency","Equal representation"] },
   { q:"Name the three branches of government.", answers:["Legislative","Executive","Judicial"], pick:3, tag:"Government · Structure",
+    hint:"L-E-J: Legislative writes, Executive enforces, Judicial judges.",
     opts:["Legislative","Executive","Judicial","Presidential","Federal","State"] },
 
   // ── AMERICAN GOVERNMENT: STRUCTURE ──
   { q:"The President of the United States is in charge of which branch of government?", answers:["Executive branch","Executive"], pick:1, tag:"Government · Structure",
+    hint:"President EXECUTES the laws -> Executive branch.",
     opts:["Executive branch","Legislative branch","Judicial branch","Federal branch"] },
   { q:"What part of the federal government writes laws?", answers:["Congress","(U.S. or national) Congress","Senate and House","Legislature"], pick:1, tag:"Government · Congress",
+    hint:"Congress writes laws. (Same fact answers the 'power of Congress' question below.)",
     opts:["Congress","The President","The Supreme Court","The Cabinet"] },
   { q:"What are the two parts of the U.S. Congress?", answers:["Senate","House of Representatives"], pick:2, tag:"Government · Congress",
+    hint:"Congress = Senate + House. Think 'bicameral' — two chambers.",
     opts:["Senate","House of Representatives","Cabinet","Supreme Court","Electoral College","Federal Reserve"] },
   { q:"Name one power of the U.S. Congress.", answers:["Writes laws","Declares war","Creates a budget","Approves treaties"], pick:1, tag:"Government · Congress",
+    hint:"Reuse: Congress writes laws (also accepted: declares war, approves the budget).",
     opts:["Writes laws","Appoints judges","Commands the military","Issues executive orders"] },
   { q:"How many U.S. Senators are there?", answers:["100"], pick:1, tag:"Government · Congress",
+    hint:"50 states x 2 senators each = 100.",
     opts:["100","50","435","535"] },
   { q:"How long is a term for a U.S. Senator?", answers:["6 years","Six (6)"], pick:1, tag:"Government · Congress",
+    hint:"Senate and Six both start with S. A Senator's term is 6 years.",
     opts:["6 years","2 years","4 years","8 years"] },
   { q:"How many voting members are there in the House of Representatives?", answers:["435"], pick:1, tag:"Government · Congress",
+    hint:"435 — just a number to drill. Say it like a phone number a few times until it sticks.",
     opts:["435","100","535","270"] },
   { q:"How long is a term for a member of the House of Representatives?", answers:["2 years","Two (2)"], pick:1, tag:"Government · Congress",
+    hint:"The House moves fast, so its term is short: 2 years. The Senate is 6 — three times as long.",
     opts:["2 years","4 years","6 years","8 years"] },
   { q:"Why do U.S. representatives serve shorter terms than U.S. Senators?", answers:["To more closely follow public opinion","To be more responsive to the people"], pick:1, tag:"Government · Congress",
+    hint:"Shorter term = staying closer to what voters want right now.",
     opts:["To more closely follow public opinion","To save money","Because of term limits","Because they represent fewer people"] },
   { q:"How many senators does each state have?", answers:["2","Two (2)"], pick:1, tag:"Government · Congress",
+    hint:"Every state, big or small, gets exactly 2 senators.",
     opts:["2","1","3","Depends on population"] },
   { q:"Why does each state have two senators?", answers:["Equal representation","Equal representation of each state"], pick:1, tag:"Government · Congress",
+    hint:"Two each means every state is treated equally, no matter its size.",
     opts:["Equal representation","Population representation","Historical tradition","To balance the Supreme Court"] },
   { q:"What is the name of the Speaker of the House of Representatives now?", answers:["Mike Johnson"], pick:1, tag:"Government · Current Officials",
+    hint:"This office changes with House elections — recheck who currently holds it close to your interview.",
     opts:["Mike Johnson","Nancy Pelosi","Kevin McCarthy","Hakeem Jeffries"] },
   { q:"Who does a U.S. Senator represent? ★", answers:["People of their state","All people of the state","Citizens of their state"], pick:1, tag:"Government · Congress",
+    hint:"A Senator represents the WHOLE state.",
     opts:["People of their state","People of their district","All Americans","The President"] },
   { q:"Who elects U.S. Senators?", answers:["Citizens from their state","Voters of their state"], pick:1, tag:"Government · Congress",
+    hint:"The same state's citizens elect that Senator.",
     opts:["Citizens from their state","The Electoral College","The President","State legislators"] },
   { q:"Who does a member of the House of Representatives represent? ★", answers:["People in their district","Citizens of their congressional district"], pick:1, tag:"Government · Congress",
+    hint:"A House member represents just their DISTRICT — smaller than a whole state.",
     opts:["People in their district","All people of their state","All Americans","The President"] },
   { q:"Who elects members of the House of Representatives?", answers:["Citizens from their district","Voters of their congressional district"], pick:1, tag:"Government · Congress",
+    hint:"That district's citizens elect them.",
     opts:["Citizens from their district","The entire state","The Electoral College","Congress itself"] },
   { q:"Some states have more representatives than other states. Why?", answers:["(Because) they have more people","(Because of) the state's population","(Because) some states have more people"], pick:1, tag:"Government · Congress",
+    hint:"More PEOPLE in a state = more seats in the House. It's population-based.",
     opts:["(Because) they have more people","Because they are larger geographically","Because they joined the union first","Because the President chose them"] },
   { q:"The President of the United States is elected for how many years?", answers:["4 years","Four (4)"], pick:1, tag:"Government · Executive",
+    hint:"President = a 4-year term. Same length as an Olympic cycle — an easy anchor.",
     opts:["4 years","2 years","6 years","8 years"] },
   { q:"The President of the United States can serve only two terms. Why?", answers:["(Because of) the 22nd Amendment","To prevent dictatorship"], pick:1, tag:"Government · Executive",
+    hint:"2 terms -> 22nd Amendment. Notice the number echo: TWO terms, TWENTY-second amendment.",
     opts:["(Because of) the 22nd Amendment","(Because of) the 1st Amendment","It is tradition only","(Because of) the 14th Amendment"] },
   { q:"What is the name of the President of the United States now?", answers:["Donald Trump","Donald J. Trump"], pick:1, tag:"Government · Current Officials",
+    hint:"Changes with elections — verify the current name close to your interview date.",
     opts:["Donald Trump","Joe Biden","Barack Obama","George W. Bush"] },
   { q:"What is the name of the Vice President of the United States now?", answers:["JD Vance","J.D. Vance"], pick:1, tag:"Government · Current Officials",
+    hint:"Changes with elections — verify the current name close to your interview date.",
     opts:["JD Vance","Kamala Harris","Mike Pence","Tim Walz"] },
   { q:"If the President can no longer serve, who becomes President?", answers:["The Vice President"], pick:1, tag:"Government · Executive",
+    hint:"The Vice President is next in line — that's their main job on paper.",
     opts:["The Vice President","The Speaker of the House","The Secretary of State","The Chief Justice"] },
   { q:"Name one power of the President.", answers:["Signs bills into law","Vetoes bills","Enforces laws","Commander in Chief of the military","Appoints judges"], pick:1, tag:"Government · Executive",
+    hint:"President SIGNS bills. (Congress WRITES them.)",
     opts:["Signs bills into law","Writes laws","Declares war without Congress","Appoints Supreme Court justices without Senate"] },
   { q:"Who is the Commander in Chief of the U.S. military?", answers:["The President"], pick:1, tag:"Government · Executive",
+    hint:"The President commands the military even as a civilian — part of the checks-and-balances design.",
     opts:["The President","The Secretary of Defense","The Chairman of the Joint Chiefs","Congress"] },
   { q:"Who signs bills to become laws?", answers:["The President"], pick:1, tag:"Government · Executive",
+    hint:"Same person as above: the President signs bills.",
     opts:["The President","The Speaker of the House","The Vice President","The Chief Justice"] },
   { q:"Who vetoes bills?", answers:["The President"], pick:1, tag:"Government · Executive",
+    hint:"Whoever can sign a bill can also reject it — the President.",
     opts:["The President","The Supreme Court","The Senate majority leader","The Vice President"] },
   { q:"Who appoints federal judges?", answers:["The President"], pick:1, tag:"Government · Executive",
+    hint:"The President appoints, the Senate confirms — a two-step process, but the appointing power is the President's.",
     opts:["The President","The Senate","The Chief Justice","Congress"] },
   { q:"The executive branch has many parts. Name one.", answers:["The President","The Vice President","The Cabinet","Departments"], pick:1, tag:"Government · Executive",
+    hint:"Easiest: 'The President.' (Vice President and the Cabinet also count.)",
     opts:["The President","The Supreme Court","The Senate","The House of Representatives"] },
   { q:"What does the President's Cabinet do?", answers:["Advises the President"], pick:1, tag:"Government · Executive",
+    hint:"The Cabinet ADVISES the President — like a board of advisors.",
     opts:["Advises the President","Writes laws","Commands the military","Approves treaties"] },
   { q:"What are two Cabinet-level positions? ★", answers:["Secretary of State","Secretary of Treasury","Secretary of Defense","Attorney General","Secretary of Interior","Secretary of Agriculture","Secretary of Commerce","Secretary of Labor","Secretary of Transportation","Secretary of Energy","Secretary of Education","Secretary of Veterans Affairs"], pick:2, tag:"Government · Executive",
+    hint:"Easy pair to remember: Secretary of STATE + Secretary of TREASURY.",
     opts:["Secretary of State","Secretary of Defense","Chief Justice","Speaker of the House","Senate Majority Leader","Vice Chairman of the Joint Chiefs"] },
   { q:"Why is the Electoral College important?", answers:["It decides who is elected President","It elects the President"], pick:1, tag:"Government · Executive",
+    hint:"The Electoral College's whole job is to decide/elect the President.",
     opts:["It decides who is elected President","It writes the Constitution","It confirms Cabinet members","It declares war"] },
 
   // ── JUDICIAL BRANCH ──
   { q:"What is one part of the judicial branch?", answers:["Supreme Court","Federal courts","District courts","Courts"], pick:1, tag:"Government · Judicial",
+    hint:"Judicial = courts. Easiest answer: the Supreme Court.",
     opts:["Supreme Court","The Senate","The Cabinet","The Electoral College"] },
   { q:"What does the judicial branch do?", answers:["Explains laws","Reviews laws","Reviews or explains laws","Interprets the Constitution"], pick:1, tag:"Government · Judicial",
+    hint:"Judges REVIEW (or explain) laws — they don't write them.",
     opts:["Explains laws","Writes laws","Enforces laws","Appoints officials"] },
   { q:"What is the highest court in the United States?", answers:["The Supreme Court"], pick:1, tag:"Government · Judicial",
+    hint:"SUPREME means highest. The Supreme Court.",
     opts:["The Supreme Court","The Federal Court of Appeals","The District Court","The Court of International Trade"] },
   { q:"How many seats are on the Supreme Court?", answers:["9","Nine (9)"], pick:1, tag:"Government · Judicial",
+    hint:"9 justices — like a baseball team's 9 players on the field.",
     opts:["9","7","11","13"] },
   { q:"How many Supreme Court justices are usually needed to decide a case?", answers:["5","Five (5)","A majority"], pick:1, tag:"Government · Judicial",
+    hint:"A majority of 9 is 5.",
     opts:["5","4","6","9"] },
   { q:"How long do Supreme Court justices serve?", answers:["For life","Their entire life","Life tenure"], pick:1, tag:"Government · Judicial",
+    hint:"For life — no term limit, no re-election.",
     opts:["For life","6 years","4 years","Until they choose to retire"] },
   { q:"Supreme Court justices serve for life. Why?", answers:["To be independent","(So they can be) independent from politics"], pick:1, tag:"Government · Judicial",
+    hint:"Serving for life removes the pressure to be re-elected, which keeps justices independent from politics.",
     opts:["To be independent","To save money","Because the Constitution requires it specifically","To serve longer than the President"] },
   { q:"Who is the Chief Justice of the United States now?", answers:["John Roberts","John G. Roberts, Jr."], pick:1, tag:"Government · Current Officials",
+    hint:"This office rarely changes, but it's an easy one to double-check right before your interview.",
     opts:["John Roberts","Sonia Sotomayor","Clarence Thomas","Amy Coney Barrett"] },
 
   // ── FEDERALISM ──
   { q:"Name one power that is only for the federal government.", answers:["Print paper money","Declare war","Create an army","Make treaties"], pick:1, tag:"Government · Federalism",
+    hint:"Think big, national powers: declare war, print money, make treaties, create an army.",
     opts:["Print paper money","Give a driver's license","Approve zoning laws","Provide public schools"] },
   { q:"Name one power that is only for the states.", answers:["Give a driver's license","Provide schooling","Provide safety","Give a marriage license","Create a local government"], pick:1, tag:"Government · Federalism",
+    hint:"Think everyday, local powers: driver's license, marriage license, schooling.",
     opts:["Give a driver's license","Print money","Declare war","Make treaties with foreign nations"] },
   { q:"What is the purpose of the 10th Amendment?", answers:["Powers not given to the federal government belong to the states or the people"], pick:1, tag:"Government · Federalism",
+    hint:"10th = the LEFTOVER-powers rule: whatever isn't given to the federal government goes to the states or the people. '10th = the rest goes to the states.'",
     opts:["Powers not given to the federal government belong to the states or the people","The right to bear arms","Freedom of speech","Equal protection under the law"] },
 
   // ── RIGHTS AND RESPONSIBILITIES ──
   { q:"There are four amendments to the U.S. Constitution about who can vote. Describe one of them.", answers:["Any citizen can vote","Citizens 18 or older can vote","You don't have to pay to vote","Women can vote","Any race can vote"], pick:1, tag:"Government · Rights",
+    hint:"Any ONE works — 'citizens 18 or older can vote' is the simplest to remember.",
     opts:["Any citizen can vote","Only property owners can vote","Only men can vote","Only those who pass a literacy test can vote"] },
   { q:"Who can vote in federal elections, run for federal office, and serve on a jury in the United States?", answers:["Citizens","U.S. citizens","American citizens"], pick:1, tag:"Government · Rights",
+    hint:"All three — voting, running for office, and jury duty — require being a U.S. citizen.",
     opts:["Citizens","Any resident","Legal permanent residents","Anyone born in the U.S."] },
   { q:"What are three rights of everyone living in the United States?", answers:["Freedom of speech","Freedom of religion","Freedom of the press","Freedom of assembly","Freedom to petition the government"], pick:3, tag:"Government · Rights",
+    hint:"S-R-A: Speech, Religion, Assembly. (Press and petition also count.)",
     opts:["Freedom of speech","Freedom of religion","Freedom of assembly","Right to vote","Right to own a passport","Right to run for President"] },
   { q:"What do we show loyalty to when we say the Pledge of Allegiance?", answers:["The United States","The flag"], pick:1, tag:"Government · Rights",
+    hint:"The Pledge of Allegiance pledges loyalty to the flag / the United States.",
     opts:["The United States","The President","The Constitution","The military"] },
   { q:"Name two promises that new citizens make in the Oath of Allegiance.", answers:["Obey the laws of the United States","Be loyal to the United States","Serve in the military","Serve on a jury","Give up loyalty to other countries"], pick:2, tag:"Government · Rights",
+    hint:"Easy pair: OBEY the laws + BE LOYAL to the U.S.",
     opts:["Obey the laws of the United States","Be loyal to the United States","Give up loyalty to other countries","Vote in every election","Pay all state taxes","Never travel abroad"] },
   { q:"How can people become United States citizens?", answers:["Naturalization","By being born in the U.S.","Through their parents"], pick:1, tag:"Government · Rights",
+    hint:"Two paths: born here, or naturalized.",
     opts:["Naturalization","By paying a fee","By serving in the military only","By living here for 1 year"] },
   { q:"What are two examples of civic participation in the United States?", answers:["Vote","Run for office","Join a political party","Help with a campaign","Join a civic group","Give an elected official your opinion","Contact elected officials","Write to a newspaper"], pick:2, tag:"Government · Rights",
+    hint:"Easiest pair: VOTE + CONTACT your elected officials.",
     opts:["Vote","Run for office","Join a civic group","Avoid jury duty","Ignore elections","Pay no taxes"] },
   { q:"What is one way Americans can serve their country?", answers:["Vote","Serve in the military","Run for office","Join the Peace Corps"], pick:1, tag:"Government · Rights",
+    hint:"Simplest answer: Vote.",
     opts:["Vote","Leave the country","Avoid jury duty","Refuse to pay taxes"] },
   { q:"Why is it important to pay federal taxes?", answers:["Required by law","All people pay to fund the federal government","Required by the (U.S.) Constitution (16th Amendment)","Civic duty"], pick:1, tag:"Government · Rights",
+    hint:"Required by law — that's the whole answer.",
     opts:["Required by law","Optional civic duty","Only required if you earn a high income","Required only for naturalized citizens"] },
   { q:"It is important for all men age 18 through 25 to register for the Selective Service. Name one reason why.", answers:["Required by law","Civic duty","Makes the draft fair, if needed"], pick:1, tag:"Government · Rights",
+    hint:"Same logic as taxes: required by law (it keeps the draft fair if it's ever needed).",
     opts:["Required by law","Civic duty","It is completely voluntary","Only required for immigrants"] },
 
   // ── AMERICAN HISTORY: COLONIAL ──
   { q:"The colonists came to America for many reasons. Name one.", answers:["Freedom","Political liberty","Religious freedom","Economic opportunity","To escape persecution"], pick:1, tag:"History · Colonial",
+    hint:"Simplest answer: religious freedom (or just 'freedom').",
     opts:["Freedom","To conquer other nations","For tropical weather","At the British king's order"] },
   { q:"Who lived in America before the Europeans arrived?", answers:["Native Americans","American Indians"], pick:1, tag:"History · Colonial",
+    hint:"Native Americans.",
     opts:["Native Americans","African Americans","European settlers","No one"] },
   { q:"What group of people was taken and sold as slaves?", answers:["Africans","African Americans"], pick:1, tag:"History · Colonial",
+    hint:"Africans.",
     opts:["Africans","Native Americans","Asian immigrants","European immigrants"] },
   { q:"What war did the Americans fight to win independence from Britain?", answers:["The American Revolution","The Revolutionary War"], pick:1, tag:"History · Colonial",
+    hint:"American Revolution (or Revolutionary War).",
     opts:["The American Revolution","The Civil War","The War of 1812","The French and Indian War"] },
   { q:"Name one reason why the Americans declared independence from Britain.", answers:["High taxes","Because of high taxes (taxation without representation)","The British army stayed in their houses","They did not have self-government"], pick:1, tag:"History · Colonial",
+    hint:"Classic phrase: 'no taxation without representation' — high taxes with no vote in Parliament.",
     opts:["High taxes","Religious differences","Desire for monarchy","Trade disputes with France"] },
   { q:"Who wrote the Declaration of Independence?", answers:["(Thomas) Jefferson"], pick:1, tag:"History · Colonial",
+    hint:"Jefferson wrote it; Congress adopted it.",
     opts:["Thomas Jefferson","Benjamin Franklin","George Washington","John Adams"] },
   { q:"When was the Declaration of Independence adopted?", answers:["July 4, 1776"], pick:1, tag:"History · Colonial",
+    hint:"July 4, 1776 — Independence Day is literally named after this date.",
     opts:["July 4, 1776","July 4, 1787","June 15, 1775","September 17, 1787"] },
   { q:"The American Revolution had many important events. Name one.", answers:["(Battle of) Bunker Hill","Declaration of Independence","Washington Crossing the Delaware","Valley Forge","Battle of Yorktown","Battle of Saratoga"], pick:1, tag:"History · Colonial",
+    hint:"Easiest to remember: the Declaration of Independence itself counts as an event of the Revolution.",
     opts:["Declaration of Independence","Battle of Gettysburg","Emancipation Proclamation","Louisiana Purchase"] },
   { q:"There were 13 original states. Name five. ★", answers:["New Hampshire","Massachusetts","Rhode Island","Connecticut","New York","New Jersey","Pennsylvania","Delaware","Maryland","Virginia","North Carolina","South Carolina","Georgia"], pick:5, tag:"History · Colonial",
+    hint:"You only need 5 of these 13 — pick whichever 5 you can say comfortably: New Hampshire, Massachusetts, Rhode Island, Connecticut, New York, New Jersey, Pennsylvania, Delaware, Maryland, Virginia, North Carolina, South Carolina, Georgia. A common shortcut: the 5 clustered together on the map — NY, NJ, PA, DE, MD.",
     opts:["New Hampshire","Massachusetts","New York","Pennsylvania","Virginia","Georgia","Delaware","Rhode Island","Connecticut","New Jersey","Maryland","North Carolina","South Carolina","Texas","California","Ohio","Florida"] },
 
   // ── AMERICAN HISTORY: 1800s ──
   { q:"What founding document was written in 1787?", answers:["The Constitution","The U.S. Constitution"], pick:1, tag:"History · Founding",
+    hint:"1787 = the year the Constitution was written. Pair the numbers: '17-87, the Constitution's fate.'",
     opts:["The Constitution","The Declaration of Independence","The Bill of Rights","The Federalist Papers"] },
   { q:"The Federalist Papers supported the passage of the U.S. Constitution. Name one of the writers.", answers:["(James) Madison","(Alexander) Hamilton","(John) Jay","Publius"], pick:1, tag:"History · Founding",
+    hint:"3 writers used the pen name 'Publius': Hamilton, Madison, Jay. Any one of the three counts.",
     opts:["James Madison","Alexander Hamilton","John Jay","Thomas Jefferson","Benjamin Franklin","John Adams"] },
   { q:"Why were the Federalist Papers important?", answers:["They helped people understand the Constitution","They supported the passage of the Constitution"], pick:1, tag:"History · Founding",
+    hint:"Their whole purpose was to convince people to support (ratify) the new Constitution.",
     opts:["They helped people understand the Constitution","They declared independence from Britain","They established the Supreme Court","They ended the Civil War"] },
   { q:"Benjamin Franklin is famous for many things. Name one. ★", answers:["U.S. diplomat","Oldest member of the Constitutional Convention","First Postmaster General","Writer of 'Poor Richard's Almanac'","Started the first free libraries"], pick:1, tag:"History · Founding",
+    hint:"Franklin was NEVER president. Think: kite and key, bifocals, the $100 bill — inventor and diplomat, not the Oval Office.",
     opts:["U.S. diplomat","First President","Wrote the Declaration of Independence","Commanded the Continental Army"] },
   { q:"George Washington is famous for many things. Name one.", answers:["First President of the United States","Commander of the Continental Army","Father of our country"], pick:1, tag:"History · Founding",
+    hint:"Washington is #1 twice over: led the Continental Army first, then became the 1st President.",
     opts:["First President of the United States","Wrote the Constitution","Declared independence","Founded the Supreme Court"] },
   { q:"Thomas Jefferson is famous for many things. Name one.", answers:["Writer of the Declaration of Independence","Third President of the U.S.","Doubled the size of the U.S."], pick:1, tag:"History · Founding",
+    hint:"Jefferson WROTE the Declaration of Independence. Memory link: 'J'efferson wrote it in 'J'uly.",
     opts:["Writer of the Declaration of Independence","First President","Commanded the Continental Army","Chief Justice"] },
   { q:"James Madison is famous for many things. Name one.", answers:["One of the writers of the Federalist Papers","Father of the Constitution","Fourth President of the U.S."], pick:1, tag:"History · Founding",
+    hint:"Madison MADE the Constitution — both start with 'MA.' Called the 'Father of the Constitution,' and also a Federalist Papers writer.",
     opts:["One of the writers of the Federalist Papers","First President","Wrote the Declaration of Independence","Commander of the Continental Army"] },
   { q:"Alexander Hamilton is famous for many things. Name one.", answers:["One of the writers of the Federalist Papers","First Secretary of the Treasury","Helped shape the U.S. financial system"], pick:1, tag:"History · Founding",
+    hint:"Hamilton is on the $10 bill because of the TREASURY — he was the first Treasury Secretary, never President. Also a Federalist Papers writer.",
     opts:["One of the writers of the Federalist Papers","First President","Wrote the Declaration of Independence","Third President"] },
   { q:"What territory did the United States buy from France in 1803?", answers:["Louisiana (Territory)","Louisiana"], pick:1, tag:"History · 1800s",
+    hint:"1803 + France = the Louisiana Purchase.",
     opts:["Louisiana Territory","Florida","Alaska","Texas"] },
   { q:"Name one war fought by the United States in the 1800s.", answers:["Civil War","Mexican-American War","War of 1812","Spanish-American War"], pick:1, tag:"History · 1800s",
+    hint:"Easiest: the Civil War.",
     opts:["Civil War","World War I","World War II","Korean War"] },
   { q:"Name the U.S. war between the North and the South.", answers:["The Civil War","The War Between the States"], pick:1, tag:"History · 1800s",
+    hint:"Civil War = North vs. South.",
     opts:["The Civil War","The Revolutionary War","The War of 1812","World War I"] },
   { q:"The Civil War had many important events. Name one.", answers:["(Battle of) Fort Sumter","Emancipation Proclamation","(Battle of) Gettysburg","(Burning of) Sherman's March","(Surrender at) Appomattox"], pick:1, tag:"History · 1800s",
+    hint:"Easiest: the Emancipation Proclamation.",
     opts:["Emancipation Proclamation","Declaration of Independence","Louisiana Purchase","Battle of Bunker Hill"] },
   { q:"Abraham Lincoln is famous for many things. Name one.", answers:["Freed the slaves","Saved (or preserved) the Union","Led the United States during the Civil War","Issued the Emancipation Proclamation"], pick:1, tag:"History · 1800s",
+    hint:"Lincoln freed the slaves and led the country through the Civil War. He was the 16th President — a later one, not a founding-era figure like Washington, Jefferson, or Madison, so don't mix up his era.",
     opts:["Freed the slaves","Wrote the Constitution","Led the country during World War II","Purchased Alaska"] },
   { q:"What did the Emancipation Proclamation do?", answers:["Freed the slaves","Freed slaves in the Confederacy","Freed slaves in the Confederate states"], pick:1, tag:"History · 1800s",
+    hint:"EMANCIPATE means 'set free.' It freed the slaves.",
     opts:["Freed the slaves","Ended the Civil War","Gave women the right to vote","Established Reconstruction"] },
   { q:"What U.S. war ended slavery?", answers:["The Civil War"], pick:1, tag:"History · 1800s",
+    hint:"The Civil War.",
     opts:["The Civil War","The Revolutionary War","World War I","The War of 1812"] },
   { q:"What amendment says all persons born or naturalized in the United States, and subject to the jurisdiction thereof, are U.S. Citizens?", answers:["14th Amendment","Fourteenth Amendment"], pick:1, tag:"History · 1800s",
+    hint:"14th Amendment = citizenship. Think '1-4' as a door — it's the amendment that opens citizenship to anyone born or naturalized here.",
     opts:["14th Amendment","13th Amendment","15th Amendment","1st Amendment"] },
   { q:"When did all men get the right to vote?", answers:["After the Civil War","(When the) 15th Amendment (was ratified)","1870"], pick:1, tag:"History · 1800s",
+    hint:"15th Amendment, right after the Civil War — voting rights regardless of race. (Don't confuse with the 19th Amendment below, which is women's voting rights.)",
     opts:["After the Civil War","After World War I","After the American Revolution","At the founding of the nation"] },
   { q:"Name one leader of the women's rights movement in the 1800s.", answers:["Susan B. Anthony","Elizabeth Cady Stanton","Sojourner Truth","Harriet Tubman","Lucretia Mott"], pick:1, tag:"History · 1800s",
+    hint:"Susan B. Anthony — she's on a U.S. dollar coin, which helps the name stick.",
     opts:["Susan B. Anthony","Harriet Beecher Stowe","Eleanor Roosevelt","Rosa Parks"] },
 
   // ── AMERICAN HISTORY: 1900s ──
   { q:"Name one war fought by the United States in the 1900s.", answers:["World War I","World War II","Korean War","Vietnam War","(Persian) Gulf War"], pick:1, tag:"History · 1900s",
+    hint:"Easiest: World War II.",
     opts:["World War I","The Civil War","The American Revolution","The War of 1812"] },
   { q:"Why did the United States enter World War I?", answers:["To support the allied powers","Because Germany attacked U.S. ships","To protect American interests"], pick:1, tag:"History · 1900s",
+    hint:"Germany attacked U.S. ships — that helped pull the U.S. into WWI.",
     opts:["To support the allied powers","To gain territory in Europe","Because of the attack on Pearl Harbor","To stop communism"] },
   { q:"When did all women get the right to vote?", answers:["After World War I","(When the) 19th Amendment (was ratified)","1920"], pick:1, tag:"History · 1900s",
+    hint:"19th Amendment, 1920. Memory pairing: '19' and '1920' share the same digits — the 19th Amendment passed in 19-20.",
     opts:["After World War I","After World War II","After the Civil War","After the American Revolution"] },
   { q:"What was the Great Depression?", answers:["Longest economic recession in modern history","Period of severe economic hardship in the 1930s","When the economy was very bad in the 1930s"], pick:1, tag:"History · 1900s",
+    hint:"The longest, most severe economic downturn in modern U.S. history.",
     opts:["Longest economic recession in modern history","A major war in the 1930s","A period of rapid economic growth","A drought that destroyed farmland"] },
   { q:"When did the Great Depression start?", answers:["Stock market crash of 1929","(Crash of) 1929","October 29, 1929"], pick:1, tag:"History · 1900s",
+    hint:"1929 — the stock market crash.",
     opts:["Stock market crash of 1929","World War I","The Dust Bowl of 1932","The bank failures of 1933"] },
   { q:"Who was President during the Great Depression and World War II?", answers:["(Franklin) Roosevelt","FDR"], pick:1, tag:"History · 1900s",
+    hint:"FDR (Franklin D. Roosevelt) — the only president to serve through both the Depression and WWII.",
     opts:["Franklin Roosevelt","Harry Truman","Woodrow Wilson","Herbert Hoover"] },
   { q:"Why did the United States enter World War II?", answers:["(Because the) Japanese attacked Pearl Harbor","To support the allied powers","To stop German expansion in Europe"], pick:1, tag:"History · 1900s",
+    hint:"Japan attacked Pearl Harbor.",
     opts:["(Because the) Japanese attacked Pearl Harbor","To stop communism in Asia","Because of the Great Depression","Because Germany invaded France only"] },
   { q:"Dwight Eisenhower is famous for many things. Name one. ★", answers:["General during World War II","34th President of the United States","Interstate Highway System"], pick:1, tag:"History · 1900s",
+    hint:"Eisenhower = 'Ike.' General first (led WWII forces), President after (the 34th) — and built the interstate highway system.",
     opts:["General during World War II","Led the country during the Great Depression","President during World War II","Ended the Korean War only"] },
   { q:"Who was the United States' main rival during the Cold War?", answers:["Russia","The Soviet Union (USSR)"], pick:1, tag:"History · 1900s",
+    hint:"Cold War = U.S. vs. the Soviet Union (USSR). 'Russia' is also accepted.",
     opts:["Russia","China","Germany","Cuba"] },
   { q:"During the Cold War, what was one main concern of the United States?", answers:["Communism","Nuclear war","Expansion of the Soviet Union"], pick:1, tag:"History · 1900s",
+    hint:"Fear of Communism spreading.",
     opts:["Communism","Fascism","Colonial expansion","Economic recession"] },
   { q:"Why did the United States enter the Korean War?", answers:["To stop the spread of communism"], pick:1, tag:"History · 1900s",
+    hint:"Same reason as Vietnam below: stop the spread of communism.",
     opts:["To stop the spread of communism","To avenge Pearl Harbor","To support France","To gain territory in Asia"] },
   { q:"Why did the United States enter the Vietnam War?", answers:["To stop the spread of communism"], pick:1, tag:"History · 1900s",
+    hint:"Same answer as Korea above: stop the spread of communism.",
     opts:["To stop the spread of communism","To avenge the Korean War","At the request of China","To protect oil interests"] },
   { q:"What did the civil rights movement do?", answers:["Fought to end racial discrimination","Worked for equal rights for all Americans","Fought to end segregation"], pick:1, tag:"History · 1900s",
+    hint:"Fought to end racial discrimination / segregation.",
     opts:["Fought to end racial discrimination","Ended the Vietnam War","Gave women the right to vote","Ended the Great Depression"] },
   { q:"Martin Luther King, Jr. is famous for many things. Name one.", answers:["Fought for civil rights","Worked to ensure racial equality","Led civil rights movement","'I Have a Dream' speech","Nonviolent protest"], pick:1, tag:"History · 1900s",
+    hint:"Fought for civil rights — nonviolent protest, 'I Have a Dream.'",
     opts:["Fought for civil rights","First Black President","Led the women's suffrage movement","Founded the NAACP"] },
   { q:"Why did the United States enter the Persian Gulf War?", answers:["To force the Iraqi military from Kuwait","Because Iraq invaded Kuwait"], pick:1, tag:"History · 1900s",
+    hint:"Push Iraq's military out of Kuwait — Iraq had invaded Kuwait.",
     opts:["To force the Iraqi military from Kuwait","To stop communism","Because of 9/11 attacks","To protect U.S. military bases"] },
 
   // ── AMERICAN HISTORY: RECENT ──
   { q:"What major event happened on September 11, 2001 in the United States?", answers:["Terrorists attacked the United States","Al-Qaeda attacked the United States","Terrorist attacks on the U.S."], pick:1, tag:"History · Recent",
+    hint:"Terrorists attacked the United States.",
     opts:["Terrorists attacked the United States","A major hurricane hit New York","The stock market crashed","A foreign country declared war on the U.S."] },
   { q:"Name one U.S. military conflict after the September 11, 2001 attacks.", answers:["War in Afghanistan","War in Iraq","(Global) War on Terror","War on Terror"], pick:1, tag:"History · Recent",
+    hint:"War in Afghanistan (or Iraq, or the 'War on Terror') — any of these count.",
     opts:["War in Afghanistan","War in Iraq","Korean War","Vietnam War"] },
 
   // ── INTEGRATED CIVICS ──
   { q:"Name one American Indian tribe in the United States.", answers:["Cherokee","Navajo","Sioux","Chippewa","Choctaw","Pueblo","Apache","Iroquois","Creek","Blackfeet","Seminole","Cheyenne","Arawak","Shawnee","Mohegan","Huron","Oneida","Lakota","Crow","Teton","Hopi","Inupiat"], pick:1, tag:"Integrated Civics · Geography",
+    hint:"Pick ONE and stick with it — Cherokee or Navajo are easy to recall and pronounce under pressure.",
     opts:["Cherokee","Navajo","Sioux","Apache","Roman","Greek","Norse","Aztec"] },
   { q:"Name one example of an American innovation.", answers:["Light bulb","Automobile","Skyscrapers","Airplane","Assembly line","Landing on the moon","Integrated circuit","Internet"], pick:1, tag:"Integrated Civics · Symbols",
+    hint:"Pick one unmistakably American invention: the airplane (Wright Brothers) or the light bulb.",
     opts:["Light bulb","Airplane","Assembly line","Steam engine (British)","Telephone (also contested)","Cotton gin","Nuclear reactor"] },
   { q:"What is the capital of the United States?", answers:["Washington, D.C."], pick:1, tag:"Integrated Civics · Geography",
+    hint:"Washington, D.C. — not New York City.",
     opts:["Washington, D.C.","New York City","Philadelphia","Boston"] },
   { q:"Where is the Statue of Liberty?", answers:["New York (Harbor)","Liberty Island","New Jersey","Near New York City","On the Hudson (River)"], pick:1, tag:"Integrated Civics · Geography",
+    hint:"New York Harbor (on Liberty Island).",
     opts:["New York Harbor","Washington, D.C.","Boston Harbor","Philadelphia"] },
   { q:"Why does the flag have 13 stripes?", answers:["(Because there were) 13 original colonies","(Because the stripes) represent the original colonies"], pick:1, tag:"Integrated Civics · Symbols",
+    hint:"13 stripes = the 13 original colonies.",
     opts:["(Because there were) 13 original colonies","(Because there are) 13 Supreme Court justices","(Because there were) 13 founding fathers","(Because there are) 13 original amendments"] },
   { q:"Why does the flag have 50 stars?", answers:["(Because there is) one star for each state","(Because) each star represents a state","(Because there are) 50 states"], pick:1, tag:"Integrated Civics · Symbols",
+    hint:"50 stars = 50 states, one star each.",
     opts:["(Because there are) 50 states","(Because there were) 50 founding fathers","(Because there are) 50 amendments","(Because there are) 50 original colonies"] },
   { q:"What is the name of the national anthem?", answers:["The Star-Spangled Banner"], pick:1, tag:"Integrated Civics · Symbols",
+    hint:"The Star-Spangled Banner.",
     opts:["The Star-Spangled Banner","America the Beautiful","God Bless America","My Country, 'Tis of Thee"] },
   { q:"The Nation's first motto was \"E Pluribus Unum.\" What does that mean?", answers:["Out of many, one"], pick:1, tag:"Integrated Civics · Symbols",
+    hint:"Latin for 'out of many, one' — many states/people becoming one nation.",
     opts:["Out of many, one","In God we trust","Liberty and justice for all","United we stand"] },
   { q:"What is Independence Day?", answers:["The country's birthday","A holiday celebrating independence from Britain","July 4th"], pick:1, tag:"Integrated Civics · Holidays",
+    hint:"The country's birthday — celebrates freedom from Britain, on July 4th.",
     opts:["The country's birthday","Veterans Day","Memorial Day","Thanksgiving"] },
   { q:"Name three national U.S. holidays.", answers:["New Year's Day","Martin Luther King, Jr. Day","Presidents' Day","Memorial Day","Independence Day","Labor Day","Columbus Day","Veterans Day","Thanksgiving","Christmas"], pick:3, tag:"Integrated Civics · Holidays",
+    hint:"Easiest trio everyone already knows: Independence Day (July 4), Thanksgiving, and Christmas.",
     opts:["Thanksgiving","Independence Day","Christmas","New Year's Day","Memorial Day","Veterans Day","St. Patrick's Day","Valentine's Day","Groundhog Day","Halloween"] },
   { q:"What is Memorial Day?", answers:["A holiday to honor soldiers who died in military service","A holiday to honor soldiers who have died","A day to remember soldiers who died defending the country"], pick:1, tag:"Integrated Civics · Holidays",
+    hint:"MEMORIAL = remembering those who DIED in military service.",
     opts:["A holiday to honor soldiers who died in military service","A holiday to honor all veterans","The country's birthday","A holiday to honor the President"] },
   { q:"What is Veterans Day?", answers:["A holiday to honor people in the (U.S.) military","A day to honor all who served in the U.S. military","A holiday honoring American veterans"], pick:1, tag:"Integrated Civics · Holidays",
+    hint:"Honors everyone who SERVED, living or dead. (Memorial Day, above, is specifically for those who died.)",
     opts:["A holiday to honor people in the (U.S.) military","A holiday to honor soldiers who died","The country's birthday","A day to honor the President"] },
 ];
 
@@ -1120,7 +1266,16 @@ function revealAnswer() {
   const q = sessionQuestions[currentIndex];
   document.getElementById('btn-reveal').style.display = 'none';
   document.getElementById('interview-answer').style.display = 'block';
-  document.getElementById('interview-answer-text').textContent = q.answers.slice(0, 4).join('   •   ');
+  document.getElementById('interview-answer-label').textContent = q.pick > 1 ? `Accepted Answers — any ${q.pick} of these` : 'Accepted Answer';
+  document.getElementById('interview-answer-text').textContent = q.answers.join('   •   ');
+  const hintEl = document.getElementById('interview-hint');
+  const hintText = document.getElementById('interview-hint-text');
+  if (q.hint) {
+    hintText.textContent = q.hint;
+    hintEl.style.display = 'block';
+  } else {
+    hintEl.style.display = 'none';
+  }
 }
 
 function selfGrade(isCorrect) {
@@ -1153,7 +1308,7 @@ function selfGrade(isCorrect) {
   } else {
     fb.className = 'feedback show wrong';
     icon.textContent = '✗';
-    text.innerHTML = `<strong>Noted.</strong> Accepted: ${q.answers.slice(0, 4).join(', ')}`;
+    text.innerHTML = `<strong>Noted.</strong> Accepted: ${q.answers.join(', ')}`;
   }
 
   document.getElementById('btn-next').style.display = 'inline-flex';
@@ -1280,7 +1435,7 @@ function showResults() {
   results.forEach((r, i) => {
     const div = document.createElement('div');
     div.className = `review-item ${r.isCorrect ? 'correct-r' : 'wrong-r'}`;
-    const correctStr = r.correctAnswers.slice(0, 4).join(', ');
+    const correctStr = r.correctAnswers.join(', ');
     let answersHtml;
     if (r.selfReported) {
       answersHtml = r.isCorrect
