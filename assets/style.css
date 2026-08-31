@@ -156,12 +156,12 @@ img { max-width: 100%; display: block; }
 }
 
 .tag {
-  font-size: clamp(7px, 0.8vw, 8px);
-  letter-spacing: 0.12em;
+  font-size: clamp(9px, 0.9vw, 10px);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 3px 7px;
-  border: 0.5px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.25);
+  padding: 4px 9px;
+  border: 0.5px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.62);
 }
 
 .btn-primary {
