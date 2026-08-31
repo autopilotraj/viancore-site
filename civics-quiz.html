@@ -140,6 +140,81 @@
     color: var(--text-faint);
   }
 
+  /* ── Mode select (start screen) ── */
+  .mode-select { margin-bottom: 40px; }
+  .mode-select-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 12px;
+  }
+  .mode-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .mode-card {
+    text-align: left;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px 20px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.15s ease;
+  }
+  .mode-card:hover { border-color: rgba(255,255,255,0.25); }
+  .mode-card.active { border-color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 0 1px var(--accent); }
+  .mode-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mode-card.active .mode-name::after { content: '✓'; color: var(--accent); font-size: 13px; }
+  .mode-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ── Interview mode (quiz screen) ── */
+  .mode-tag {
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+  .interview-panel { margin-bottom: 24px; }
+  .interview-answer {
+    margin-top: 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+  }
+  .interview-answer-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+  .interview-answer-text {
+    font-size: 16px;
+    color: var(--correct);
+    font-weight: 500;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+  .self-grade-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .self-grade-btn { flex: 1; justify-content: center; min-width: 160px; }
+  .correct-btn { background: var(--correct); color: #000; }
+  .correct-btn:hover { background: #3ddc7a; box-shadow: 0 0 20px rgba(34,197,94,0.25); }
+  .wrong-btn { border-color: rgba(239,68,68,0.4); color: #fca5a5; }
+  .wrong-btn:hover { border-color: var(--wrong); background: var(--wrong-dim); }
+
   /* ── Buttons ── */
   .btn {
     display: inline-flex;
@@ -523,6 +598,21 @@
         <div class="lbl">Passing threshold</div>
       </div>
     </div>
+
+    <div class="mode-select">
+      <div class="mode-select-label">Choose Practice Mode</div>
+      <div class="mode-options">
+        <button class="mode-card active" id="mode-card-mc" onclick="selectMode('multiple-choice')" type="button">
+          <div class="mode-name">Multiple Choice</div>
+          <div class="mode-desc">See 4 answer options per question. Best for first-pass learning.</div>
+        </button>
+        <button class="mode-card" id="mode-card-interview" onclick="selectMode('interview')" type="button">
+          <div class="mode-name">Interview Mode</div>
+          <div class="mode-desc">No options shown — just like the real interview. Answer out loud, then reveal and grade yourself.</div>
+        </button>
+      </div>
+    </div>
+
     <button class="btn btn-primary" onclick="startQuiz()">Start Practice ›</button>
     <div class="disclaimer" style="margin-top:32px;">
       <strong>Disclaimer:</strong> This is an unofficial practice tool. It is not affiliated with, endorsed by, or approved by USCIS or any U.S. government agency. Questions are sourced from the official public domain USCIS 2025 civics test. Always verify current answers — especially officeholder names — at <a href="https://www.uscis.gov/citizenship/testupdates" target="_blank" rel="noopener" style="color:var(--warn);">uscis.gov/citizenship/testupdates</a>.
@@ -533,7 +623,7 @@
   <section id="screen-quiz" class="screen">
     <div class="progress-wrap">
       <div class="progress-meta">
-        <div class="q-counter">Question <span id="q-num">1</span> of 20</div>
+        <div class="q-counter">Question <span id="q-num">1</span> of 20 <span class="mode-tag" id="mode-tag-active"></span></div>
         <div class="score-live" id="score-live">0 correct</div>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
@@ -546,6 +636,18 @@
     </div>
 
     <ul class="options-list" id="options-list"></ul>
+
+    <div class="interview-panel" id="interview-panel" style="display:none;">
+      <button class="btn btn-outline" id="btn-reveal" onclick="revealAnswer()" style="width:100%;justify-content:center;" type="button">Reveal Answer</button>
+      <div class="interview-answer" id="interview-answer" style="display:none;">
+        <div class="interview-answer-label">Accepted Answer</div>
+        <div class="interview-answer-text" id="interview-answer-text"></div>
+        <div class="self-grade-row">
+          <button class="btn self-grade-btn correct-btn" onclick="selfGrade(true)" type="button">✓ I got it right</button>
+          <button class="btn btn-outline self-grade-btn wrong-btn" onclick="selfGrade(false)" type="button">✗ I missed it</button>
+        </div>
+      </div>
+    </div>
 
     <div class="feedback" id="feedback">
       <div class="feedback-icon" id="feedback-icon"></div>
@@ -881,6 +983,7 @@ let wrongCount = 0;
 let answered = false;
 let selectedOptions = new Set();
 let results = [];
+let quizMode = 'multiple-choice';
 
 function shuffle(arr) {
   const a = [...arr];
@@ -889,6 +992,12 @@ function shuffle(arr) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+function selectMode(mode) {
+  quizMode = mode;
+  document.getElementById('mode-card-mc').classList.toggle('active', mode === 'multiple-choice');
+  document.getElementById('mode-card-interview').classList.toggle('active', mode === 'interview');
 }
 
 function showScreen(id) {
@@ -932,23 +1041,40 @@ function renderQuestion() {
     instruction.textContent = `Select ${pick} answers`;
   }
 
-  // Shuffle options
-  const shuffledOpts = shuffle(q.opts);
-  const letters = ['A','B','C','D','E','F'];
-  const list = document.getElementById('options-list');
-  list.innerHTML = '';
+  // Mode badge
+  document.getElementById('mode-tag-active').textContent = quizMode === 'interview' ? 'INTERVIEW MODE' : '';
 
-  shuffledOpts.forEach((opt, i) => {
-    const li = document.createElement('li');
-    li.className = 'option-item';
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.dataset.value = opt;
-    btn.innerHTML = `<span class="option-letter">${letters[i]}</span>${opt}`;
-    btn.addEventListener('click', () => toggleOption(btn, opt, pick));
-    li.appendChild(btn);
-    list.appendChild(li);
-  });
+  const optionsList = document.getElementById('options-list');
+  const interviewPanel = document.getElementById('interview-panel');
+
+  if (quizMode === 'multiple-choice') {
+    optionsList.style.display = '';
+    interviewPanel.style.display = 'none';
+
+    // Shuffle options
+    const shuffledOpts = shuffle(q.opts);
+    const letters = ['A','B','C','D','E','F'];
+    optionsList.innerHTML = '';
+
+    shuffledOpts.forEach((opt, i) => {
+      const li = document.createElement('li');
+      li.className = 'option-item';
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.dataset.value = opt;
+      btn.innerHTML = `<span class="option-letter">${letters[i]}</span>${opt}`;
+      btn.addEventListener('click', () => toggleOption(btn, opt, pick));
+      li.appendChild(btn);
+      optionsList.appendChild(li);
+    });
+  } else {
+    // Interview mode — no options shown; self-graded reveal instead
+    optionsList.style.display = 'none';
+    optionsList.innerHTML = '';
+    interviewPanel.style.display = 'block';
+    document.getElementById('btn-reveal').style.display = 'inline-flex';
+    document.getElementById('interview-answer').style.display = 'none';
+  }
 
   // Reset feedback & buttons
   const fb = document.getElementById('feedback');
@@ -957,7 +1083,7 @@ function renderQuestion() {
 
   document.getElementById('btn-submit').style.display = 'none';
   document.getElementById('btn-next').style.display = 'none';
-  document.getElementById('select-hint').textContent = pick > 1 ? `Choose ${pick} before submitting` : '';
+  document.getElementById('select-hint').textContent = (quizMode === 'multiple-choice' && pick > 1) ? `Choose ${pick} before submitting` : '';
 }
 
 function toggleOption(btn, value, pick) {
@@ -988,6 +1114,50 @@ function toggleOption(btn, value, pick) {
       hint.textContent = `${selectedOptions.size} of ${pick} selected`;
     }
   }
+}
+
+function revealAnswer() {
+  const q = sessionQuestions[currentIndex];
+  document.getElementById('btn-reveal').style.display = 'none';
+  document.getElementById('interview-answer').style.display = 'block';
+  document.getElementById('interview-answer-text').textContent = q.answers.slice(0, 4).join('   •   ');
+}
+
+function selfGrade(isCorrect) {
+  if (answered) return;
+  answered = true;
+  const q = sessionQuestions[currentIndex];
+
+  if (isCorrect) { correctCount++; } else { wrongCount++; }
+
+  results.push({
+    q: q.q,
+    tag: q.tag,
+    pick: q.pick,
+    userAnswers: [],
+    correctAnswers: q.answers,
+    isCorrect,
+    selfReported: true
+  });
+
+  document.getElementById('interview-answer').style.display = 'none';
+
+  const fb = document.getElementById('feedback');
+  const icon = document.getElementById('feedback-icon');
+  const text = document.getElementById('feedback-text');
+
+  if (isCorrect) {
+    fb.className = 'feedback show correct';
+    icon.textContent = '✓';
+    text.innerHTML = `<strong>Nice.</strong> Answering out loud from memory is exactly how the real interview works.`;
+  } else {
+    fb.className = 'feedback show wrong';
+    icon.textContent = '✗';
+    text.innerHTML = `<strong>Noted.</strong> Accepted: ${q.answers.slice(0, 4).join(', ')}`;
+  }
+
+  document.getElementById('btn-next').style.display = 'inline-flex';
+  document.getElementById('score-live').textContent = correctCount + ' correct';
 }
 
 function submitAnswer() {
@@ -1110,16 +1280,21 @@ function showResults() {
   results.forEach((r, i) => {
     const div = document.createElement('div');
     div.className = `review-item ${r.isCorrect ? 'correct-r' : 'wrong-r'}`;
-    const yourStr = r.userAnswers.join(', ') || '(none)';
     const correctStr = r.correctAnswers.slice(0, 4).join(', ');
+    let answersHtml;
+    if (r.selfReported) {
+      answersHtml = r.isCorrect
+        ? `<span class="correct-a">✓ Answered correctly (self-reported) — ${correctStr}</span>`
+        : `<span class="yours">✗ Marked as missed (self-reported)</span><span class="correct-a">✓ Accepted: ${correctStr}</span>`;
+    } else {
+      const yourStr = r.userAnswers.join(', ') || '(none)';
+      answersHtml = r.isCorrect
+        ? `<span class="correct-a">✓ ${yourStr}</span>`
+        : `<span class="yours">✗ You chose: ${yourStr}</span><span class="correct-a">✓ Accepted: ${correctStr}</span>`;
+    }
     div.innerHTML = `
       <div class="review-q"><span class="qnum">Q${i+1}</span>${r.q}</div>
-      <div class="review-answers">
-        ${r.isCorrect
-          ? `<span class="correct-a">✓ ${yourStr}</span>`
-          : `<span class="yours">✗ You chose: ${yourStr}</span><span class="correct-a">✓ Accepted: ${correctStr}</span>`
-        }
-      </div>`;
+      <div class="review-answers">${answersHtml}</div>`;
     reviewEl.appendChild(div);
   });
 
