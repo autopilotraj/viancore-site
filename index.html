@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>(function(){try{var t=localStorage.getItem('viancore-theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="VianCore — Where Enterprise Knowledge Gets Serious. Deep technical knowledge on enterprise systems, security architecture, and documentation."/>
@@ -47,11 +48,24 @@
       z-index: 1;
     }
 
+    /* Light theme: the moody photo was shot for a black overlay, so swap it
+       for a clean, futuristic glow + dot-grid field instead of darkening it. */
+    html[data-theme="light"] .hero {
+      background-image:
+        radial-gradient(rgba(11,18,32,0.07) 1px, transparent 1px),
+        radial-gradient(circle at 88% 20%, rgba(12,143,134,0.16) 0%, rgba(12,143,134,0) 55%),
+        radial-gradient(circle at 8% 85%, rgba(12,143,134,0.10) 0%, rgba(12,143,134,0) 50%),
+        linear-gradient(180deg, #ffffff 0%, #f2f5f9 100%);
+      background-size: 24px 24px, auto, auto, auto;
+      background-position: 0 0, 0 0, 0 0, 0 0;
+    }
+    html[data-theme="light"] .hero::before { background: none; }
+
     .hero-tag {
       font-size: clamp(10px, 1vw, 12px);
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.65);
+      color: rgba(var(--text-rgb),0.65);
       margin-bottom: 24px;
     }
 
@@ -60,14 +74,14 @@
       font-weight: 400;
       letter-spacing: 0.04em;
       line-height: 1.2;
-      color: #fff;
+      color: var(--text-page);
       margin-bottom: 18px;
       max-width: 700px;
     }
 
     .hero-sub {
       font-size: clamp(12px, 1.3vw, 14px);
-      color: rgba(255,255,255,0.8);
+      color: rgba(var(--text-rgb),0.8);
       letter-spacing: 0.03em;
       max-width: 460px;
       line-height: 1.85;
@@ -78,26 +92,26 @@
     .stats-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      border-top: 0.5px solid rgba(255,255,255,0.07);
-      border-bottom: 0.5px solid rgba(255,255,255,0.07);
+      border-top: 0.5px solid rgba(var(--text-rgb),0.07);
+      border-bottom: 0.5px solid rgba(var(--text-rgb),0.07);
     }
 
     .stat {
       padding: clamp(24px, 3vw, 40px) clamp(16px, 2.5vw, 32px);
-      border-right: 0.5px solid rgba(255,255,255,0.07);
+      border-right: 0.5px solid rgba(var(--text-rgb),0.07);
     }
     .stat:last-child { border-right: none; }
 
     .stat-num {
       font-size: clamp(22px, 3vw, 32px);
       font-weight: 300;
-      color: #fff;
+      color: var(--text-page);
       margin-bottom: 6px;
     }
 
     .stat-label {
       font-size: clamp(8px, 0.9vw, 10px);
-      color: rgba(255,255,255,0.6);
+      color: rgba(var(--text-rgb),0.6);
       letter-spacing: 0.15em;
       text-transform: uppercase;
     }
@@ -107,18 +121,18 @@
     .pillars {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      border: 0.5px solid rgba(255,255,255,0.07);
+      border: 0.5px solid rgba(var(--text-rgb),0.07);
     }
 
     .pillar {
       padding: clamp(24px, 3vw, 40px) clamp(20px, 2.5vw, 32px);
-      border-right: 0.5px solid rgba(255,255,255,0.07);
+      border-right: 0.5px solid rgba(var(--text-rgb),0.07);
     }
     .pillar:last-child { border-right: none; }
 
     .pillar-icon {
       font-size: 20px;
-      color: rgba(255,255,255,0.28);
+      color: rgba(var(--text-rgb),0.28);
       margin-bottom: 18px;
     }
 
@@ -126,14 +140,14 @@
       font-size: clamp(11px, 1vw, 13px);
       font-weight: 500;
       letter-spacing: 0.16em;
-      color: #fff;
+      color: var(--text-page);
       margin-bottom: 10px;
       text-transform: uppercase;
     }
 
     .pillar-desc {
       font-size: clamp(11px, 1.1vw, 13px);
-      color: rgba(255,255,255,0.75);
+      color: rgba(var(--text-rgb),0.75);
       line-height: 1.85;
       font-weight: 400;
     }
@@ -141,10 +155,10 @@
     @media (max-width: 768px) {
       .stats-row { grid-template-columns: repeat(2, 1fr); }
       .stat:nth-child(2) { border-right: none; }
-      .stat:nth-child(3) { border-top: 0.5px solid rgba(255,255,255,0.07); }
-      .stat:nth-child(4) { border-top: 0.5px solid rgba(255,255,255,0.07); border-right: none; }
+      .stat:nth-child(3) { border-top: 0.5px solid rgba(var(--text-rgb),0.07); }
+      .stat:nth-child(4) { border-top: 0.5px solid rgba(var(--text-rgb),0.07); border-right: none; }
       .pillars { grid-template-columns: 1fr; }
-      .pillar { border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+      .pillar { border-right: none; border-bottom: 0.5px solid rgba(var(--text-rgb),0.07); }
       .pillar:last-child { border-bottom: none; }
     }
 
@@ -174,6 +188,7 @@
       </div>
       <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
     </div>
+    <div class="nav-right">
     <ul class="nav-links">
       <li><a href="knowledge/">Knowledge Base</a></li>
       <li><a href="knowledge/#security">Security</a></li>
@@ -181,9 +196,23 @@
       <li><a href="learning-hub.html">Learning Hub</a></li>
       <li><a href="about/">About</a></li>
     </ul>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light mode" title="Switch to light mode">
+      <svg class="tt-node" viewBox="0 0 40 40" width="18" height="18" aria-hidden="true">
+        <circle class="tt-ring-outer" cx="20" cy="20" r="15" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <circle class="tt-ring-inner" cx="20" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.55"/>
+        <circle class="tt-dot" cx="20" cy="20" r="3.2"/>
+        <g class="tt-ticks" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+          <line x1="20" y1="1" x2="20" y2="6"/>
+          <line x1="20" y1="34" x2="20" y2="39"/>
+          <line x1="1" y1="20" x2="6" y2="20"/>
+          <line x1="34" y1="20" x2="39" y2="20"/>
+        </g>
+      </svg>
+    </button>
     <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
       <span></span><span></span><span></span>
     </button>
+  </div>
   </nav>
   <div class="nav-mobile" id="mobileMenu">
     <a href="knowledge/">Knowledge Base</a>
@@ -285,5 +314,7 @@
     }
   </script>
 
+
+  <script src="assets/theme-toggle.js"></script>
 </body>
 </html>

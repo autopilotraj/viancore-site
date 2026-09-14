@@ -1,4 +1,4 @@
-const CACHE_NAME = 'viancore-v2';
+const CACHE_NAME = 'viancore-v3';
 
 const PRECACHE_URLS = [
   '/',
@@ -8,6 +8,7 @@ const PRECACHE_URLS = [
   '/about/',
   '/about/index.html',
   '/assets/style.css',
+  '/assets/theme-toggle.js',
   '/manifest.json',
   '/learning-hub.html',
   '/civics-quiz.html'

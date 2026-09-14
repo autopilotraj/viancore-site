@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>(function(){try{var t=localStorage.getItem('viancore-theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Cybersecurity Awareness Guide | VianCore</title>
@@ -19,17 +20,30 @@
     --card-hover:  #141414;
     --border:      #1e1e1e;
     --accent:      #20b2aa;
-    --accent-dim:  rgba(32,178,170,0.10);
-    --accent-glow: rgba(32,178,170,0.20);
-    --text:        rgba(255,255,255,0.88);
-    --text-muted:  rgba(255,255,255,0.55);
-    --text-faint:  rgba(255,255,255,0.28);
+    --accent-dim:  rgba(var(--accent-rgb),0.10);
+    --accent-glow: rgba(var(--accent-rgb),0.20);
+    --text:        rgba(var(--text-rgb),0.88);
+    --text-muted:  rgba(var(--text-rgb),0.55);
+    --text-faint:  rgba(var(--text-rgb),0.28);
     --warn:        #f59e0b;
     --warn-dim:    rgba(245,158,11,0.10);
     --danger:      #ef4444;
     --danger-dim:  rgba(239,68,68,0.10);
     --safe:        #22c55e;
     --safe-dim:    rgba(34,197,94,0.10);
+  
+    --text-rgb: 255,255,255;
+    --accent-rgb: 32,178,170;
+  }
+  html[data-theme="light"] {
+    --black: #f2f5f9;
+    --surface: #ffffff;
+    --card: #ffffff;
+    --card-hover: #eef2f6;
+    --border: #dde3e9;
+    --accent: #0c8f86;
+    --text-rgb: 11,18,32;
+    --accent-rgb: 12,143,134;
   }
 
   body {
@@ -111,7 +125,7 @@
   .page-title {
     font-size: clamp(26px, 4vw, 40px);
     font-weight: 700;
-    color: #fff;
+    color: var(--text);
     line-height: 1.15;
     margin-bottom: 16px;
     letter-spacing: -0.01em;
@@ -207,7 +221,7 @@
   .section-title {
     font-size: clamp(20px, 3vw, 26px);
     font-weight: 700;
-    color: #fff;
+    color: var(--text);
     line-height: 1.2;
     margin-bottom: 20px;
     letter-spacing: -0.01em;
@@ -226,7 +240,7 @@
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--text);
     margin: 32px 0 14px;
   }
 
@@ -250,7 +264,7 @@
   .threat-name {
     font-size: 13px;
     font-weight: 700;
-    color: #fff;
+    color: var(--text);
     margin-bottom: 6px;
     letter-spacing: 0.02em;
   }
@@ -282,7 +296,7 @@
   }
   .callout-accent {
     background: var(--accent-dim);
-    border: 1px solid rgba(32,178,170,0.25);
+    border: 1px solid rgba(var(--accent-rgb),0.25);
   }
   .callout-icon {
     font-size: 18px;
@@ -385,7 +399,7 @@
     font-size: 16px;
     top: 11px;
   }
-  .checklist li strong { color: #fff; font-weight: 600; }
+  .checklist li strong { color: var(--text); font-weight: 600; }
 
   /* ── Step list ── */
   .step-list {
@@ -423,7 +437,7 @@
   .step-title {
     font-size: 14px;
     font-weight: 600;
-    color: #fff;
+    color: var(--text);
     margin-bottom: 4px;
   }
   .step-desc {
@@ -459,7 +473,7 @@
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--text);
     margin-bottom: 10px;
     padding-bottom: 6px;
     border-bottom: 1px solid var(--border);
@@ -490,7 +504,7 @@
     margin-top: 52px;
     padding: 32px;
     background: var(--accent-dim);
-    border: 1px solid rgba(32,178,170,0.25);
+    border: 1px solid rgba(var(--accent-rgb),0.25);
     border-radius: 6px;
     display: flex;
     align-items: center;
@@ -501,7 +515,7 @@
   .cta-text-title {
     font-size: 16px;
     font-weight: 700;
-    color: #fff;
+    color: var(--text);
     margin-bottom: 4px;
   }
   .cta-text-sub {
@@ -513,7 +527,7 @@
     align-items: center;
     gap: 8px;
     background: var(--accent);
-    color: #000;
+    color: var(--black);
     font-family: 'Inter', sans-serif;
     font-size: 12px;
     font-weight: 700;
@@ -547,6 +561,27 @@
     color: var(--text-faint);
     line-height: 1.75;
   }
+
+
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  background: transparent; border: 0.5px solid rgba(255,255,255,0.25);
+  color: #ffffff; cursor: pointer; padding: 0;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+}
+.theme-toggle:hover { border-color: #20b2aa; box-shadow: 0 0 0 4px rgba(32,178,170,0.14); }
+.theme-toggle:active { transform: scale(0.9); }
+.theme-toggle .tt-dot { fill: #20b2aa; transition: r 0.3s ease, opacity 0.3s ease; }
+.theme-toggle .tt-ticks line { transition: opacity 0.3s ease, transform 0.3s ease; transform-origin: 20px 20px; }
+html:not([data-theme="light"]) .theme-toggle .tt-node { animation: tt-pulse 3.2s ease-in-out infinite; }
+@keyframes tt-pulse {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(32,178,170,0)); }
+  50% { filter: drop-shadow(0 0 3px rgba(32,178,170,0.85)); }
+}
+html[data-theme="light"] .theme-toggle .tt-dot { r: 2; fill: none; stroke: #20b2aa; stroke-width: 1.3; opacity: 0.9; }
+html[data-theme="light"] .theme-toggle .tt-ticks line { opacity: 0.4; transform: scale(0.62); }
+html[data-theme="light"] .theme-toggle .tt-node { animation: none; }
 </style>
 </head>
 <body>
@@ -559,7 +594,19 @@
     <li class="hide-mobile"><a href="knowledge-base.html">Knowledge Base</a></li>
     <li><a href="learning-hub.html">Learning Hub</a></li>
     <li class="hide-mobile"><a href="index.html#contact">Contact</a></li>
-  </ul>
+  <li class="theme-toggle-item" style="display:flex;align-items:center;"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light mode" title="Switch to light mode">
+      <svg class="tt-node" viewBox="0 0 40 40" width="18" height="18" aria-hidden="true">
+        <circle class="tt-ring-outer" cx="20" cy="20" r="15" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <circle class="tt-ring-inner" cx="20" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.55"/>
+        <circle class="tt-dot" cx="20" cy="20" r="3.2"/>
+        <g class="tt-ticks" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+          <line x1="20" y1="1" x2="20" y2="6"/>
+          <line x1="20" y1="34" x2="20" y2="39"/>
+          <line x1="1" y1="20" x2="6" y2="20"/>
+          <line x1="34" y1="20" x2="39" y2="20"/>
+        </g>
+      </svg>
+    </button></li></ul>
 </nav>
 
 <!-- ── Page Hero ── -->
@@ -1104,5 +1151,7 @@
   </div>
 </footer>
 
+
+  <script src="assets/theme-toggle.js"></script>
 </body>
 </html>
