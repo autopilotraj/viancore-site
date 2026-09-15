@@ -5,7 +5,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Building a document-grounded RAG chatbot for a PeopleSoft PICASO/ODA environment using an OCI GenAI Agent, a Function wrapper, and API Gateway. VianCore Knowledge Base."/>
-  <title>Building a RAG Chatbot for PeopleSoft with OCI GenAI Agent — VianCore</title>
+  <title>Building a RAG Chatbot for PeopleSoft with OCI GenAI Agent · VianCore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -225,20 +225,20 @@
     <div class="content">
       <div class="doc-category">AI · Integration</div>
       <h1 class="doc-title">Building a RAG Chatbot for PeopleSoft with OCI GenAI Agent</h1>
-      <p class="doc-subtitle">A proof-of-concept that extends a delivered PeopleSoft PICASO/ODA chatbot with a document-grounded question-answering agent — built on OCI's GenAI Agent service, a Function wrapper, and API Gateway — without asking PeopleSoft or ODA to speak the GenAI SDK directly.</p>
+      <p class="doc-subtitle">A proof-of-concept that extends a delivered PeopleSoft PICASO/ODA chatbot with a document-grounded question-answering agent, built on OCI's GenAI Agent service, a Function wrapper, and API Gateway, without asking PeopleSoft or ODA to speak the GenAI SDK directly.</p>
       <div class="doc-divider"></div>
 
       <div class="doc-body">
 
         <div class="doc-section" id="overview">
           <div class="doc-section-title">Overview</div>
-          <p class="doc-para">PeopleSoft ships with PICASO, a digital assistant built on Oracle Digital Assistant (ODA), that already answers a useful set of employee questions — absence balances, benefits, team lookups, paycheck summaries. What it can't do out of the box is answer open-ended questions against your own documentation: "what does the runbook say about X," "how do I request Y." That's the gap a Retrieval-Augmented Generation (RAG) agent fills — a knowledge base built from your own documents, paired with a large language model that answers strictly from what's in it, rather than from general training data.</p>
-          <p class="doc-para">This project proves that pattern end to end on OCI: a knowledge base built from Object Storage documents, an OCI GenAI Agent to answer questions against it, and a path that lets both Oracle Digital Assistant and the PeopleSoft chatbot widget call it — while keeping OCI-specific authentication and SDK logic completely out of ODA and PeopleSoft.</p>
+          <p class="doc-para">PeopleSoft ships with PICASO, a digital assistant built on Oracle Digital Assistant (ODA), that already answers a useful set of employee questions: absence balances, benefits, team lookups, paycheck summaries. What it can't do out of the box is answer open-ended questions against your own documentation: "what does the runbook say about X," "how do I request Y." That's the gap a Retrieval-Augmented Generation (RAG) agent fills, with a knowledge base built from your own documents, paired with a large language model that answers strictly from what's in it, rather than from general training data.</p>
+          <p class="doc-para">This project proves that pattern end to end on OCI: a knowledge base built from Object Storage documents, an OCI GenAI Agent to answer questions against it, and a path that lets both Oracle Digital Assistant and the PeopleSoft chatbot widget call it, while keeping OCI-specific authentication and SDK logic completely out of ODA and PeopleSoft.</p>
         </div>
 
         <div class="doc-section" id="architecture">
           <div class="doc-section-title">Architecture</div>
-          <p class="doc-para">The core design decision was to never let ODA or PeopleSoft talk to the OCI GenAI Agent Runtime directly. Doing so would mean pushing OCI request signing, resource principal authentication, and session-management logic into ODA's skill flows — not a clean integration pattern, and a maintenance burden every time the underlying SDK changes. Instead, everything OCI-specific sits behind a Function that exposes one simple thing: a REST endpoint.</p>
+          <p class="doc-para">The core design decision was to never let ODA or PeopleSoft talk to the OCI GenAI Agent Runtime directly. Doing so would mean pushing OCI request signing, resource principal authentication, and session-management logic into ODA's skill flows: not a clean integration pattern, and a maintenance burden every time the underlying SDK changes. Instead, everything OCI-specific sits behind a Function that exposes one simple thing: a REST endpoint.</p>
           <div class="doc-code">PeopleSoft / PICASO chatbot
   → Oracle Digital Assistant (ODA) skill
   → ODA REST Service
@@ -247,21 +247,21 @@
   → OCI GenAI Agent Runtime
   → Object Storage knowledge base
   → Natural-language answer, returned all the way back</div>
-          <p class="doc-para">Every component above the Function line only ever calls a plain HTTPS REST endpoint. All of the OCI SDK complexity — signing requests, creating a runtime session, calling the Agent, shaping the response — lives inside the Function, where it can be changed without touching ODA or PeopleSoft at all.</p>
+          <p class="doc-para">Every component above the Function line only ever calls a plain HTTPS REST endpoint. All of the OCI SDK complexity (signing requests, creating a runtime session, calling the Agent, shaping the response) lives inside the Function, where it can be changed without touching ODA or PeopleSoft at all.</p>
         </div>
 
         <div class="doc-section" id="foundation">
           <div class="doc-section-title">The chatbot foundation</div>
-          <p class="doc-para">Before any of the GenAI work started, the delivered PICASO/ODA chatbot itself had to be fully working — and getting there surfaced a dependency that isn't obvious from the chatbot UI. An early symptom was a generic <em>"Oops! Something went wrong while connecting to PeopleSoft"</em> error on employee-lookup questions, even though backend logs showed authentication succeeding cleanly (<code>ParseStatus: true, Authorized: true, ProcessSuccess: false</code>).</p>
-          <p class="doc-para">The Employee Directory skill doesn't query a table directly — it routes through PeopleSoft's Search Framework, which depends on an OpenSearch instance running alongside PeopleSoft, plus a working Integration Broker Gateway callback:</p>
+          <p class="doc-para">Before any of the GenAI work started, the delivered PICASO/ODA chatbot itself had to be fully working, and getting there surfaced a dependency that isn't obvious from the chatbot UI. An early symptom was a generic <em>"Oops! Something went wrong while connecting to PeopleSoft"</em> error on employee-lookup questions, even though backend logs showed authentication succeeding cleanly (<code>ParseStatus: true, Authorized: true, ProcessSuccess: false</code>).</p>
+          <p class="doc-para">The Employee Directory skill doesn't query a table directly. It routes through PeopleSoft's Search Framework, which depends on an OpenSearch instance running alongside PeopleSoft, plus a working Integration Broker Gateway callback:</p>
           <div class="doc-code">Chatbot / ODA → PeopleSoft Application Service → Employee Directory Service
   → Search Framework / OpenSearch → Integration Broker Gateway callback
   → Response back to chatbot</div>
-          <p class="doc-para">If OpenSearch isn't running, the Search Instance configuration is wrong, or the Gateway callback URL doesn't match the active PeopleSoft HTTPS endpoint, the chatbot authenticates fine and then fails anonymously at the processing step — which is exactly the failure mode observed. The fix was validating OpenSearch was up and listening on its port, confirming the Search Instance host and callback URL matched the current PeopleSoft HTTPS setup, and correcting the Integration Broker Gateway URL to point at the listening connector rather than a stale service connector. A separate, smaller issue — a chatbot user missing the required Payroll Assistant role on their PeopleSoft profile — turned out to be its own independent blocker for paycheck-related questions specifically.</p>
+          <p class="doc-para">If OpenSearch isn't running, the Search Instance configuration is wrong, or the Gateway callback URL doesn't match the active PeopleSoft HTTPS endpoint, the chatbot authenticates fine and then fails anonymously at the processing step, which is exactly the failure mode observed. The fix was validating OpenSearch was up and listening on its port, confirming the Search Instance host and callback URL matched the current PeopleSoft HTTPS setup, and correcting the Integration Broker Gateway URL to point at the listening connector rather than a stale service connector. A separate, smaller issue, a chatbot user missing the required Payroll Assistant role on their PeopleSoft profile, turned out to be its own independent blocker for paycheck-related questions specifically.</p>
           <div class="doc-callout">
-            <p><strong>Takeaway:</strong> a chatbot that authenticates successfully but still fails generically is a strong signal to look at its backend dependencies — Search Framework, Integration Broker, or a missing role grant — before assuming the chatbot configuration itself is wrong.</p>
+            <p><strong>Takeaway:</strong> a chatbot that authenticates successfully but still fails generically is a strong signal to look at its backend dependencies (Search Framework, Integration Broker, or a missing role grant) before assuming the chatbot configuration itself is wrong.</p>
           </div>
-          <p class="doc-para">With that foundation working, delivered PICASO flows for absence, benefits, team lookups, and paycheck summaries all validated cleanly, and — worth calling out directly — the paycheck flow correctly scoped results to the logged-in user: typing another employee's ID in chat did not return that employee's data, it returned the logged-in user's own paycheck instead.</p>
+          <p class="doc-para">With that foundation working, delivered PICASO flows for absence, benefits, team lookups, and paycheck summaries all validated cleanly, and, worth calling out directly, the paycheck flow correctly scoped results to the logged-in user: typing another employee's ID in chat did not return that employee's data, it returned the logged-in user's own paycheck instead.</p>
         </div>
 
         <div class="doc-section" id="rag-agent">
@@ -271,21 +271,21 @@
             <li><strong>Object Storage bucket</strong> holding the source documents the agent should answer from.</li>
             <li><strong>Knowledge base</strong> created against that bucket, with ingestion run to index the documents' content.</li>
             <li><strong>GenAI Agent</strong> configured with the knowledge base as its RAG tool, plus guardrails to keep answers grounded in the ingested content.</li>
-            <li><strong>Agent endpoint</strong> created and validated directly in the OCI Console's chat interface before anything external tried to call it — proving the RAG behavior in isolation first.</li>
+            <li><strong>Agent endpoint</strong> created and validated directly in the OCI Console's chat interface before anything external tried to call it, proving the RAG behavior in isolation first.</li>
           </ul>
-          <p class="doc-para">One naming clarification mattered enough to call out explicitly partway through the project: this OCI GenAI Agent, wired to a document knowledge base, is a <strong>RAG Agent</strong> — its job is grounded question-answering, nothing more. A separate concept, a <strong>GenAI Agent</strong> in the action-oriented sense (reasoning over live transactional data, taking multi-step actions), is a different architecture with different security requirements. Keeping that distinction explicit early avoided scope creep later, when a reasoning-over-live-data experiment did come up.</p>
+          <p class="doc-para">One naming clarification mattered enough to call out explicitly partway through the project: this OCI GenAI Agent, wired to a document knowledge base, is a <strong>RAG Agent</strong>: its job is grounded question-answering, nothing more. A separate concept, a <strong>GenAI Agent</strong> in the action-oriented sense (reasoning over live transactional data, taking multi-step actions), is a different architecture with different security requirements. Keeping that distinction explicit early avoided scope creep later, when a reasoning-over-live-data experiment did come up.</p>
         </div>
 
         <div class="doc-section" id="wrapper">
           <div class="doc-section-title">The function wrapper pattern</div>
           <p class="doc-para">Calling the GenAI Agent Runtime from a Function turned out to need its own short list of OCI plumbing, each piece easy to get wrong once:</p>
           <ul class="doc-list">
-            <li><strong>Resource principal authentication.</strong> The Function authenticates to the GenAI Agent Runtime as itself, using OCI's resource principal signer — no embedded credentials.</li>
-            <li><strong>A Dynamic Group matching the Function.</strong> The first matching rule used the compartment <em>name</em> where OCI's <code>resource.compartment.id</code> actually expects the compartment <em>OCID</em> — an easy mix-up, and one that fails silently as an authorization error rather than a clear validation message.</li>
+            <li><strong>Resource principal authentication.</strong> The Function authenticates to the GenAI Agent Runtime as itself, using OCI's resource principal signer, with no embedded credentials.</li>
+            <li><strong>A Dynamic Group matching the Function.</strong> The first matching rule used the compartment <em>name</em> where OCI's <code>resource.compartment.id</code> actually expects the compartment <em>OCID</em>, an easy mix-up, and one that fails silently as an authorization error rather than a clear validation message.</li>
             <li><strong>An IAM policy</strong> granting that Dynamic Group permission to invoke the GenAI Agent Runtime.</li>
-            <li><strong>An OCI Container Registry (OCIR) repository</strong> to host the Function's container image, since Fn defaults to Docker Hub if its registry context is left blank — a default that produces a confusing "access denied" push error rather than an obviously wrong-registry message.</li>
+            <li><strong>An OCI Container Registry (OCIR) repository</strong> to host the Function's container image, since Fn defaults to Docker Hub if its registry context is left blank, a default that produces a confusing "access denied" push error rather than an obviously wrong-registry message.</li>
           </ul>
-          <p class="doc-para">The Function itself is deliberately small — parse the incoming message, authenticate, open a session against the Agent endpoint, forward the question, and shape the response:</p>
+          <p class="doc-para">The Function itself is deliberately small: parse the incoming message, authenticate, open a session against the Agent endpoint, forward the question, and shape the response:</p>
           <div class="doc-code">signer = oci.auth.signers.get_resource_principals_signer()
 client = oci.generative_ai_agent_runtime.GenerativeAiAgentRuntimeClient(
     config={}, signer=signer
@@ -305,7 +305,7 @@ chat_result = client.chat(
         session_id=session.id
     )
 )</div>
-          <p class="doc-para">Two smaller but real errors showed up during this build worth documenting: the OCI GenAI Agent SDK's response objects aren't natively JSON-serializable, so the Function has to extract plain fields before returning them (a raw <code>Message</code> or <code>MessageContent</code> object thrown straight into <code>json.dumps</code> fails); and OCIR authentication uses an OCI Auth Token as the Docker password, in the format <code>&lt;tenancy-namespace&gt;/&lt;oci-username&gt;</code> — not the regular OCI Console password, which is a distinct credential entirely and the most common reason a working <code>docker login</code> is followed by a failing <code>docker push</code>.</p>
+          <p class="doc-para">Two smaller but real errors showed up during this build worth documenting: the OCI GenAI Agent SDK's response objects aren't natively JSON-serializable, so the Function has to extract plain fields before returning them (a raw <code>Message</code> or <code>MessageContent</code> object thrown straight into <code>json.dumps</code> fails), and OCIR authentication uses an OCI Auth Token as the Docker password, in the format <code>&lt;tenancy-namespace&gt;/&lt;oci-username&gt;</code>, not the regular OCI Console password, which is a distinct credential entirely and the most common reason a working <code>docker login</code> is followed by a failing <code>docker push</code>.</p>
         </div>
 
         <div class="doc-section" id="gateway">
@@ -313,31 +313,31 @@ chat_result = client.chat(
           <p class="doc-para">With the Function working end to end from a direct <code>fn invoke</code>, the last piece was giving ODA a plain REST endpoint to call. API Gateway sits in front of the Function, exposing a single route:</p>
           <div class="doc-code">POST /psft-genai/ask
 { "message": "What is OpenSearch?" }</div>
-          <p class="doc-para">The IAM policy for this is a single line — <code>Allow any-user to use functions-family in tenancy where request.principal.type = 'ApiGateway'</code> — scoped down further in a production deployment, but sufficient to prove the pattern for this proof of concept. On the ODA side, a REST Service definition points at the API Gateway endpoint, and a small three-state skill flow — ask the question, call the service, display the response — completes the loop. The field name in the request body matters more than it looks: the Function expects <code>message</code> specifically, and a payload using <code>question</code> instead fails to route with a generic missing-field error.</p>
+          <p class="doc-para">The IAM policy for this is a single line: <code>Allow any-user to use functions-family in tenancy where request.principal.type = 'ApiGateway'</code>, scoped down further in a production deployment, but sufficient to prove the pattern for this proof of concept. On the ODA side, a REST Service definition points at the API Gateway endpoint, and a small three-state skill flow (ask the question, call the service, display the response) completes the loop. The field name in the request body matters more than it looks: the Function expects <code>message</code> specifically, and a payload using <code>question</code> instead fails to route with a generic missing-field error.</p>
         </div>
 
         <div class="doc-section" id="result">
           <div class="doc-section-title">End-to-end result</div>
-          <p class="doc-para">The full path validated in stages — first from PowerShell directly against the API Gateway endpoint, then from inside an ODA skill preview, and finally from the actual PeopleSoft chatbot widget, asking a knowledge-base question and getting an answer generated from the ingested documents:</p>
+          <p class="doc-para">The full path validated in stages: first from PowerShell directly against the API Gateway endpoint, then from inside an ODA skill preview, and finally from the actual PeopleSoft chatbot widget, asking a knowledge-base question and getting an answer generated from the ingested documents:</p>
           <div class="doc-code">PeopleSoft chatbot → PICASO/ODA → custom RAG skill → ODA REST Service
   → OCI API Gateway → OCI Function → OCI GenAI Agent Runtime
   → Object Storage knowledge base → answer returned to the chatbot</div>
-          <p class="doc-para">One real, honestly-documented limitation: the conversation flow itself needs polish. After one RAG question and answer, the chatbot session tends to route back into PICASO's main assistant flow rather than staying in a natural back-and-forth. That's a conversation-design gap, not a backend integration failure — the technical path proved out; the UX around it is future work.</p>
+          <p class="doc-para">One real, honestly-documented limitation: the conversation flow itself needs polish. After one RAG question and answer, the chatbot session tends to route back into PICASO's main assistant flow rather than staying in a natural back-and-forth. That's a conversation-design gap, not a backend integration failure. The technical path proved out, and the UX around it is future work.</p>
         </div>
 
         <div class="doc-section" id="next">
           <div class="doc-section-title">Security notes &amp; what's next</div>
-          <p class="doc-para">A natural next question once RAG worked was whether the same Function could support action-oriented reasoning, not just document Q&amp;A — for example, comparing two paychecks and explaining why net pay changed. A plumbing experiment confirmed the routing pattern works: the same Function endpoint can branch on an <code>action</code> field and handle a paycheck-comparison request alongside its default RAG path, calculating the difference between two sample paychecks and returning a plain-English explanation.</p>
-          <p class="doc-para">What that experiment did <em>not</em> prove — and this distinction matters — is dynamic, secure data access. The paycheck data used was fixed sample data, not a live pull from PeopleSoft for the logged-in user, so this should be described honestly as a "plumbing experiment," not completed functionality. It surfaced the actual next challenge clearly: reasoning over data is the easy part once an LLM is in the loop; secure, user-scoped access to that data is the hard part, and it's the priority for any future iteration.</p>
+          <p class="doc-para">A natural next question once RAG worked was whether the same Function could support action-oriented reasoning, not just document Q&amp;A. For example, comparing two paychecks and explaining why net pay changed. A plumbing experiment confirmed the routing pattern works: the same Function endpoint can branch on an <code>action</code> field and handle a paycheck-comparison request alongside its default RAG path, calculating the difference between two sample paychecks and returning a plain-English explanation.</p>
+          <p class="doc-para">What that experiment did <em>not</em> prove, and this distinction matters, is dynamic, secure data access. The paycheck data used was fixed sample data, not a live pull from PeopleSoft for the logged-in user, so this should be described honestly as a "plumbing experiment," not completed functionality. It surfaced the actual next challenge clearly: reasoning over data is the easy part once an LLM is in the loop. Secure, user-scoped access to that data is the hard part, and it's the priority for any future iteration.</p>
           <div class="doc-callout">
-            <p><strong>The design requirement going forward:</strong> the delivered PICASO Payroll Assistant already scopes paycheck access correctly — a logged-in user can only ever retrieve their own data, even if they type someone else's employee ID into the chat. Any GenAI extension has to preserve that exact behavior. The backend must resolve "my paychecks" from the authenticated session, and must never trust an employee ID typed into free-form chat text as authorization to return that employee's data. That's a hard requirement, not a nice-to-have, before a paycheck-comparison feature is anywhere near production-ready.</p>
+            <p><strong>The design requirement going forward:</strong> the delivered PICASO Payroll Assistant already scopes paycheck access correctly. A logged-in user can only ever retrieve their own data, even if they type someone else's employee ID into the chat. Any GenAI extension has to preserve that exact behavior. The backend must resolve "my paychecks" from the authenticated session, and must never trust an employee ID typed into free-form chat text as authorization to return that employee's data. That's a hard requirement, not a nice-to-have, before a paycheck-comparison feature is anywhere near production-ready.</p>
           </div>
           <p class="doc-para">Production hardening beyond this proof of concept would also need: authenticated (not open) ODA REST service calls, least-privilege IAM policies scoped tighter than the tenancy-wide policy used here, and care around what gets written to logs given the sensitivity of payroll data flowing through the pipeline.</p>
         </div>
 
         <div class="doc-section" id="summary">
           <div class="doc-section-title">Summary</div>
-          <p class="doc-para">A working RAG chatbot for PeopleSoft comes down to one architectural discipline: keep every OCI-specific concern — authentication, SDK calls, session management — behind a Function wrapper, and let ODA and PeopleSoft talk to nothing more complex than a REST endpoint. That pattern proved out cleanly for document-grounded Q&amp;A, end to end from PeopleSoft's own chatbot widget. Extending the same pattern to reasoning over live, user-specific data is a real next step, but it comes with a security bar that has to match what the delivered PeopleSoft chatbot already gets right: never trust an identifier typed in chat over the authenticated session it actually came from.</p>
+          <p class="doc-para">A working RAG chatbot for PeopleSoft comes down to one architectural discipline: keep every OCI-specific concern (authentication, SDK calls, session management) behind a Function wrapper, and let ODA and PeopleSoft talk to nothing more complex than a REST endpoint. That pattern proved out cleanly for document-grounded Q&amp;A, end to end from PeopleSoft's own chatbot widget. Extending the same pattern to reasoning over live, user-specific data is a real next step, but it comes with a security bar that has to match what the delivered PeopleSoft chatbot already gets right: never trust an identifier typed in chat over the authenticated session it actually came from.</p>
         </div>
 
         <div class="doc-nav">

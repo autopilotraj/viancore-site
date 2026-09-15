@@ -5,7 +5,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="A modernization pattern for PeopleSoft: layering Oracle Digital Assistant on top of an unmodified back office instead of re-platforming. Architecture, cost tradeoffs, and staffing. VianCore Knowledge Base."/>
-  <title>The PeopleSoft + ODA Sidecar Pattern — VianCore</title>
+  <title>The PeopleSoft + ODA Sidecar Pattern · VianCore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -239,20 +239,20 @@
     <div class="content">
       <div class="doc-category">Systems · Architecture Analysis</div>
       <h1 class="doc-title">The PeopleSoft + ODA Sidecar Pattern</h1>
-      <p class="doc-subtitle">A modernization option worth understanding before recommending a full re-platform: layer Oracle Digital Assistant on top of an unmodified PeopleSoft back office instead of touching the core system at all. This is an architecture and cost analysis, not a hands-on build write-up — the kind of thinking that goes into a modernization recommendation before a single line of PeopleCode changes.</p>
+      <p class="doc-subtitle">A modernization option worth understanding before recommending a full re-platform: layer Oracle Digital Assistant on top of an unmodified PeopleSoft back office instead of touching the core system at all. This is an architecture and cost analysis, not a hands-on build write-up: the kind of thinking that goes into a modernization recommendation before a single line of PeopleCode changes.</p>
       <div class="doc-divider"></div>
 
       <div class="doc-body">
 
         <div class="doc-section" id="overview">
           <div class="doc-section-title">Overview</div>
-          <p class="doc-para">Most organizations still running PeopleSoft for HCM, Financials, or Campus Solutions aren't looking to rip it out — the back-office logic is deep, accurate, and expensive to reproduce. What they're actually unhappy about is the user experience: menu navigation, page-by-page workflows, and a UI that hasn't kept pace with what employees expect from consumer software. A full re-platform to a SaaS alternative fixes that, but at a cost and risk profile that's hard to justify for the UX problem alone.</p>
-          <p class="doc-para">The "sidecar" pattern is the middle path: put Oracle Digital Assistant (ODA) in front of PeopleSoft as a conversational layer, talking to the existing system entirely through REST APIs, while every payroll rule, approval workflow, and finance calculation stays exactly where it is. Nothing about the pattern requires touching PeopleCode or re-certifying the back office — the risk surface is the integration layer, not the system of record.</p>
+          <p class="doc-para">Most organizations still running PeopleSoft for HCM, Financials, or Campus Solutions aren't looking to rip it out. The back-office logic is deep, accurate, and expensive to reproduce. What they're actually unhappy about is the user experience: menu navigation, page-by-page workflows, and a UI that hasn't kept pace with what employees expect from consumer software. A full re-platform to a SaaS alternative fixes that, but at a cost and risk profile that's hard to justify for the UX problem alone.</p>
+          <p class="doc-para">The "sidecar" pattern is the middle path: put Oracle Digital Assistant (ODA) in front of PeopleSoft as a conversational layer, talking to the existing system entirely through REST APIs, while every payroll rule, approval workflow, and finance calculation stays exactly where it is. Nothing about the pattern requires touching PeopleCode or re-certifying the back office. The risk surface is the integration layer, not the system of record.</p>
         </div>
 
         <div class="doc-section" id="architecture">
           <div class="doc-section-title">Architecture</div>
-          <p class="doc-para">The core design principle is separation: PeopleSoft never has to know it's being asked a question by an AI, and ODA never touches the PeopleSoft database directly. Every interaction goes through Integration Broker, using a dedicated proxy user with exactly the permissions a real end user would have — nothing more.</p>
+          <p class="doc-para">The core design principle is separation: PeopleSoft never has to know it's being asked a question by an AI, and ODA never touches the PeopleSoft database directly. Every interaction goes through Integration Broker, using a dedicated proxy user with exactly the permissions a real end user would have, nothing more.</p>
           <div class="doc-diagram">
             <svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architecture diagram: PeopleSoft environment connected via a secure REST API gateway to Oracle Digital Assistant in OCI, which serves employees over Teams, web, and mobile.">
               <rect x="10" y="20" width="330" height="260" rx="6" fill="rgba(32,178,170,0.05)" stroke="rgba(32,178,170,0.35)" stroke-width="1"/>
@@ -296,17 +296,17 @@
               </defs>
             </svg>
           </div>
-          <p class="doc-para">The connection between the two sides is a plain secure REST/HTTPS API — Oracle Integration Cloud is the usual broker when more orchestration is needed, but the principle holds either way: the API surface is deliberately narrow, and it carries scoped responses, not raw data or bulk exports.</p>
+          <p class="doc-para">The connection between the two sides is a plain secure REST/HTTPS API. Oracle Integration Cloud is the usual broker when more orchestration is needed, but the principle holds either way: the API surface is deliberately narrow, and it carries scoped responses, not raw data or bulk exports.</p>
         </div>
 
         <div class="doc-section" id="flow">
           <div class="doc-section-title">How a request flows</div>
           <ul class="doc-list">
-            <li>An employee asks a question in natural language — Teams, a web widget, or mobile — for example, "how many vacation days do I have left."</li>
+            <li>An employee asks a question in natural language, such as through Teams, a web widget, or mobile, for example "how many vacation days do I have left."</li>
             <li>ODA's NLU layer resolves the intent and determines what PeopleSoft data answers it.</li>
             <li>ODA calls PeopleSoft's Integration Broker over HTTPS, through a gateway/load balancer.</li>
-            <li>PeopleSoft authenticates the call through the dedicated proxy user, then validates the actual requesting user's own permissions — the proxy user is a transport identity, not a permissions bypass.</li>
-            <li>Existing PeopleCode, workflow, and approval logic runs exactly as it would for a browser session, and returns only the specific data requested — no bulk access, no direct database reads.</li>
+            <li>PeopleSoft authenticates the call through the dedicated proxy user, then validates the actual requesting user's own permissions. The proxy user is a transport identity, not a permissions bypass.</li>
+            <li>Existing PeopleCode, workflow, and approval logic runs exactly as it would for a browser session, and returns only the specific data requested: no bulk access, no direct database reads.</li>
             <li>ODA converts the structured response into a natural-language answer, optionally using generative AI to summarize when the response is long-form (a policy document, for instance, rather than a single number).</li>
             <li>The employee gets an answer in the same chat thread, typically within a few seconds.</li>
           </ul>
@@ -317,13 +317,13 @@
 
         <div class="doc-section" id="capabilities">
           <div class="doc-section-title">What the AI layer adds beyond a scripted chatbot</div>
-          <p class="doc-para">Oracle shipped PICASO as a pre-built PeopleSoft digital assistant for years, but the current direction — reinforced by pre-built PICASO skills now being deprecated in favor of the Chatbot Integration Framework (CIF) — is toward custom agents built directly on ODA. That shift unlocks a handful of capabilities that a scripted, intent-only bot doesn't have:</p>
+          <p class="doc-para">Oracle shipped PICASO as a pre-built PeopleSoft digital assistant for years, but the current direction, reinforced by pre-built PICASO skills now being deprecated in favor of the Chatbot Integration Framework (CIF), is toward custom agents built directly on ODA. That shift unlocks a handful of capabilities that a scripted, intent-only bot doesn't have:</p>
           <div class="doc-table-wrap">
             <table class="doc-table">
               <tr><th>Capability</th><th>What it changes</th></tr>
-              <tr><td>Generative AI summarization</td><td>ODA can pull a document PeopleSoft holds — a policy PDF, for instance — and summarize it inline rather than just linking to it.</td></tr>
+              <tr><td>Generative AI summarization</td><td>ODA can pull a document PeopleSoft holds, such as a policy PDF, and summarize it inline rather than just linking to it.</td></tr>
               <tr><td>Natural-language data questions</td><td>A manager's plain-English question about spend or headcount can be translated into a structured query against PeopleSoft data, instead of requiring a saved query or report.</td></tr>
-              <tr><td>Omnichannel delivery</td><td>The same skill can be reached from Teams, Slack, or a web widget — the back office stays put, but the interaction moves to wherever people already work.</td></tr>
+              <tr><td>Omnichannel delivery</td><td>The same skill can be reached from Teams, Slack, or a web widget. The back office stays put, but the interaction moves to wherever people already work.</td></tr>
               <tr><td>Multilingual by default</td><td>A question asked in one language can be understood and answered in that language even though the underlying PeopleSoft pages were never translated.</td></tr>
             </table>
           </div>
@@ -331,16 +331,16 @@
 
         <div class="doc-section" id="cost">
           <div class="doc-section-title">Weighing it against the alternatives</div>
-          <p class="doc-para">The sidecar pattern is one point on a spectrum of PeopleSoft modernization options, and the honest way to evaluate it is against the other two paths organizations typically consider. These are rough, directional ranges for a mid-size enterprise engagement — every environment's actual numbers will vary with scope, headcount, and how much technical debt already exists in the current PeopleSoft instance.</p>
+          <p class="doc-para">The sidecar pattern is one point on a spectrum of PeopleSoft modernization options, and the honest way to evaluate it is against the other two paths organizations typically consider. These are rough, directional ranges for a mid-size enterprise engagement. Every environment's actual numbers will vary with scope, headcount, and how much technical debt already exists in the current PeopleSoft instance.</p>
           <div class="doc-table-wrap">
             <table class="doc-table">
               <tr><th>Approach</th><th>Typical cost range</th><th>Typical timeline</th><th>Relative risk</th></tr>
-              <tr><td>ODA sidecar on existing PeopleSoft</td><td>Low six figures</td><td>2–4 months</td><td>Low — no core system changes</td></tr>
-              <tr><td>Lift-and-shift PeopleSoft to OCI (IaaS)</td><td>Mid six to low seven figures</td><td>3–9 months</td><td>Medium — infrastructure and cutover risk, logic unchanged</td></tr>
-              <tr><td>Full SaaS re-platform (e.g., Oracle Fusion, Workday)</td><td>Seven to eight figures</td><td>12–36 months</td><td>High — business process redesign, data migration, change management at scale</td></tr>
+              <tr><td>ODA sidecar on existing PeopleSoft</td><td>Low six figures</td><td>2–4 months</td><td>Low: no core system changes</td></tr>
+              <tr><td>Lift-and-shift PeopleSoft to OCI (IaaS)</td><td>Mid six to low seven figures</td><td>3–9 months</td><td>Medium: infrastructure and cutover risk, logic unchanged</td></tr>
+              <tr><td>Full SaaS re-platform (e.g., Oracle Fusion, Workday)</td><td>Seven to eight figures</td><td>12–36 months</td><td>High: business process redesign, data migration, change management at scale</td></tr>
             </table>
           </div>
-          <p class="doc-para">The gap in both cost and timeline between the sidecar approach and a full re-platform is large enough that it's worth treating them as genuinely different decisions, not points on the same roadmap. A sidecar buys UX improvement now; it doesn't buy out of an eventual re-platform conversation if the underlying PeopleSoft version itself is aging out of support.</p>
+          <p class="doc-para">The gap in both cost and timeline between the sidecar approach and a full re-platform is large enough that it's worth treating them as genuinely different decisions, not points on the same roadmap. A sidecar buys UX improvement now. It doesn't buy out of an eventual re-platform conversation if the underlying PeopleSoft version itself is aging out of support.</p>
         </div>
 
         <div class="doc-section" id="pricing">
@@ -349,33 +349,33 @@
           <div class="doc-table-wrap">
             <table class="doc-table">
               <tr><th>Metric</th><th>Best fit</th></tr>
-              <tr><td>Named user</td><td>Internal employees where headcount with access is known and stable — the common choice for HCM/Financials self-service.</td></tr>
-              <tr><td>Session-based</td><td>High-volume "guest" access where the user count is unpredictable — student applicants, external suppliers.</td></tr>
+              <tr><td>Named user</td><td>Internal employees where headcount with access is known and stable: the common choice for HCM/Financials self-service.</td></tr>
+              <tr><td>Session-based</td><td>High-volume "guest" access where the user count is unpredictable, such as student applicants or external suppliers.</td></tr>
               <tr><td>Request-based</td><td>Low-volume, narrowly transactional bots, though most vendors enforce a practical minimum request volume.</td></tr>
             </table>
           </div>
           <p class="doc-para">The license fee is also not the full production cost. Budgeting realistically means adding in the pieces that make the integration secure and usable at scale: a load balancer or API gateway to expose Integration Broker to the cloud safely, object storage if the assistant needs to read and summarize documents, and an identity service to keep PeopleSoft user accounts synchronized with the assistant's authentication. None of these are large individually, but a proposal that only quotes the per-user license fee is quoting an incomplete number.</p>
-          <p class="doc-para">Where the PeopleSoft environment is hosted also matters more than it first appears. ODA itself runs in OCI regardless of where PeopleSoft lives, so an on-premises PeopleSoft environment needs a private network path — a dedicated cloud interconnect or VPN — to keep latency acceptable, plus a modest egress cost for data leaving the data center. PeopleSoft hosted in another public cloud changes the calculus again: Oracle and Microsoft's direct interconnect, for instance, can bring OCI-to-Azure latency down to single-digit milliseconds and lets the identity layer piggyback on an existing Azure AD/Entra ID tenant for single sign-on, which removes a whole category of integration work.</p>
+          <p class="doc-para">Where the PeopleSoft environment is hosted also matters more than it first appears. ODA itself runs in OCI regardless of where PeopleSoft lives, so an on-premises PeopleSoft environment needs a private network path (a dedicated cloud interconnect or VPN) to keep latency acceptable, plus a modest egress cost for data leaving the data center. PeopleSoft hosted in another public cloud changes the calculus again: Oracle and Microsoft's direct interconnect, for instance, can bring OCI-to-Azure latency down to single-digit milliseconds and lets the identity layer piggyback on an existing Azure AD/Entra ID tenant for single sign-on, which removes a whole category of integration work.</p>
         </div>
 
         <div class="doc-section" id="team">
           <div class="doc-section-title">Staffing it correctly</div>
-          <p class="doc-para">This is a smaller build than a re-platform, but it isn't a one-person project — it draws on four distinct skill sets, and skipping any one of them shows up later as rework:</p>
+          <p class="doc-para">This is a smaller build than a re-platform, but it isn't a one-person project. It draws on four distinct skill sets, and skipping any one of them shows up later as rework:</p>
           <div class="doc-table-wrap">
             <table class="doc-table">
               <tr><th>Role</th><th>Owns</th><th>Why it's non-negotiable</th></tr>
-              <tr><td>System / Security admin</td><td>Integration Broker, the proxy user, SSL, Web SDK</td><td>The proxy user's permission scoping is the entire security model — this has to be existing PeopleSoft security expertise, not a generalist.</td></tr>
-              <tr><td>Technical lead</td><td>Application Classes, Application Service Framework</td><td>This is the PeopleCode surface actually exposed to ODA — get the service contract wrong and every downstream skill inherits the bug.</td></tr>
+              <tr><td>System / Security admin</td><td>Integration Broker, the proxy user, SSL, Web SDK</td><td>The proxy user's permission scoping is the entire security model. This has to be existing PeopleSoft security expertise, not a generalist.</td></tr>
+              <tr><td>Technical lead</td><td>Application Classes, Application Service Framework</td><td>This is the PeopleCode surface actually exposed to ODA. Get the service contract wrong and every downstream skill inherits the bug.</td></tr>
               <tr><td>DBA</td><td>Performance, search indexing</td><td>A chatbot adds a new, bursty load pattern against PeopleSoft and its search index that the DBA needs to plan capacity around.</td></tr>
-              <tr><td>Conversation designer</td><td>Chat flows, intents, NLU training</td><td>This is where most of the actual "business logic" of a good assistant lives, and it's config, not code — a role that's easy to underestimate if the team is used to thinking in PeopleCode.</td></tr>
+              <tr><td>Conversation designer</td><td>Chat flows, intents, NLU training</td><td>This is where most of the actual "business logic" of a good assistant lives, and it's config, not code: a role that's easy to underestimate if the team is used to thinking in PeopleCode.</td></tr>
             </table>
           </div>
         </div>
 
         <div class="doc-section" id="recommendation">
           <div class="doc-section-title">When this pattern fits</div>
-          <p class="doc-para">The sidecar pattern earns its place when the actual complaint is about user experience and self-service friction, not about the underlying business logic or the platform's long-term viability. It's a strong fit for reducing help-desk and call-center load on high-volume, low-complexity questions — balance lookups, status checks, directory searches — where the answer already exists in PeopleSoft and the only real problem is how many clicks it takes a person to find it.</p>
-          <p class="doc-para">It's a weaker fit as a substitute for addressing a genuinely aging PeopleSoft foundation. If the underlying PeopleTools release, database version, or PUM currency is itself the risk — not just the UI — a sidecar buys time and goodwill, but the re-platform or upgrade conversation doesn't go away, it gets deferred. The honest framing for a modernization recommendation is that a sidecar and a platform upgrade are solving different problems, and treating the cheaper one as a replacement for the more expensive one is where these projects tend to under-deliver on expectations.</p>
+          <p class="doc-para">The sidecar pattern earns its place when the actual complaint is about user experience and self-service friction, not about the underlying business logic or the platform's long-term viability. It's a strong fit for reducing help-desk and call-center load on high-volume, low-complexity questions (balance lookups, status checks, directory searches) where the answer already exists in PeopleSoft and the only real problem is how many clicks it takes a person to find it.</p>
+          <p class="doc-para">It's a weaker fit as a substitute for addressing a genuinely aging PeopleSoft foundation. If the underlying PeopleTools release, database version, or PUM currency is itself the risk, not just the UI, a sidecar buys time and goodwill, but the re-platform or upgrade conversation doesn't go away, it gets deferred. The honest framing for a modernization recommendation is that a sidecar and a platform upgrade are solving different problems, and treating the cheaper one as a replacement for the more expensive one is where these projects tend to under-deliver on expectations.</p>
         </div>
 
         <div class="doc-nav">

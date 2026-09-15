@@ -4,8 +4,8 @@
   <script>(function(){try{var t=localStorage.getItem('viancore-theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="How a GoDaddy certificate chain change from G2 to R1 hierarchy broke PeopleSoft Integration Broker node ping — and how to fix it."/>
-  <title>IB Node Ping Failure After GoDaddy SSL Renewal — VianCore</title>
+  <meta name="description" content="How a GoDaddy certificate chain change from G2 to R1 hierarchy broke PeopleSoft Integration Broker node ping, and how to fix it."/>
+  <title>IB Node Ping Failure After GoDaddy SSL Renewal · VianCore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -392,7 +392,7 @@
     <!-- HERO -->
     <div class="doc-eyebrow">Systems · Integration Broker</div>
     <h1 class="doc-title">IB Node Ping Failure After GoDaddy SSL Certificate Renewal</h1>
-    <p class="doc-subtitle">A GoDaddy certificate chain change — from the legacy G2 hierarchy to the new R1 hierarchy — caused Integration Broker node ping to fail silently after a routine SSL renewal. Here is what happened and how it was resolved.</p>
+    <p class="doc-subtitle">A GoDaddy certificate chain change, from the legacy G2 hierarchy to the new R1 hierarchy, caused Integration Broker node ping to fail silently after a routine SSL renewal. Here is what happened and how it was resolved.</p>
     <div class="doc-divider"></div>
 
     <div class="doc-body">
@@ -400,7 +400,7 @@
       <!-- SUMMARY -->
       <div id="summary" class="summary-card">
         <div class="card-label">What Happened</div>
-        <p>After renewing an SSL certificate on WebLogic, PeopleSoft Integration Broker node ping began failing with error <strong>158,10836 — General Connection Failed</strong>. Network connectivity was confirmed working. The real problem was that the renewed GoDaddy certificate was issued under a new hierarchy (R1) not yet trusted in PeopleSoft Digital Certificates. Importing the new root and intermediate chain resolved the issue immediately.</p>
+        <p>After renewing an SSL certificate on WebLogic, PeopleSoft Integration Broker node ping began failing with error <strong>158,10836: General Connection Failed</strong>. Network connectivity was confirmed working. The real problem was that the renewed GoDaddy certificate was issued under a new hierarchy (R1) not yet trusted in PeopleSoft Digital Certificates. Importing the new root and intermediate chain resolved the issue immediately.</p>
       </div>
 
       <!-- 01 ERROR -->
@@ -415,7 +415,7 @@
       <!-- 02 VALIDATION -->
       <section id="validation" class="doc-section">
         <div class="doc-section-title">02 · Initial Validation</div>
-        <h2>What curl Told Us — And What It Didn't</h2>
+        <h2>What curl Told Us (And What It Didn't)</h2>
         <p class="doc-para">The application server was tested using <code style="font-family:monospace;font-size:11px;color:var(--accent);">curl</code> against the load balancer Gateway URL. The test succeeded, confirming DNS, routing, and firewall paths were all working.</p>
         <div class="callout warn">
           <span class="callout-label">Important distinction</span>
@@ -431,51 +431,51 @@
         <p class="doc-para">Comparing the old working certificate against the newly renewed certificate revealed a different GoDaddy hierarchy:</p>
         <div class="chain-grid">
           <div class="chain-box old">
-            <div class="chain-box-label">Old Chain — Previously Working</div>
+            <div class="chain-box-label">Old Chain: Previously Working</div>
             <div class="chain-step">
-              <div class="cert-name">Go Daddy Root CA — G2</div>
+              <div class="cert-name">Go Daddy Root CA: G2</div>
               <div class="chain-arrow">↓</div>
-              <div class="cert-name">Go Daddy Secure CA — G2</div>
+              <div class="cert-name">Go Daddy Secure CA: G2</div>
               <div class="chain-arrow">↓</div>
               <div class="cert-name">Server / Leaf Certificate</div>
             </div>
           </div>
           <div class="chain-box new">
-            <div class="chain-box-label">New Chain — After Renewal</div>
+            <div class="chain-box-label">New Chain: After Renewal</div>
             <div class="chain-step">
-              <div class="cert-name">Go Daddy Root CA — G2</div>
+              <div class="cert-name">Go Daddy Root CA: G2</div>
               <div class="chain-arrow">↓</div>
-              <div class="cert-name">GoDaddy TLS Root CA — R1 <span class="cert-new-badge">New</span></div>
+              <div class="cert-name">GoDaddy TLS Root CA: R1 <span class="cert-new-badge">New</span></div>
               <div class="chain-arrow">↓</div>
-              <div class="cert-name">GoDaddy TLS Intermediate CA DV — R1v1 <span class="cert-new-badge">New</span></div>
+              <div class="cert-name">GoDaddy TLS Intermediate CA DV: R1v1 <span class="cert-new-badge">New</span></div>
               <div class="chain-arrow">↓</div>
               <div class="cert-name">Server / Leaf Certificate</div>
             </div>
           </div>
         </div>
-        <p class="doc-para">The renewed certificate introduced two additional components — the R1 root and the R1v1 intermediate — that were not present in PeopleSoft Digital Certificates. Because PeopleSoft could not build a complete trust path to the leaf certificate, the SSL handshake failed.</p>
+        <p class="doc-para">The renewed certificate introduced two additional components, the R1 root and the R1v1 intermediate, that were not present in PeopleSoft Digital Certificates. Because PeopleSoft could not build a complete trust path to the leaf certificate, the SSL handshake failed.</p>
         <div class="callout info">
           <span class="callout-label">Why this surprised the team</span>
-          The assumption was that renewing from the same vendor would reuse the same root and intermediate hierarchy. That assumption is not safe. GoDaddy officially transitioned DV certificate issuance to the R1 hierarchy — any renewal after this transition produces a certificate with a different chain.
+          The assumption was that renewing from the same vendor would reuse the same root and intermediate hierarchy. That assumption is not safe. GoDaddy officially transitioned DV certificate issuance to the R1 hierarchy. Any renewal after this transition produces a certificate with a different chain.
         </div>
       </section>
 
       <!-- VENDOR NOTE -->
       <div id="vendor-context" class="vendor-note">
-        <div class="vn-label">GoDaddy — Official Vendor Context</div>
+        <div class="vn-label">GoDaddy: Official Vendor Context</div>
         <p>GoDaddy has formally migrated public DV certificate issuance to the <strong>GoDaddy TLS Root CA – R1</strong> hierarchy using the <strong>GoDaddy TLS Intermediate CA DV – R1v1</strong> issuing CA. This is a deliberate architectural change, not a temporary variation.</p>
-        <p>During the transition, GoDaddy maintains a cross-signed trust path from R1 back to G2, which allows browsers to validate the chain automatically. However, systems like PeopleSoft that maintain their own internal trust store must be updated manually — they do not benefit from the cross-signed path.</p>
+        <p>During the transition, GoDaddy maintains a cross-signed trust path from R1 back to G2, which allows browsers to validate the chain automatically. However, systems like PeopleSoft that maintain their own internal trust store must be updated manually. They do not benefit from the cross-signed path.</p>
         <p>Certificate bundle files (including the R1 root and R1v1 intermediate) are available at <a href="https://certs.godaddy.com" target="_blank" rel="noopener">certs.godaddy.com</a>.</p>
       </div>
 
       <!-- 04 KEY SIZE -->
       <section id="key-size" class="doc-section">
         <div class="doc-section-title">04 · Observation</div>
-        <h2>Key Size Change — 2048 to 4096 Bit</h2>
+        <h2>Key Size Change: 2048 to 4096 Bit</h2>
         <p class="doc-para">The old certificate used a 2048-bit RSA key. The renewed certificate used a 4096-bit RSA key, reflecting stronger current security standards.</p>
         <div class="callout warn">
           <span class="callout-label">Common misdiagnosis risk</span>
-          The key size change is real but was not the cause of the failure. The failure was entirely due to the missing certificate chain in PeopleSoft Digital Certificates. Do not conflate RSA key size with certificate chain trust — they are separate concerns.
+          The key size change is real but was not the cause of the failure. The failure was entirely due to the missing certificate chain in PeopleSoft Digital Certificates. Do not conflate RSA key size with certificate chain trust. They are separate concerns.
         </div>
       </section>
 
@@ -499,7 +499,7 @@
         <ul class="checklist">
           <li><span class="check-num">1</span>Capture the old certificate hierarchy <em>before</em> renewal begins.</li>
           <li><span class="check-num">2</span>Capture the new certificate hierarchy <em>immediately after</em> renewal.</li>
-          <li><span class="check-num">3</span>Compare old and new root and intermediate certificate names explicitly — do not assume they match.</li>
+          <li><span class="check-num">3</span>Compare old and new root and intermediate certificate names explicitly. Do not assume they match.</li>
           <li><span class="check-num">4</span>Confirm whether the chain changed hierarchy (e.g., G2 to R1) or added new intermediates.</li>
           <li><span class="check-num">5</span>Download the official certificate bundle from the CA (e.g., certs.godaddy.com).</li>
           <li><span class="check-num">6</span>Import any new required root and intermediate certificates into PeopleSoft Digital Certificates.</li>

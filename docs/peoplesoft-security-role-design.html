@@ -4,8 +4,8 @@
   <script>(function(){try{var t=localStorage.getItem('viancore-theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="PeopleSoft Security Role Design — Principles and Pitfalls. VianCore Knowledge Base."/>
-  <title>PeopleSoft Security Role Design — VianCore</title>
+  <meta name="description" content="PeopleSoft Security Role Design: Principles and Pitfalls. VianCore Knowledge Base."/>
+  <title>PeopleSoft Security Role Design · VianCore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -220,15 +220,15 @@
 
     <div class="content">
       <div class="doc-category">Security</div>
-      <h1 class="doc-title">PeopleSoft Security Role Design — Principles and Pitfalls</h1>
-      <p class="doc-subtitle">A framework for building maintainable, auditable role structures from the ground up — based on real-world deployments across multiple enterprise environments.</p>
+      <h1 class="doc-title">PeopleSoft Security Role Design: Principles and Pitfalls</h1>
+      <p class="doc-subtitle">A framework for building maintainable, auditable role structures from the ground up, based on real-world deployments across multiple enterprise environments.</p>
       <div class="doc-divider"></div>
 
       <div class="doc-body">
 
         <div id="overview">
           <div class="doc-section-title">Overview</div>
-          <p class="doc-para">Security role design is one of the most consequential decisions made during a PeopleSoft implementation — and one of the least understood. Done well, it stays invisible. Done poorly, it becomes the root cause of audit findings, privilege creep, and support nightmares that follow a system for years.</p>
+          <p class="doc-para">Security role design is one of the most consequential decisions made during a PeopleSoft implementation, and one of the least understood. Done well, it stays invisible. Done poorly, it becomes the root cause of audit findings, privilege creep, and support nightmares that follow a system for years.</p>
         </div>
 
         <div class="doc-callout">
@@ -237,7 +237,7 @@
 
         <div id="problem">
           <div class="doc-section-title">The core problem</div>
-          <p class="doc-para">Most role models fail not at design time, but over time. What starts as a clean structure degrades through accumulated exceptions — a user here who needs one extra permission, a team there that got access "just for the project." Without governance, entropy wins. The goal of good role design is to make that entropy as slow and visible as possible.</p>
+          <p class="doc-para">Most role models fail not at design time, but over time. What starts as a clean structure degrades through accumulated exceptions: a user here who needs one extra permission, a team there that got access "just for the project." Without governance, entropy wins. The goal of good role design is to make that entropy as slow and visible as possible.</p>
         </div>
 
         <div id="principles">
@@ -245,16 +245,16 @@
           <ul class="doc-list">
             <li>Separate permission lists by function, not by department or title</li>
             <li>Never assign access at the role level that isn't needed by every member of that role</li>
-            <li>Build for least privilege from day one — retrofitting is significantly harder</li>
+            <li>Build for least privilege from day one: retrofitting is significantly harder</li>
             <li>Document the intent of every role at creation time, not after the fact</li>
             <li>Establish a naming convention and enforce it without exceptions</li>
-            <li>Design for the auditor — if you can't explain a role in one sentence, redesign it</li>
+            <li>Design for the auditor: if you can't explain a role in one sentence, redesign it</li>
           </ul>
         </div>
 
         <div id="pitfalls">
           <div class="doc-section-title">Common pitfalls</div>
-          <p class="doc-para">The most damaging pattern seen across implementations is the "super role" — a catch-all role assigned when access requests become too complex to route properly. Once it exists, it proliferates. Within months, a significant portion of the user base has access they never needed and cannot be audited effectively.</p>
+          <p class="doc-para">The most damaging pattern seen across implementations is the "super role," a catch-all role assigned when access requests become too complex to route properly. Once it exists, it proliferates. Within months, a significant portion of the user base has access they never needed and cannot be audited effectively.</p>
         </div>
 
         <div id="audit">
@@ -264,7 +264,7 @@
 
         <div id="summary">
           <div class="doc-section-title">Summary</div>
-          <p class="doc-para">Good security role design is invisible — nobody notices it until it's gone wrong. Invest the time upfront, document everything, govern it continuously, and treat every exception as a signal that something in the model needs to change.</p>
+          <p class="doc-para">Good security role design is invisible. Nobody notices it until it's gone wrong. Invest the time upfront, document everything, govern it continuously, and treat every exception as a signal that something in the model needs to change.</p>
         </div>
 
         <div class="doc-nav">

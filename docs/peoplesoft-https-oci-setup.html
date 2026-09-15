@@ -5,7 +5,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="A field-tested walkthrough of enabling public HTTPS for a PeopleSoft environment on OCI — DNS validation, WebLogic trust, and the firewall rule that gets missed. VianCore Knowledge Base."/>
-  <title>Enabling Public HTTPS for PeopleSoft on OCI — VianCore</title>
+  <title>Enabling Public HTTPS for PeopleSoft on OCI · VianCore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -223,21 +223,21 @@
     <div class="content">
       <div class="doc-category">Systems · Networking</div>
       <h1 class="doc-title">Enabling Public HTTPS for PeopleSoft on OCI</h1>
-      <p class="doc-subtitle">Getting a publicly trusted certificate onto a PeopleSoft/WebLogic stack running on OCI touches four different layers — DNS, the certificate authority, WebLogic's trust store, and the OS firewall — and a passing test at any one of them tells you almost nothing about the other three.</p>
+      <p class="doc-subtitle">Getting a publicly trusted certificate onto a PeopleSoft/WebLogic stack running on OCI touches four different layers (DNS, the certificate authority, WebLogic's trust store, and the OS firewall), and a passing test at any one of them tells you almost nothing about the other three.</p>
       <div class="doc-divider"></div>
 
       <div class="doc-body">
 
         <div class="doc-section" id="overview">
           <div class="doc-section-title">Overview</div>
-          <p class="doc-para">The goal was straightforward on paper: put a publicly trusted TLS certificate in front of a PeopleSoft environment running on OCI, so it could be reached over HTTPS from outside the tenancy without a browser warning. In practice, "put a certificate on it" turns into four separate problems that each fail independently — DNS has to validate correctly, the certificate authority has to actually issue after that, WebLogic and PeopleSoft's own keystore both have to trust the resulting chain, and the OS firewall and OCI network layer both have to let the traffic through. Every one of those can look fine in isolation while the overall path is still broken.</p>
+          <p class="doc-para">The goal was straightforward on paper: put a publicly trusted TLS certificate in front of a PeopleSoft environment running on OCI, so it could be reached over HTTPS from outside the tenancy without a browser warning. In practice, "put a certificate on it" turns into four separate problems that each fail independently: DNS has to validate correctly, the certificate authority has to actually issue after that, WebLogic and PeopleSoft's own keystore both have to trust the resulting chain, and the OS firewall and OCI network layer both have to let the traffic through. Every one of those can look fine in isolation while the overall path is still broken.</p>
         </div>
 
         <div class="doc-section" id="architecture">
           <div class="doc-section-title">Architecture</div>
           <p class="doc-para">The request path is simple to describe and easy to get wrong in practice:</p>
           <div class="doc-code">Browser → HTTPS (443/9000) → OCI subnet → Linux firewall → WebLogic (PIA) → PeopleSoft</div>
-          <p class="doc-para">DNS was managed in Cloudflare; the certificate itself was purchased and issued through Namecheap, using Comodo/Sectigo as the underlying certificate authority. Splitting DNS and certificate issuance across two providers is common, but it means the DNS validation record has to be copied across correctly by hand, and it's the single most common point of failure in the whole process.</p>
+          <p class="doc-para">DNS was managed in Cloudflare. The certificate itself was purchased and issued through Namecheap, using Comodo/Sectigo as the underlying certificate authority. Splitting DNS and certificate issuance across two providers is common, but it means the DNS validation record has to be copied across correctly by hand, and it's the single most common point of failure in the whole process.</p>
         </div>
 
         <div class="doc-section" id="dns">
@@ -252,31 +252,31 @@
             <li>Wait for the certificate authority to poll, validate, and issue.</li>
           </ul>
           <div class="doc-callout">
-            <p><strong>The DNS record has to be exact.</strong> The CNAME host has to come verbatim from Namecheap — it's a long, underscore-prefixed validation value, not the main domain. In Cloudflare, only the left-hand label goes in the host field (the zone is appended automatically), the target has to include the full <code>comodoca.com</code> / <code>sectigo.com</code> value Namecheap gives you, and the record's proxy status must be set to "DNS only" — a proxied record breaks DNS-based validation.</p>
+            <p><strong>The DNS record has to be exact.</strong> The CNAME host has to come verbatim from Namecheap: it's a long, underscore-prefixed validation value, not the main domain. In Cloudflare, only the left-hand label goes in the host field (the zone is appended automatically), the target has to include the full <code>comodoca.com</code> / <code>sectigo.com</code> value Namecheap gives you, and the record's proxy status must be set to "DNS only." A proxied record breaks DNS-based validation.</p>
           </div>
-          <p class="doc-para">Even once the CNAME resolves correctly everywhere — confirmed with <code>nslookup</code> and independently with MXToolbox — issuance is not instant. In this case DNS validated within seconds and both lookup tools confirmed the record immediately, but the certificate authority's status stayed <em>PENDING / IN PROGRESS</em> for roughly 25 minutes before flipping to issued. Typical documented delay is 5–15 minutes; this run landed at the high end of that, and the worst case Namecheap quotes is around 30 minutes. The only wrong move at that point is to start changing DNS records to "fix" something that isn't actually broken — that just restarts the validation clock.</p>
-          <p class="doc-para">Once issued, the certificate bundle downloads as a chain: the server certificate, two Comodo/Sectigo intermediates, and the USERTrust root. All four need to move to the Linux host — in this case via WinSCP — and get assembled into the correct order for both WebLogic's keystore and PeopleSoft's own Digital Certificates keystore, which are two separate stores that each need the chain imported independently.</p>
+          <p class="doc-para">Even once the CNAME resolves correctly everywhere (confirmed with <code>nslookup</code> and independently with MXToolbox), issuance is not instant. In this case DNS validated within seconds and both lookup tools confirmed the record immediately, but the certificate authority's status stayed <em>PENDING / IN PROGRESS</em> for roughly 25 minutes before flipping to issued. Typical documented delay is 5–15 minutes. This run landed at the high end of that, and the worst case Namecheap quotes is around 30 minutes. The only wrong move at that point is to start changing DNS records to "fix" something that isn't actually broken. That just restarts the validation clock.</p>
+          <p class="doc-para">Once issued, the certificate bundle downloads as a chain: the server certificate, two Comodo/Sectigo intermediates, and the USERTrust root. All four need to move to the Linux host (in this case via WinSCP) and get assembled into the correct order for both WebLogic's keystore and PeopleSoft's own Digital Certificates keystore, which are two separate stores that each need the chain imported independently.</p>
         </div>
 
         <div class="doc-section" id="trust">
           <div class="doc-section-title">Getting WebLogic and PeopleSoft to trust it</div>
           <p class="doc-para">A certificate loading successfully in WebLogic does not mean the rest of the stack trusts it, and proving that took working through each layer independently rather than guessing from the symptom:</p>
           <ul class="doc-list">
-            <li><strong>Cert import confirmed.</strong> The certificate imported cleanly into the PeopleSoft keystore, WebLogic was configured for custom identity/trust, and after <em>Commit Changes</em> the server logs showed the certificate being loaded — a step that's easy to skip in the newer WebLogic Remote Console, where a change that isn't explicitly committed never actually takes effect.</li>
+            <li><strong>Cert import confirmed.</strong> The certificate imported cleanly into the PeopleSoft keystore, WebLogic was configured for custom identity/trust, and after <em>Commit Changes</em> the server logs showed the certificate being loaded, a step that's easy to skip in the newer WebLogic Remote Console, where a change that isn't explicitly committed never actually takes effect.</li>
             <li><strong>Local listener confirmed.</strong> <code>ss -ltnp | grep 9000</code> and <code>netstat -ltnp | grep 9000</code> both showed Java listening on the HTTPS port locally.</li>
             <li><strong>Local handshake confirmed.</strong> <code>openssl s_client -connect localhost:9000 -servername &lt;hostname&gt;</code> succeeded from the box itself, proving the listener was alive and presenting the right certificate.</li>
-            <li><strong>External access still failed.</strong> The same URL, tested from outside with <code>curl -vk</code> and PowerShell's <code>Test-NetConnection</code>, timed out — DNS resolved, but the public TCP connection on port 9000 never completed. That ruled out the certificate itself and pointed at something between the internet and the listener.</li>
+            <li><strong>External access still failed.</strong> The same URL, tested from outside with <code>curl -vk</code> and PowerShell's <code>Test-NetConnection</code>, timed out. DNS resolved, but the public TCP connection on port 9000 never completed. That ruled out the certificate itself and pointed at something between the internet and the listener.</li>
           </ul>
-          <p class="doc-para">A separate, unrelated trust issue showed up at the Integration Broker layer: loading gateway connectors failed with a generic <em>General Connection Failed</em> error, and the application server log pointed at the real cause — <code>javax.net.ssl.SSLHandshakeException: Untrusted Server Certificate Chain</code>. PeopleSoft's Integration Gateway makes its own outbound HTTPS call back to the PIA listener, and it has its own Java trust store, separate from WebLogic's. The fix was importing the root and both intermediate certificates into the PeopleSoft Digital Certificates keystore and restarting services — after that, <em>Load Gateway Connectors</em> completed and reported all connectors and properties loaded successfully. A related REST endpoint failure (<code>PSFT Authentication token failed for Node …</code>) turned out to be a separate, simpler fix: enabling "check token" on the default local node.</p>
+          <p class="doc-para">A separate, unrelated trust issue showed up at the Integration Broker layer: loading gateway connectors failed with a generic <em>General Connection Failed</em> error, and the application server log pointed at the real cause: <code>javax.net.ssl.SSLHandshakeException: Untrusted Server Certificate Chain</code>. PeopleSoft's Integration Gateway makes its own outbound HTTPS call back to the PIA listener, and it has its own Java trust store, separate from WebLogic's. The fix was importing the root and both intermediate certificates into the PeopleSoft Digital Certificates keystore and restarting services. After that, <em>Load Gateway Connectors</em> completed and reported all connectors and properties loaded successfully. A related REST endpoint failure (<code>PSFT Authentication token failed for Node …</code>) turned out to be a separate, simpler fix: enabling "check token" on the default local node.</p>
         </div>
 
         <div class="doc-section" id="firewall">
           <div class="doc-section-title">The port that was never open</div>
-          <p class="doc-para">With DNS resolving, the certificate trusted at every layer, and the local listener confirmed healthy, external access still failed — which meant the block had to be in the network path itself. OCI Network Security Groups turned out not to be in use for this path at all, which narrowed it to two remaining candidates: the subnet security list, or the Linux firewall. Checking the Linux side directly settled it:</p>
+          <p class="doc-para">With DNS resolving, the certificate trusted at every layer, and the local listener confirmed healthy, external access still failed, which meant the block had to be in the network path itself. OCI Network Security Groups turned out not to be in use for this path at all, which narrowed it to two remaining candidates: the subnet security list, or the Linux firewall. Checking the Linux side directly settled it:</p>
           <div class="doc-code">sudo firewall-cmd --list-all
 # ports: 8000/tcp  5601/tcp
-# 9000/tcp — missing</div>
-          <p class="doc-para">The HTTPS port had simply never been opened in <code>firewalld</code> on this host — everything upstream of the OS was fine. The fix was one command, followed by external access working immediately after:</p>
+# 9000/tcp: missing</div>
+          <p class="doc-para">The HTTPS port had simply never been opened in <code>firewalld</code> on this host. Everything upstream of the OS was fine. The fix was one command, followed by external access working immediately after:</p>
           <div class="doc-code">sudo firewall-cmd --permanent --add-port=9000/tcp
 sudo firewall-cmd --reload</div>
         </div>
@@ -286,15 +286,15 @@ sudo firewall-cmd --reload</div>
           <ul class="doc-list">
             <li><strong>A local success proves nothing about external reachability.</strong> Certificate loading, local listener status, and local SSL handshake can all be green while the port is still closed to the outside world. Test each layer independently instead of inferring one from another.</li>
             <li><strong>In the newer WebLogic Remote Console, a saved change is not a committed change.</strong> Without an explicit <em>Commit Changes</em>, the configuration update never actually takes effect, and later steps will fail against the old configuration in confusing ways.</li>
-            <li><strong>WebLogic's trust store and PeopleSoft's Digital Certificates keystore are separate.</strong> Importing the certificate chain into one does not automatically satisfy the other — Integration Broker's own outbound HTTPS calls depend on the PeopleSoft-side keystore specifically.</li>
+            <li><strong>WebLogic's trust store and PeopleSoft's Digital Certificates keystore are separate.</strong> Importing the certificate chain into one does not automatically satisfy the other. Integration Broker's own outbound HTTPS calls depend on the PeopleSoft-side keystore specifically.</li>
             <li><strong>Errors surfaced in the browser or Remote Console can be several layers removed from the real cause.</strong> A generic "connection failed" or "unauthorized token" message is frequently a downstream symptom of an SSL trust or network problem, not a bug in the component reporting the error.</li>
-            <li><strong>DNS-only proxy status matters for validation.</strong> A Cloudflare record proxied through their edge will not satisfy DNS-based certificate validation — it has to be set to "DNS only" for the validation record specifically.</li>
+            <li><strong>DNS-only proxy status matters for validation.</strong> A Cloudflare record proxied through their edge will not satisfy DNS-based certificate validation. It has to be set to "DNS only" for the validation record specifically.</li>
           </ul>
         </div>
 
         <div class="doc-section" id="summary">
           <div class="doc-section-title">Summary</div>
-          <p class="doc-para">Public HTTPS for PeopleSoft on OCI is really four independent problems stacked on top of each other: DNS validation, certificate issuance, trust configuration across two separate keystores, and network reachability through both the OCI subnet and the Linux firewall. The fastest path through it is to prove each layer in isolation — DNS resolution, certificate trust locally, then external reachability — rather than assuming a green result at one layer means the next one is fine.</p>
+          <p class="doc-para">Public HTTPS for PeopleSoft on OCI is really four independent problems stacked on top of each other: DNS validation, certificate issuance, trust configuration across two separate keystores, and network reachability through both the OCI subnet and the Linux firewall. The fastest path through it is to prove each layer in isolation (DNS resolution, certificate trust locally, then external reachability) rather than assuming a green result at one layer means the next one is fine.</p>
         </div>
 
         <div class="doc-nav">

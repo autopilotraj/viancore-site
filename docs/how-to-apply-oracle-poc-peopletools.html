@@ -5,7 +5,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="How to apply an Oracle Proof of Concept (POC) patch to your PeopleTools environment — step by step guide. VianCore Knowledge Base."/>
-  <title>How to Apply an Oracle POC to Your PeopleTools Environment — VianCore</title>
+  <title>How to Apply an Oracle POC to Your PeopleTools Environment · VianCore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -264,7 +264,7 @@
     <div class="content">
       <div class="doc-category">Systems · Patching</div>
       <h1 class="doc-title">How to Apply an Oracle POC to Your PeopleTools Environment</h1>
-      <p class="doc-subtitle">A step-by-step walkthrough for applying an Oracle Proof of Concept patch using Change Assistant and the Environment Management Framework — including EM Hub configuration, agent setup, and validation.</p>
+      <p class="doc-subtitle">A step-by-step walkthrough for applying an Oracle Proof of Concept patch using Change Assistant and the Environment Management Framework, including EM Hub configuration, agent setup, and validation.</p>
       <div class="doc-divider"></div>
 
       <div class="doc-body">
@@ -289,7 +289,7 @@
         </div>
 
         <div class="doc-section" id="download">
-          <div class="doc-section-title">Step 1 — Download the patch</div>
+          <div class="doc-section-title">Step 1: Download the patch</div>
           <div class="doc-step">
             <div class="step-num">01</div>
             <div class="step-body">
@@ -299,12 +299,12 @@
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-01.png" alt="MOS download screen — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 1 — MOS patch download screen</div>
+            <div class="screenshot-caption">Screenshot 1: MOS patch download screen</div>
           </div>
         </div>
 
         <div class="doc-section" id="em-hub">
-          <div class="doc-section-title">Step 2 — Configure EM Hub and agents</div>
+          <div class="doc-section-title">Step 2: Configure EM Hub and agents</div>
           <div class="doc-step">
             <div class="step-num">02</div>
             <div class="step-body">
@@ -314,17 +314,17 @@
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-02.png" alt="EM Hub configuration — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 2 — EM Hub configuration screen</div>
+            <div class="screenshot-caption">Screenshot 2: EM Hub configuration screen</div>
           </div>
         </div>
 
         <div class="doc-section" id="web-server">
-          <div class="doc-section-title">Step 3 — Web server configuration</div>
+          <div class="doc-section-title">Step 3: Web server configuration</div>
           <div class="doc-step">
             <div class="step-num">03</div>
             <div class="step-body">
               <div class="step-title">Web servers act as EM Hubs by default</div>
-              <div class="step-desc">By default all web servers will act as EM Hubs — no additional service needs to be started. Update the following parameters in the PSEMAgent config file on each web server:</div>
+              <div class="step-desc">By default all web servers will act as EM Hubs. No additional service needs to be started. Update the following parameters in the PSEMAgent config file on each web server:</div>
             </div>
           </div>
           <div class="doc-code">hubURL
@@ -337,21 +337,21 @@ unixdrivestocrawl</div>
             <div class="step-num">04</div>
             <div class="step-body">
               <div class="step-title">Start the EM Agent</div>
-              <div class="step-desc">Start the EM Agent from the PSEMAgent directory and watch for a confirmation message that says <em>"sending pulse"</em> — this confirms the agent is running and communicating with the hub.</div>
+              <div class="step-desc">Start the EM Agent from the PSEMAgent directory and watch for a confirmation message that says <em>"sending pulse"</em>. This confirms the agent is running and communicating with the hub.</div>
             </div>
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-03.png" alt="EM Agent startup — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 3 — EM Agent startup confirmation</div>
+            <div class="screenshot-caption">Screenshot 3: EM Agent startup confirmation</div>
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-04.png" alt="EM Agent pulse confirmation — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 4 — Agent sending pulse confirmation</div>
+            <div class="screenshot-caption">Screenshot 4: Agent sending pulse confirmation</div>
           </div>
         </div>
 
         <div class="doc-section" id="app-server">
-          <div class="doc-section-title">Step 4 — App and batch server agents</div>
+          <div class="doc-section-title">Step 4: App and batch server agents</div>
           <div class="doc-step">
             <div class="step-num">05</div>
             <div class="step-body">
@@ -361,16 +361,16 @@ unixdrivestocrawl</div>
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-05.png" alt="App server agent configuration — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 5 — App server agent configuration</div>
+            <div class="screenshot-caption">Screenshot 5: App server agent configuration</div>
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-06.png" alt="Batch server agent configuration — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 6 — Batch server agent configuration</div>
+            <div class="screenshot-caption">Screenshot 6: Batch server agent configuration</div>
           </div>
         </div>
 
         <div class="doc-section" id="peopletools-options">
-          <div class="doc-section-title">Step 5 — Confirm PeopleTools Options</div>
+          <div class="doc-section-title">Step 5: Confirm PeopleTools Options</div>
           <div class="doc-step">
             <div class="step-num">06</div>
             <div class="step-body">
@@ -379,7 +379,7 @@ unixdrivestocrawl</div>
             </div>
           </div>
           <div class="doc-code">PeopleTools → Utilities → Administration → PeopleTools Options</div>
-          <p class="doc-para">Confirm the following three fields — these will appear in Change Assistant in the next step and must match exactly:</p>
+          <p class="doc-para">Confirm the following three fields. These will appear in Change Assistant in the next step and must match exactly:</p>
           <ul class="doc-list">
             <li>Environment Long Name</li>
             <li>Environment Short Name</li>
@@ -387,17 +387,17 @@ unixdrivestocrawl</div>
           </ul>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-07.png" alt="PeopleTools Options page — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 7 — PeopleTools Options confirmation</div>
+            <div class="screenshot-caption">Screenshot 7: PeopleTools Options confirmation</div>
           </div>
         </div>
 
         <div class="doc-section" id="change-assistant">
-          <div class="doc-section-title">Step 6 — Configure Change Assistant PATH</div>
+          <div class="doc-section-title">Step 6: Configure Change Assistant PATH</div>
           <div class="doc-step">
             <div class="step-num">07</div>
             <div class="step-body">
               <div class="step-title">Add PeopleTools paths to the PATH environment variable</div>
-              <div class="step-desc">On the Change Assistant server, add the following to the system PATH environment variable before launching Change Assistant. These paths are version-specific — adjust to match your installed PeopleTools version:</div>
+              <div class="step-desc">On the Change Assistant server, add the following to the system PATH environment variable before launching Change Assistant. These paths are version-specific: adjust to match your installed PeopleTools version:</div>
             </div>
           </div>
           <div class="doc-code">[PT_INSTALL_PATH]\bin\client\winx86
@@ -407,12 +407,12 @@ unixdrivestocrawl</div>
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-08.png" alt="Change Assistant PATH configuration — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 8 — PATH environment variable configuration</div>
+            <div class="screenshot-caption">Screenshot 8: PATH environment variable configuration</div>
           </div>
         </div>
 
         <div class="doc-section" id="apply">
-          <div class="doc-section-title">Step 7 — Validate and apply in Change Assistant</div>
+          <div class="doc-section-title">Step 7: Validate and apply in Change Assistant</div>
           <div class="doc-step">
             <div class="step-num">08</div>
             <div class="step-body">
@@ -424,11 +424,11 @@ unixdrivestocrawl</div>
           <p class="doc-para">Wait for the validation to complete and confirm you receive a successful response before proceeding to apply the change package.</p>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-09.png" alt="Change Assistant EMF validation — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 9 — Change Assistant EMF validation</div>
+            <div class="screenshot-caption">Screenshot 9: Change Assistant EMF validation</div>
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-10.png" alt="Validation complete — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 10 — Validation success confirmation</div>
+            <div class="screenshot-caption">Screenshot 10: Validation success confirmation</div>
           </div>
           <div class="doc-step">
             <div class="step-num">09</div>
@@ -439,28 +439,28 @@ unixdrivestocrawl</div>
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-11.png" alt="Change package application — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 11 — Change package application in progress</div>
+            <div class="screenshot-caption">Screenshot 11: Change package application in progress</div>
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-12.png" alt="Change package steps — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 12 — Change package step progression</div>
+            <div class="screenshot-caption">Screenshot 12: Change package step progression</div>
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-13.png" alt="Change package completion — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 13 — Change package steps completing</div>
+            <div class="screenshot-caption">Screenshot 13: Change package steps completing</div>
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-14.png" alt="Final steps — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 14 — Final steps in the application process</div>
+            <div class="screenshot-caption">Screenshot 14: Final steps in the application process</div>
           </div>
           <div class="screenshot-block">
             <img src="../assets/images/poc-guide/screenshot-15.png" alt="Application complete — sensitive details masked"/>
-            <div class="screenshot-caption">Screenshot 15 — Completed application confirmation</div>
+            <div class="screenshot-caption">Screenshot 15: Completed application confirmation</div>
           </div>
         </div>
 
         <div class="doc-section" id="cleanup">
-          <div class="doc-section-title">Step 8 — Post-apply cleanup</div>
+          <div class="doc-section-title">Step 8: Post-apply cleanup</div>
           <div class="doc-step">
             <div class="step-num">10</div>
             <div class="step-body">

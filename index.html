@@ -4,8 +4,8 @@
   <script>(function(){try{var t=localStorage.getItem('viancore-theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="VianCore — Where Enterprise Knowledge Gets Serious. Deep technical knowledge on enterprise systems, security architecture, and documentation."/>
-  <title>VianCore — Where Enterprise Knowledge Gets Serious</title>
+  <meta name="description" content="VianCore · Where Enterprise Knowledge Gets Serious. Deep technical knowledge on enterprise systems, security architecture, and documentation."/>
+  <title>VianCore · Where Enterprise Knowledge Gets Serious</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -48,18 +48,35 @@
       z-index: 1;
     }
 
-    /* Light theme: the moody photo was shot for a black overlay, so swap it
-       for a clean, futuristic glow + dot-grid field instead of darkening it. */
+    /* Light theme: the moody photo was shot for a black overlay and doesn't
+       hold up lightened (source is near-black with two thin highlights, no
+       real midtones) — tried twice, rejected twice. Light mode drops the
+       photo entirely and goes typographic instead: left-aligned, larger
+       type, one accent word, layered glow instead of a flat one. */
     html[data-theme="light"] .hero {
+      align-items: flex-start;
+      text-align: left;
       background-image:
-        radial-gradient(rgba(11,18,32,0.07) 1px, transparent 1px),
-        radial-gradient(circle at 88% 20%, rgba(12,143,134,0.16) 0%, rgba(12,143,134,0) 55%),
-        radial-gradient(circle at 8% 85%, rgba(12,143,134,0.10) 0%, rgba(12,143,134,0) 50%),
+        radial-gradient(rgba(11,18,32,0.05) 1px, transparent 1px),
+        radial-gradient(circle at 82% -8%, rgba(12,143,134,0.24) 0%, rgba(12,143,134,0) 50%),
+        radial-gradient(circle at 102% 65%, rgba(12,143,134,0.15) 0%, rgba(12,143,134,0) 45%),
         linear-gradient(180deg, #ffffff 0%, #f2f5f9 100%);
-      background-size: 24px 24px, auto, auto, auto;
+      background-size: 22px 22px, auto, auto, auto;
       background-position: 0 0, 0 0, 0 0, 0 0;
     }
     html[data-theme="light"] .hero::before { background: none; }
+
+    .hero-inner { max-width: 100%; }
+    html[data-theme="light"] .hero-inner {
+      max-width: 620px;
+      padding-left: 22px;
+      border-left: 2px solid rgba(12,143,134,0.55);
+    }
+    @media (min-width: 560px) {
+      html[data-theme="light"] .hero-tag { white-space: nowrap; }
+    }
+    .hero-title em { font-style: normal; }
+    html[data-theme="light"] .hero-title em { color: var(--accent); }
 
     .hero-tag {
       font-size: clamp(10px, 1vw, 12px);
@@ -233,9 +250,11 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-tag">Enterprise Knowledge &nbsp;·&nbsp; Cybersecurity &nbsp;·&nbsp; Continuous Learning</div>
-    <h1 class="hero-title">Where Enterprise Knowledge Gets Serious</h1>
-    <p class="hero-sub">Practical knowledge across enterprise systems, cybersecurity, and emerging technology — built from decades in the field and shared without the fluff.</p>
+    <div class="hero-inner">
+      <div class="hero-tag">Enterprise Knowledge &nbsp;·&nbsp; Cybersecurity &nbsp;·&nbsp; Continuous Learning</div>
+      <h1 class="hero-title">Where Enterprise Knowledge Gets <em>Serious</em></h1>
+      <p class="hero-sub">Practical knowledge across enterprise systems, cybersecurity, and emerging technology, built from decades in the field and shared without the fluff.</p>
+    </div>
   </section>
 
   <!-- STATS -->
@@ -275,7 +294,7 @@
       <div class="pillar">
         <div class="pillar-icon">&#9632;</div>
         <div class="pillar-title"><a href="learning-hub.html" style="color:inherit;text-decoration:none;">Learning Hub</a></div>
-        <div class="pillar-desc">Free quizzes, guides, and resources — open to everyone. From citizenship prep to cybersecurity awareness, no login required.</div>
+        <div class="pillar-desc">Free quizzes, guides, and resources for everyone. From citizenship prep to cybersecurity awareness, no login required.</div>
       </div>
     </div>
   </section>

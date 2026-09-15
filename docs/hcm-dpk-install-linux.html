@@ -5,7 +5,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="A field-tested walkthrough of the Oracle DPK installer for a PeopleSoft HCM environment on Linux. VianCore Knowledge Base."/>
-  <title>Installing a PeopleSoft HCM Deployment Package (DPK) on Linux — VianCore</title>
+  <title>Installing a PeopleSoft HCM Deployment Package (DPK) on Linux · VianCore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -222,28 +222,28 @@
     <div class="content">
       <div class="doc-category">Systems · Installation</div>
       <h1 class="doc-title">Installing a PeopleSoft HCM Deployment Package (DPK) on Linux</h1>
-      <p class="doc-subtitle">A field-tested walkthrough of the Oracle DPK installer for an HCM environment on Linux — the prep steps that save you a rerun, and the prompts that are easy to answer wrong the first time.</p>
+      <p class="doc-subtitle">A field-tested walkthrough of the Oracle DPK installer for an HCM environment on Linux: the prep steps that save you a rerun, and the prompts that are easy to answer wrong the first time.</p>
       <div class="doc-divider"></div>
 
       <div class="doc-body">
 
         <div class="doc-section" id="overview">
           <div class="doc-section-title">Overview</div>
-          <p class="doc-para">The Deployment Package (DPK) is Oracle's standard mechanism for standing up a PeopleSoft environment — application, PeopleTools, and database — as a single scripted install driven by Puppet under the hood. It's reliable once you understand its assumptions, but it front-loads a lot of validation, and a failed prerequisite check late in the process costs you the whole extraction step over again. Getting the prep work right the first time is most of the battle.</p>
+          <p class="doc-para">The Deployment Package (DPK) is Oracle's standard mechanism for standing up a PeopleSoft environment (application, PeopleTools, and database) as a single scripted install driven by Puppet under the hood. It's reliable once you understand its assumptions, but it front-loads a lot of validation, and a failed prerequisite check late in the process costs you the whole extraction step over again. Getting the prep work right the first time is most of the battle.</p>
         </div>
 
         <div class="doc-section" id="prep">
           <div class="doc-section-title">Before you start</div>
           <p class="doc-para">Before touching the installer, verify the host is actually ready for it:</p>
           <ul class="doc-list">
-            <li>Confirm free disk space with <code>df -h</code> — the DPK extracts, then deploys, so you need roughly double the archive size free.</li>
+            <li>Confirm free disk space with <code>df -h</code>. The DPK extracts, then deploys, so you need roughly double the archive size free.</li>
             <li>Check memory and CPU against the minimums in the install guide (<code>cat /proc/meminfo</code>, <code>cat /proc/cpuinfo</code>).</li>
-            <li>Confirm full read/write access to <code>/tmp</code> and <code>/var/tmp</code> — several install phases stage files there.</li>
-            <li>Check the umask in <code>/etc/bashrc</code> and <code>/etc/profile</code>; the installer expects <code>022</code>.</li>
-            <li>Make sure the Oracle Linux/RHEL release packages and <code>oracle-database-preinstall-19c</code> are installed — this pulls in most of the OS-level dependencies the DPK assumes are already there.</li>
+            <li>Confirm full read/write access to <code>/tmp</code> and <code>/var/tmp</code>. Several install phases stage files there.</li>
+            <li>Check the umask in <code>/etc/bashrc</code> and <code>/etc/profile</code>, the installer expects <code>022</code>.</li>
+            <li>Make sure the Oracle Linux/RHEL release packages and <code>oracle-database-preinstall-19c</code> are installed. This pulls in most of the OS-level dependencies the DPK assumes are already there.</li>
             <li>Check for <code>glibc</code> and install <code>glibc-devel</code> if it's missing.</li>
             <li>Create a dedicated install directory (for example <code>/apps/DPK_INSTALL</code>) with permissions that let the setup script run without fighting the filesystem.</li>
-            <li>Two compatibility symlinks trip people up more than anything else on newer OS releases — <code>libncursesw.so.5</code> and <code>libtinfo.so.5</code> are often missing entirely. Either symlink them from the <code>.so.6</code> versions already present, or install <code>ncurses-compat-libs</code> and skip the symlinks.</li>
+            <li>Two compatibility symlinks trip people up more than anything else on newer OS releases: <code>libncursesw.so.5</code> and <code>libtinfo.so.5</code> are often missing entirely. Either symlink them from the <code>.so.6</code> versions already present, or install <code>ncurses-compat-libs</code> and skip the symlinks.</li>
           </ul>
         </div>
 
@@ -263,27 +263,27 @@ Validating Oracle Central Inventory:            [ OK ]</div>
           <div class="doc-section-title">Key decisions during setup</div>
           <p class="doc-para">The installer asks a series of questions partway through. A few of them are easy to answer without thinking and hard to walk back:</p>
           <ul class="doc-list">
-            <li><strong>Base directory</strong> — where the DPKs get extracted and the components deployed. Needs to be writable with real headroom; changing this later means starting over.</li>
-            <li><strong>Installation type — PUM or FRESH</strong> — FRESH builds a clean environment from the delivered database; PUM is for an update-image-based refresh.</li>
-            <li><strong>Database type — DEMO or SYS</strong> — DEMO loads Oracle's demo data, useful for a sandbox or training environment; SYS gives you a bare database you'll populate yourself.</li>
-            <li><strong>Database name</strong> — must start with a letter, uppercase letters and numbers only, 8 characters max. Plan this in advance so it fits your naming convention.</li>
-            <li>A run of password prompts follows — database admin, Connect ID, Access ID, Operator ID, WebLogic Admin, Web Profile user, and Integration Gateway user and keystore. Have a password policy decided before you get here.</li>
+            <li><strong>Base directory</strong>: where the DPKs get extracted and the components deployed. Needs to be writable with real headroom, and changing this later means starting over.</li>
+            <li><strong>Installation type: PUM or FRESH</strong>. FRESH builds a clean environment from the delivered database. PUM is for an update-image-based refresh.</li>
+            <li><strong>Database type: DEMO or SYS</strong>. DEMO loads Oracle's demo data, useful for a sandbox or training environment. SYS gives you a bare database you'll populate yourself.</li>
+            <li><strong>Database name</strong>: must start with a letter, uppercase letters and numbers only, 8 characters max. Plan this in advance so it fits your naming convention.</li>
+            <li>A run of password prompts follows: database admin, Connect ID, Access ID, Operator ID, WebLogic Admin, Web Profile user, and Integration Gateway user and keystore. Have a password policy decided before you get here.</li>
           </ul>
-          <p class="doc-para">Once you confirm the answers, the installer encrypts everything into the Hiera YAML files and proceeds unattended through deployment: application components, the Oracle database server, PeopleTools, OS users, the database itself, and the Application Server, Process Scheduler, and PIA domains — finishing with a full stop/start cycle of the environment.</p>
+          <p class="doc-para">Once you confirm the answers, the installer encrypts everything into the Hiera YAML files and proceeds unattended through deployment: application components, the Oracle database server, PeopleTools, OS users, the database itself, and the Application Server, Process Scheduler, and PIA domains, finishing with a full stop/start cycle of the environment.</p>
         </div>
 
         <div class="doc-section" id="lessons">
           <div class="doc-section-title">Lessons learned</div>
           <ul class="doc-list">
-            <li>Do the prep checklist in full before starting — the installer validates a lot up front, but not everything, and a failure two-thirds of the way through a multi-hour deployment is expensive.</li>
+            <li>Do the prep checklist in full before starting. The installer validates a lot up front, but not everything, and a failure two-thirds of the way through a multi-hour deployment is expensive.</li>
             <li>Write down your answers to the PUM/FRESH, DEMO/SYS, and database name prompts before you start the run. There's no going back once the bootstrap begins without tearing the environment down.</li>
-            <li>If you want to customize the environment beyond the defaults, don't fight the prompts — answer 'n' at the final confirmation and follow the documented path for a custom <code>psft_customizations.yaml</code> Hiera file instead.</li>
+            <li>If you want to customize the environment beyond the defaults, don't fight the prompts. Answer 'n' at the final confirmation and follow the documented path for a custom <code>psft_customizations.yaml</code> Hiera file instead.</li>
           </ul>
         </div>
 
         <div class="doc-section" id="summary">
           <div class="doc-section-title">Summary</div>
-          <p class="doc-para">The DPK installer removes most of the manual PeopleSoft build process, but it front-loads the decisions that matter — base directory, install type, database naming, and passwords — into a handful of prompts you answer once. Treat the prep checklist as non-negotiable and have your answers ready before you start, and the rest of the process is close to unattended.</p>
+          <p class="doc-para">The DPK installer removes most of the manual PeopleSoft build process, but it front-loads the decisions that matter (base directory, install type, database naming, and passwords) into a handful of prompts you answer once. Treat the prep checklist as non-negotiable and have your answers ready before you start, and the rest of the process is close to unattended.</p>
         </div>
 
         <div class="doc-nav">

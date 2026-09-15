@@ -5,7 +5,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Installing and licensing Micro Focus Visual COBOL Development Hub for PeopleSoft, and the recurring errors that show up compiling COBOL on Linux. VianCore Knowledge Base."/>
-  <title>Setting Up Micro Focus Visual COBOL for PeopleSoft — VianCore</title>
+  <title>Setting Up Micro Focus Visual COBOL for PeopleSoft · VianCore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -233,14 +233,14 @@
     <div class="content">
       <div class="doc-category">Systems · Installation</div>
       <h1 class="doc-title">Setting Up Micro Focus Visual COBOL for PeopleSoft</h1>
-      <p class="doc-subtitle">Installing and licensing the Visual COBOL Development Hub, and the recurring errors that show up when compiling PeopleSoft's COBOL programs on Linux — collected across several real installs.</p>
+      <p class="doc-subtitle">Installing and licensing the Visual COBOL Development Hub, and the recurring errors that show up when compiling PeopleSoft's COBOL programs on Linux, collected across several real installs.</p>
       <div class="doc-divider"></div>
 
       <div class="doc-body">
 
         <div class="doc-section" id="overview">
           <div class="doc-section-title">Overview</div>
-          <p class="doc-para">PeopleSoft still ships a set of COBOL programs (payroll, year-end processing, and similar) that require a COBOL runtime to compile and execute. Micro Focus Visual COBOL Development Hub is Oracle's supported compiler for this on Linux. The install itself is straightforward; nearly all of the friction is in licensing and in a handful of missing OS packages that the installer doesn't always surface clearly.</p>
+          <p class="doc-para">PeopleSoft still ships a set of COBOL programs (payroll, year-end processing, and similar) that require a COBOL runtime to compile and execute. Micro Focus Visual COBOL Development Hub is Oracle's supported compiler for this on Linux. The install itself is straightforward. Nearly all of the friction is in licensing and in a handful of missing OS packages that the installer doesn't always surface clearly.</p>
         </div>
 
         <div class="doc-section" id="install">
@@ -250,7 +250,7 @@
             <li>Grant execute permission to the setup binary: <code>chmod +x setup_visualcobol_devhub_4.0_patchupdate04_&lt;build&gt;_redhat_x86_64</code></li>
             <li>Launch the installer, passing the admin ID that will own the Enterprise Server configuration: <code>./setup_visualcobol_devhub_4.0_patchupdate04_&lt;build&gt;_redhat_x86_64 --EsadminID=psadm2</code></li>
             <li>Accept the EULA when prompted. The installer validates the platform, extracts its payload, and installs to <code>/opt/microfocus/VisualCOBOL</code> by default.</li>
-            <li>If you're on a newer OS release, you'll likely be missing a few 32-bit compatibility packages the installer expects — see <a href="#issues" style="color:#20b2aa;">Known Issues</a> below before you run it, to save yourself a second pass.</li>
+            <li>If you're on a newer OS release, you'll likely be missing a few 32-bit compatibility packages the installer expects. See <a href="#issues" style="color:#20b2aa;">Known Issues</a> below before you run it, to save yourself a second pass.</li>
           </ul>
         </div>
 
@@ -259,13 +259,13 @@
           <p class="doc-para">Licensing is the part most people get stuck on, mainly because it's a separate tool from the installer itself.</p>
           <ul class="doc-list numbered">
             <li>Start the License Administration tool as root: <code>/var/microfocuslicensing/bin/cesadmintool.sh</code></li>
-            <li>Check status first — a fresh install should report <code>No licenses found</code>.</li>
+            <li>Check status first: a fresh install should report <code>No licenses found</code>.</li>
             <li>Copy your temporary (typically 30-day) or permanent license file to the server, then choose option 4, "Manual License Installation," and point it at the license file's path.</li>
-            <li>Re-check status to confirm the license is active — a temporary license will show days remaining; a permanent one shows <code>Full</code> with no expiry.</li>
+            <li>Re-check status to confirm the license is active. A temporary license will show days remaining. A permanent one shows <code>Full</code> with no expiry.</li>
             <li>When you receive your permanent license, repeat the manual installation step against the new file to replace the temporary one.</li>
           </ul>
           <div class="doc-callout">
-            <p>If licensing later fails with "Cannot communicate with licensing daemon" — in either sample or online COBOL programs — check that the daemon is actually running with <code>/var/microfocuslicensing/bin/mfcesdchk</code>, and start it with <code>/var/microfocuslicensing/bin/startmfcesd.sh</code> if it isn't. If the daemon still won't come up, the underlying Sentinel RMS license manager service itself may be down — start it with <code>startlserv.sh</code> in the same directory.</p>
+            <p>If licensing later fails with "Cannot communicate with licensing daemon," in either sample or online COBOL programs, check that the daemon is actually running with <code>/var/microfocuslicensing/bin/mfcesdchk</code>, and start it with <code>/var/microfocuslicensing/bin/startmfcesd.sh</code> if it isn't. If the daemon still won't come up, the underlying Sentinel RMS license manager service itself may be down. Start it with <code>startlserv.sh</code> in the same directory.</p>
           </div>
         </div>
 
@@ -276,13 +276,13 @@
 export PATH=$COBDIR/bin:$PATH</div>
           <p class="doc-para">Confirm it's picked up with <code>echo $COBDIR</code> before moving on to compilation.</p>
           <div class="doc-callout">
-            <p>If you're on a single-user DPK deployment, one OS account owns <code>PS_HOME</code>, <code>PS_APP_HOME</code>, and <code>PS_CFG_HOME</code>, so you only need to set this once. Multi-user deployments — where different accounts own different homes — need the same variables set for every account that will compile COBOL, which is a common source of "it compiled tools but not app" confusion.</p>
+            <p>If you're on a single-user DPK deployment, one OS account owns <code>PS_HOME</code>, <code>PS_APP_HOME</code>, and <code>PS_CFG_HOME</code>, so you only need to set this once. Multi-user deployments, where different accounts own different homes, need the same variables set for every account that will compile COBOL, which is a common source of "it compiled tools but not app" confusion.</p>
           </div>
         </div>
 
         <div class="doc-section" id="compiling">
           <div class="doc-section-title">Compiling and relinking COBOLs</div>
-          <p class="doc-para">Before compiling, back up the delivered <code>PS_HOME</code> and <code>PS_APP_HOME</code> <code>SRC</code> and <code>CBLBIN</code> folders — if a compile goes wrong partway through, you want a clean starting point rather than a partially-converted source tree.</p>
+          <p class="doc-para">Before compiling, back up the delivered <code>PS_HOME</code> and <code>PS_APP_HOME</code> <code>SRC</code> and <code>CBLBIN</code> folders. If a compile goes wrong partway through, you want a clean starting point rather than a partially-converted source tree.</p>
           <p class="doc-para">From <code>$PS_HOME/setup</code>, the two scripts that matter are <code>pscbl.mak</code> (compile) and <code>psrun.mak</code> (relink):</p>
           <div class="doc-code">pscbl.mak PS_HOME       # compile PS_HOME cobols only
 pscbl.mak PS_APP_HOME    # compile the application's cobols only
@@ -294,40 +294,40 @@ pscbl.mak                # compiles PS_HOME, then PS_APP_HOME, then PS_CUST_HOME
 ... All COBOL programs have been successfully compiled.
 ... The COBOL executables were copied to /apps/psft/pt/ps_home/cblbin
 End of compilation in PS_HOME</div>
-          <p class="doc-para">Run <code>psrun.mak</code> the same way afterward to relink. If you run <code>pscbl.mak</code> with no home specified and you don't have any custom COBOL programs, you'll see errors about a missing <code>PS_CUST_HOME/src/cbl</code> directory — that's expected and not a problem if you genuinely have no custom COBOLs.</p>
+          <p class="doc-para">Run <code>psrun.mak</code> the same way afterward to relink. If you run <code>pscbl.mak</code> with no home specified and you don't have any custom COBOL programs, you'll see errors about a missing <code>PS_CUST_HOME/src/cbl</code> directory. That's expected and not a problem if you genuinely have no custom COBOLs.</p>
         </div>
 
         <div class="doc-section" id="issues">
           <div class="doc-section-title">Known issues</div>
 
           <div class="doc-issue">
-            <div class="doc-issue-title">Issue — Relinking fails on missing prerequisites</div>
+            <div class="doc-issue-title">Issue: Relinking fails on missing prerequisites</div>
             <p>Relinking COBOLs fails with errors in <code>psrun.err</code> pointing at missing build tools. Installing the <code>glibc-*.x86_64</code> and <code>gcc*x86_64</code> packages for your architecture resolves it.</p>
           </div>
 
           <div class="doc-issue">
-            <div class="doc-issue-title">Issue — Development Hub install fails on package check</div>
-            <p>The installer aborts with a message that required 32-bit software wasn't detected — commonly <code>glibc-devel (i686)</code> on newer Red Hat/OEL releases that default to 64-bit-only package sets. Install the missing package explicitly, e.g. <code>sudo yum install glibc-devel.i686</code>, and re-run. To avoid this entirely, install the following before you start: <code>glibc-*.i686</code>, <code>libgcc-*.i686</code>, <code>libstdc++-*.i686</code>, <code>glibc-devel-*.i686</code>, <code>gcc*x86_64</code>, and <code>cpp*x86_64</code>, plus the <code>pax</code> archiving utility and an X11 terminal emulator if they're not already present.</p>
+            <div class="doc-issue-title">Issue: Development Hub install fails on package check</div>
+            <p>The installer aborts with a message that required 32-bit software wasn't detected, commonly <code>glibc-devel (i686)</code> on newer Red Hat/OEL releases that default to 64-bit-only package sets. Install the missing package explicitly, e.g. <code>sudo yum install glibc-devel.i686</code>, and re-run. To avoid this entirely, install the following before you start: <code>glibc-*.i686</code>, <code>libgcc-*.i686</code>, <code>libstdc++-*.i686</code>, <code>glibc-devel-*.i686</code>, <code>gcc*x86_64</code>, and <code>cpp*x86_64</code>, plus the <code>pax</code> archiving utility and an X11 terminal emulator if they're not already present.</p>
           </div>
 
           <div class="doc-issue">
-            <div class="doc-issue-title">Issue — License daemon unreachable</div>
-            <p>Both sample and online COBOL programs fail with a licensing communication error. Confirm the daemon is running with <code>mfcesdchk</code>; if not, start it with <code>startmfcesd.sh</code>, and check the underlying Sentinel RMS license manager service (<code>startlserv.sh</code>) if the daemon itself won't come up.</p>
+            <div class="doc-issue-title">Issue: License daemon unreachable</div>
+            <p>Both sample and online COBOL programs fail with a licensing communication error. Confirm the daemon is running with <code>mfcesdchk</code>. If not, start it with <code>startmfcesd.sh</code>, and check the underlying Sentinel RMS license manager service (<code>startlserv.sh</code>) if the daemon itself won't come up.</p>
           </div>
 
           <div class="doc-issue">
-            <div class="doc-issue-title">Issue — Java errors launching the license admin tool as root</div>
+            <div class="doc-issue-title">Issue: Java errors launching the license admin tool as root</div>
             <p>The License Administration tool can throw Java errors when launched as root if <code>$JAVA_HOME</code> points at the PeopleTools-bundled JRE path rather than a real JDK. Point <code>JAVA_HOME</code> at an actual JDK install and add it to <code>PATH</code> before launching:</p>
             <div class="doc-code">export JAVA_HOME=/apps/psft/pt/jdk
 export PATH=$JAVA_HOME/bin:$PATH</div>
           </div>
 
-          <p class="doc-para" style="font-size:12px;color:rgba(255,255,255,0.35);">A note on multi-user setups: earlier revisions of this process required compiling PeopleTools COBOLs as one dedicated account and application COBOLs as another, since each account owned a different PeopleSoft home. Newer single-user DPK deployments don't have this split — the same account owns every home, and one round of <code>pscbl.mak</code> / <code>psrun.mak</code> covers everything. If you're still on a multi-user layout, be prepared for exactly this kind of permissions friction and plan which account compiles which home in advance.</p>
+          <p class="doc-para" style="font-size:12px;color:rgba(255,255,255,0.35);">A note on multi-user setups: earlier revisions of this process required compiling PeopleTools COBOLs as one dedicated account and application COBOLs as another, since each account owned a different PeopleSoft home. Newer single-user DPK deployments don't have this split. The same account owns every home, and one round of <code>pscbl.mak</code> / <code>psrun.mak</code> covers everything. If you're still on a multi-user layout, be prepared for exactly this kind of permissions friction and plan which account compiles which home in advance.</p>
         </div>
 
         <div class="doc-section" id="summary">
           <div class="doc-section-title">Summary</div>
-          <p class="doc-para">The install itself takes minutes; licensing and missing OS packages are where the time actually goes. Install the 32-bit compatibility packages up front, understand that licensing is a separate tool from the installer, and know your account model (single-user vs. multi-user DPK) before you start compiling — that covers the vast majority of issues you'll hit.</p>
+          <p class="doc-para">The install itself takes minutes. Licensing and missing OS packages are where the time actually goes. Install the 32-bit compatibility packages up front, understand that licensing is a separate tool from the installer, and know your account model (single-user vs. multi-user DPK) before you start compiling. That covers the vast majority of issues you'll hit.</p>
         </div>
 
         <div class="doc-nav">

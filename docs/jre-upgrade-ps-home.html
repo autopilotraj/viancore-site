@@ -5,7 +5,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="A short, mechanical process for upgrading the JRE under PS_HOME on Linux and Windows for PeopleTools 8.59+. VianCore Knowledge Base."/>
-  <title>Upgrading the JRE Under PS_HOME — VianCore</title>
+  <title>Upgrading the JRE Under PS_HOME · VianCore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -224,14 +224,14 @@
     <div class="content">
       <div class="doc-category">Systems · Patching</div>
       <h1 class="doc-title">Upgrading the JRE Under PS_HOME</h1>
-      <p class="doc-subtitle">A short, mechanical process on PeopleTools 8.59 and newer — but easy to get wrong if you don't know that the "jre" directory hasn't actually held a JRE since JDK 11.</p>
+      <p class="doc-subtitle">A short, mechanical process on PeopleTools 8.59 and newer, but easy to get wrong if you don't know that the "jre" directory hasn't actually held a JRE since JDK 11.</p>
       <div class="doc-divider"></div>
 
       <div class="doc-body">
 
         <div class="doc-section" id="overview">
           <div class="doc-section-title">Overview</div>
-          <p class="doc-para">PeopleTools 8.59 and later expect a Java runtime under <code>$PS_HOME</code>, referenced by convention as the <code>jre</code> directory. Keeping this current matters for security patching, and Oracle ships updates for it regularly through My Oracle Support. The process itself is a handful of steps; the only real risk is skipping the backup or forgetting which processes need to be stopped first.</p>
+          <p class="doc-para">PeopleTools 8.59 and later expect a Java runtime under <code>$PS_HOME</code>, referenced by convention as the <code>jre</code> directory. Keeping this current matters for security patching, and Oracle ships updates for it regularly through My Oracle Support. The process itself is a handful of steps. The only real risk is skipping the backup or forgetting which processes need to be stopped first.</p>
         </div>
 
         <div class="doc-section" id="linux">
@@ -249,19 +249,19 @@
 
         <div class="doc-section" id="windows">
           <div class="doc-section-title">Upgrading on Windows</div>
-          <p class="doc-para">The Windows installation steps follow Oracle's own JDK installer flow rather than a manual copy — see <a href="https://docs.oracle.com/en/java/javase/11/install/installation-jdk-microsoft-windows-platforms.html" target="_blank" rel="noopener">Oracle's JDK installation guide for Microsoft Windows platforms</a> for the current, version-specific steps.</p>
+          <p class="doc-para">The Windows installation steps follow Oracle's own JDK installer flow rather than a manual copy. See <a href="https://docs.oracle.com/en/java/javase/11/install/installation-jdk-microsoft-windows-platforms.html" target="_blank" rel="noopener">Oracle's JDK installation guide for Microsoft Windows platforms</a> for the current, version-specific steps.</p>
         </div>
 
         <div class="doc-section" id="note">
           <div class="doc-section-title">A naming quirk worth knowing</div>
           <div class="doc-callout">
-            <p>There is no JRE starting with JDK 11 — Oracle merged the JRE into the JDK distribution. PeopleTools still calls the directory <code>jre</code> under <code>$PS_HOME</code> for backward compatibility, but what you're actually installing there from JDK 11 onward is a full JDK.</p>
+            <p>There is no JRE starting with JDK 11. Oracle merged the JRE into the JDK distribution. PeopleTools still calls the directory <code>jre</code> under <code>$PS_HOME</code> for backward compatibility, but what you're actually installing there from JDK 11 onward is a full JDK.</p>
           </div>
         </div>
 
         <div class="doc-section" id="summary">
           <div class="doc-section-title">Summary</div>
-          <p class="doc-para">Stop the domains, back up the existing directory, swap in the new JDK build, and bring the domains back up — that's the entire upgrade. The only step people skip is the backup, and it's the one you'll want the one time the upgrade doesn't go cleanly.</p>
+          <p class="doc-para">Stop the domains, back up the existing directory, swap in the new JDK build, and bring the domains back up: that's the entire upgrade. The only step people skip is the backup, and it's the one you'll want the one time the upgrade doesn't go cleanly.</p>
         </div>
 
         <div class="doc-nav">
