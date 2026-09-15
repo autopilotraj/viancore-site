@@ -11,6 +11,7 @@
     var next = theme === 'light' ? 'dark' : 'light';
     btn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
     btn.setAttribute('title', 'Switch to ' + next + ' mode');
+    btn.setAttribute('aria-checked', theme === 'light' ? 'true' : 'false');
   }
 
   function setTheme(theme) {

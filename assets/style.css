@@ -97,27 +97,55 @@ img { max-width: 100%; display: block; }
 .nav-right { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 28px); }
 
 /* =============================================
-   THEME TOGGLE — always readable on the permanently-dark nav
+   THEME TOGGLE — a real light/dark switch, not an icon button.
+   Deliberately shares no shape language with the crosshair mark
+   (no rings, no ticks, no center dot) so it never reads as a second
+   logo — it reads as a switch because it IS a switch.
    ============================================= */
 .theme-toggle {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-  background: transparent; border: 0.5px solid rgba(255,255,255,0.25);
-  color: #ffffff; cursor: pointer; padding: 0;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+  flex-shrink: 0; background: transparent; border: 0; padding: 8px;
+  margin: -8px; cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
-.theme-toggle:hover { border-color: #20b2aa; box-shadow: 0 0 0 4px rgba(32,178,170,0.14); }
-.theme-toggle:active { transform: scale(0.9); }
-.theme-toggle .tt-dot { fill: #20b2aa; transition: r 0.3s ease, opacity 0.3s ease; }
-.theme-toggle .tt-ticks line { transition: opacity 0.3s ease, transform 0.3s ease; transform-origin: 20px 20px; }
-html:not([data-theme="light"]) .theme-toggle .tt-node { animation: tt-pulse 3.2s ease-in-out infinite; }
-@keyframes tt-pulse {
-  0%, 100% { filter: drop-shadow(0 0 0 rgba(32,178,170,0)); }
-  50% { filter: drop-shadow(0 0 3px rgba(32,178,170,0.85)); }
+.theme-toggle .tt-track {
+  position: relative; width: 44px; height: 24px; border-radius: 999px;
+  background: linear-gradient(180deg, #262c33, #101317);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.65);
+  transition: background 0.35s ease, border-color 0.25s ease;
 }
-html[data-theme="light"] .theme-toggle .tt-dot { r: 2; fill: none; stroke: #20b2aa; stroke-width: 1.3; opacity: 0.9; }
-html[data-theme="light"] .theme-toggle .tt-ticks line { opacity: 0.4; transform: scale(0.62); }
-html[data-theme="light"] .theme-toggle .tt-node { animation: none; }
+.theme-toggle .tt-track::after {
+  content: ""; position: absolute; inset: -4px; border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(32,178,170,0); pointer-events: none;
+  transition: box-shadow 0.4s ease;
+}
+html:not([data-theme="light"]) .theme-toggle .tt-track::after {
+  box-shadow: 0 0 10px 1px rgba(32,178,170,0.3);
+}
+.theme-toggle:hover .tt-track { border-color: rgba(32,178,170,0.6); }
+.theme-toggle:active .tt-thumb { width: 22px; }
+
+.theme-toggle .tt-thumb {
+  position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(160deg, #f4f7f8, #ccd5db);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.55);
+  transition: transform 0.4s cubic-bezier(.65,0,.35,1), width 0.15s ease;
+}
+html[data-theme="light"] .theme-toggle .tt-thumb { transform: translateX(20px); }
+
+.theme-toggle .tt-icon { position: absolute; transition: opacity 0.25s ease, transform 0.4s ease; }
+.theme-toggle .tt-icon-moon { opacity: 1; transform: scale(1) rotate(0deg); color: #1c232b; }
+.theme-toggle .tt-icon-sun { opacity: 0; transform: scale(0.4) rotate(-90deg); color: #a8700f; }
+html[data-theme="light"] .theme-toggle .tt-icon-moon { opacity: 0; transform: scale(0.4) rotate(90deg); }
+html[data-theme="light"] .theme-toggle .tt-icon-sun { opacity: 1; transform: scale(1) rotate(0deg); }
+
+html[data-theme="light"] .theme-toggle .tt-track {
+  background: linear-gradient(180deg, #e3eaf0, #ccd7e1);
+  border-color: rgba(11,18,32,0.16);
+  box-shadow: inset 0 1px 2px rgba(11,18,32,0.14);
+}
+html[data-theme="light"] .theme-toggle:hover .tt-track { border-color: rgba(12,143,134,0.65); }
 
 /* Hamburger — mobile only */
 .nav-hamburger {
