@@ -31,6 +31,22 @@ html[data-theme="light"] {
   --accent-rgb: 12,143,134;
 }
 
+/* Knowledge Base article body text — contrast boost for light mode.
+   Every docs/*.html page sets its own rgba(var(--text-rgb), X) opacity for
+   these classes, tuned to read as soft white-on-black in dark mode. In
+   light mode that same opacity turns near-black text into washed-out gray
+   on a pale background. These rules target light mode specifically and
+   win by specificity (attribute selector + class) over each page's own
+   inline rule, so no per-document file needs to change. */
+html[data-theme="light"] .doc-subtitle,
+html[data-theme="light"] .doc-caption { color: rgba(var(--text-rgb),0.78); }
+html[data-theme="light"] .doc-section-title { color: rgba(var(--text-rgb),0.65); }
+html[data-theme="light"] .doc-para,
+html[data-theme="light"] .doc-list li,
+html[data-theme="light"] .doc-callout p,
+html[data-theme="light"] .doc-para code,
+html[data-theme="light"] .doc-code { color: var(--text-page); }
+
 html { font-size: 16px; scroll-behavior: smooth; }
 
 body {
