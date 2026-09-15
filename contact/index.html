@@ -13,8 +13,34 @@
   <style>
     .page-header {
       padding: clamp(48px, 7vw, 80px) 6vw clamp(36px, 4vw, 52px);
-      border-bottom: 0.5px solid rgba(var(--text-rgb),0.07);
+      border-bottom: none;
+      position: relative;
+      background-image: url('../assets/images/about-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.95) 0%,
+        rgba(0,0,0,0.85) 55%,
+        rgba(0,0,0,0.97) 100%
+      );
+      z-index: 0;
+    }
+    .page-header > * { position: relative; z-index: 1; }
+    html[data-theme="light"] .page-header {
+      background-image:
+        radial-gradient(rgba(11,18,32,0.07) 1px, transparent 1px),
+        radial-gradient(circle at 88% 20%, rgba(12,143,134,0.16) 0%, rgba(12,143,134,0) 55%),
+        radial-gradient(circle at 8% 85%, rgba(12,143,134,0.10) 0%, rgba(12,143,134,0) 50%),
+        linear-gradient(180deg, #ffffff 0%, #f2f5f9 100%);
+      background-size: 24px 24px, auto, auto, auto;
+    }
+    html[data-theme="light"] .page-header::before { background: none; }
     .page-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(var(--text-rgb),0.6); margin-bottom: 12px; }
     .page-title { font-size: clamp(24px, 3vw, 32px); font-weight: 300; letter-spacing: 0.04em; color: var(--text-page); margin-bottom: 8px; }
     .page-sub { font-size: clamp(12px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.6); font-weight: 300; letter-spacing: 0.03em; }
