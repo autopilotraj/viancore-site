@@ -13,7 +13,7 @@
   <style>
     .page-header {
       padding: clamp(48px, 7vw, 80px) 6vw clamp(36px, 4vw, 52px);
-      border-bottom: none;
+      border-bottom: 0.5px solid rgba(var(--text-rgb),0.07);
       position: relative;
       background-image: url('../assets/images/hero-bg.jpg');
       background-size: cover;
@@ -41,6 +41,9 @@
       background-size: 24px 24px, auto, auto, auto;
     }
     html[data-theme="light"] .page-header::before { background: none; }
+    .page-header .page-label,
+    .page-header .page-title,
+    .page-header .page-sub { max-width: 700px; }
     .page-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(var(--text-rgb),0.6); margin-bottom: 12px; }
     .page-title { font-size: clamp(24px, 3vw, 32px); font-weight: 300; letter-spacing: 0.04em; color: var(--text-page); margin-bottom: 8px; }
     .page-sub { font-size: clamp(12px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.6); font-weight: 300; letter-spacing: 0.03em; }

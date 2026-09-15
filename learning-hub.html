@@ -116,6 +116,7 @@ html[data-theme="light"] .nav-logo-light { display: block; }
   /* ── Page header ── */
   .page-header {
     padding: clamp(56px, 8vw, 96px) 6vw clamp(48px, 5vw, 68px);
+    border-bottom: 0.5px solid rgba(var(--text-rgb),0.07);
     position: relative;
     background-image: url('assets/images/hero-bg.jpg');
     background-size: cover;
@@ -143,6 +144,8 @@ html[data-theme="light"] .nav-logo-light { display: block; }
     background-size: 24px 24px, auto, auto, auto;
   }
   html[data-theme="light"] .page-header::before { background: none; }
+  .page-header .eyebrow,
+  .page-header h1 { max-width: 700px; }
   .eyebrow {
     font-size: 10px;
     font-weight: 600;
