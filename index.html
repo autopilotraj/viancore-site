@@ -102,9 +102,15 @@
       letter-spacing: 0.03em;
       max-width: 460px;
       line-height: 1.85;
-      margin-bottom: 40px;
+      margin: 0 auto 40px;
       font-weight: 400;
     }
+    /* .hero-inner has no fixed width here, so it stretches to the width of
+       its widest child (.hero-title). .hero-sub's own max-width is narrower
+       than that, and without margin:auto it just sits flush against
+       .hero-inner's left edge instead of centering within it - which reads
+       as "off-center" under the centered title above it. */
+    html[data-theme="light"] .hero-sub { margin-left: 0; margin-right: 0; }
 
     .stats-row {
       display: grid;
