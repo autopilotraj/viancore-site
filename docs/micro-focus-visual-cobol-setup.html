@@ -112,11 +112,11 @@
       transition: border-color 0.2s, color 0.2s;
     }
     .doc-nav-btn:hover { border-color: rgba(var(--text-rgb),0.3); color: rgba(var(--text-rgb),0.7); }
-    .doc-nav-btn .nav-dir { font-size: 8px; color: rgba(var(--text-rgb),0.2); }
+    .doc-nav-btn .nav-dir { font-size: 8px; color: rgba(var(--text-rgb),0.6); }
     .doc-nav-btn .nav-title { font-size: 10px; color: rgba(var(--text-rgb),0.42); }
     .back-btn {
       font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
-      color: rgba(var(--text-rgb),0.22); cursor: pointer; background: transparent;
+      color: rgba(var(--text-rgb),0.6); cursor: pointer; background: transparent;
       border: none; font-family: var(--font); transition: color 0.2s;
     }
     .back-btn:hover { color: var(--accent); }
@@ -134,7 +134,8 @@
     <div class="nav-brand">
       <div class="nav-logo">
         <a href="../">
-          <img src="../assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img">
+          <img src="../assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-dark">
+        <img src="../assets/images/logo-nav-color.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-light">
         </a>
       </div>
       <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
@@ -142,7 +143,8 @@
     <div class="nav-right">
     <ul class="nav-links">
       <li><a href="../knowledge/" class="active">Knowledge Base</a></li>
-      <li><a href="../about/">About</a></li>
+      <li><a href="../learning-hub.html">Learning Hub</a></li>
+    <li><a href="../about/">About</a></li>
       <li><a href="../contact/">Contact</a></li>
     </ul>
     <button class="theme-toggle" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Switch to light mode" title="Switch to light mode">
@@ -174,6 +176,7 @@
   </nav>
   <div class="nav-mobile" id="mobileMenu">
     <a href="../knowledge/" class="active">Knowledge Base</a>
+    <a href="../learning-hub.html">Learning Hub</a>
     <a href="../about/">About</a>
     <a href="../contact/">Contact</a>
   </div>

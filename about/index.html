@@ -45,7 +45,7 @@
     .about-hero .about-label,
     .about-hero .about-title,
     .about-hero .about-intro { max-width: 700px; }
-    .about-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(var(--text-rgb),0.22); margin-bottom: 16px; }
+    .about-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(var(--text-rgb),0.6); margin-bottom: 16px; }
     .about-title { font-size: clamp(24px, 3.5vw, 38px); font-weight: 300; letter-spacing: 0.04em; line-height: 1.25; color: var(--text-page); margin-bottom: 20px; }
     .about-title em { color: var(--accent); font-style: normal; }
     .about-intro { font-size: clamp(12px, 1.3vw, 14px); font-weight: 300; color: rgba(var(--text-rgb),0.8); line-height: 1.9; max-width: 640px; }
@@ -53,7 +53,7 @@
     .two-col { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid rgba(var(--text-rgb),0.07); }
     .col-block { padding: clamp(32px, 4vw, 52px) 6vw; border-right: 0.5px solid rgba(var(--text-rgb),0.07); }
     .col-block:last-child { border-right: none; }
-    .col-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(var(--text-rgb),0.22); margin-bottom: 14px; }
+    .col-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(var(--text-rgb),0.6); margin-bottom: 14px; }
     .col-title { font-size: clamp(14px, 1.5vw, 17px); font-weight: 300; color: var(--text-page); letter-spacing: 0.03em; margin-bottom: 14px; line-height: 1.4; }
     .col-body { font-size: clamp(11px, 1.2vw, 13px); font-weight: 300; color: rgba(var(--text-rgb),0.75); line-height: 1.9; }
 
@@ -79,7 +79,7 @@
       flex-wrap: wrap; gap: 24px;
     }
     .contact-title { font-size: clamp(16px, 2vw, 20px); font-weight: 300; color: var(--text-page); letter-spacing: 0.03em; margin-bottom: 6px; }
-    .contact-sub { font-size: clamp(11px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.3); font-weight: 300; }
+    .contact-sub { font-size: clamp(11px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.6); font-weight: 300; }
 
   .not-section {
     padding: clamp(40px, 5vw, 60px) 6vw;
@@ -87,7 +87,7 @@
     background: var(--bg);
   }
   .not-inner { max-width: 900px; }
-  .not-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(var(--text-rgb),0.22); margin-bottom: 12px; }
+  .not-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(var(--text-rgb),0.6); margin-bottom: 12px; }
   .not-title { font-size: clamp(22px, 3vw, 32px); font-weight: 300; color: var(--text-page); letter-spacing: 0.04em; margin-bottom: 36px; }
   .not-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 0.5px solid rgba(var(--text-rgb),0.07); margin-bottom: 32px; }
   .not-item { padding: clamp(24px, 3vw, 32px) clamp(20px, 2.5vw, 28px); border-right: 0.5px solid rgba(var(--text-rgb),0.07); }
@@ -96,7 +96,7 @@
   .not-item-body { font-size: clamp(11px, 1.2vw, 13px); font-weight: 300; color: rgba(var(--text-rgb),0.70); line-height: 1.85; }
   .currently-line {
     font-size: clamp(11px, 1.2vw, 13px); font-weight: 300;
-    color: rgba(var(--text-rgb),0.28); letter-spacing: 0.06em;
+    color: rgba(var(--text-rgb),0.6); letter-spacing: 0.06em;
     border-left: 2px solid var(--accent);
     padding: 10px 16px;
     background: rgba(var(--accent-rgb),0.03);
@@ -125,7 +125,8 @@
     <div class="nav-brand">
       <div class="nav-logo">
         <a href="../">
-          <img src="../assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img">
+          <img src="../assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-dark">
+        <img src="../assets/images/logo-nav-color.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-light">
         </a>
       </div>
       <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>

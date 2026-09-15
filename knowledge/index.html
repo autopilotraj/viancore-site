@@ -39,7 +39,7 @@
       background-size: 24px 24px, auto, auto, auto;
     }
     html[data-theme="light"] .page-header::before { background: none; }
-    .page-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(var(--text-rgb),0.22); margin-bottom: 10px; }
+    .page-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(var(--text-rgb),0.6); margin-bottom: 10px; }
     .page-title { font-size: clamp(22px, 3vw, 30px); font-weight: 300; letter-spacing: 0.04em; color: var(--text-page); margin-bottom: 6px; }
     .page-sub { font-size: clamp(11px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.7); letter-spacing: 0.04em; font-weight: 300; }
 
@@ -85,7 +85,7 @@
     .search-box input::placeholder { color: rgba(var(--text-rgb),0.35); }
     .search-clear {
       background: none; border: none; cursor: pointer; padding: 0;
-      color: rgba(var(--text-rgb),0.3); font-size: 14px; line-height: 1; display: none;
+      color: rgba(var(--text-rgb),0.6); font-size: 14px; line-height: 1; display: none;
     }
     .search-clear.visible { display: block; }
     .search-clear:hover { color: var(--accent); }
@@ -112,7 +112,7 @@
     }
     .pg-btn:hover { border-color: rgba(var(--text-rgb),0.3); color: rgba(var(--text-rgb),0.7); }
     .pg-btn:disabled { opacity: 0.2; cursor: default; }
-    .pg-divider { font-size: 9px; color: rgba(var(--text-rgb),0.15); padding: 0 8px; letter-spacing: 0.1em; }
+    .pg-divider { font-size: 9px; color: rgba(var(--text-rgb),0.6); padding: 0 8px; letter-spacing: 0.1em; }
 
     .library { padding: clamp(16px, 2vw, 28px) 6vw clamp(40px, 5vw, 56px); }
 
@@ -158,7 +158,8 @@
     <div class="nav-brand">
       <div class="nav-logo">
         <a href="../">
-          <img src="../assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img">
+          <img src="../assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-dark">
+        <img src="../assets/images/logo-nav-color.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-light">
         </a>
       </div>
       <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>

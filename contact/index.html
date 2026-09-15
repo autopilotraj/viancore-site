@@ -15,9 +15,9 @@
       padding: clamp(48px, 7vw, 80px) 6vw clamp(36px, 4vw, 52px);
       border-bottom: 0.5px solid rgba(var(--text-rgb),0.07);
     }
-    .page-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(var(--text-rgb),0.22); margin-bottom: 12px; }
+    .page-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(var(--text-rgb),0.6); margin-bottom: 12px; }
     .page-title { font-size: clamp(24px, 3vw, 32px); font-weight: 300; letter-spacing: 0.04em; color: var(--text-page); margin-bottom: 8px; }
-    .page-sub { font-size: clamp(12px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.3); font-weight: 300; letter-spacing: 0.03em; }
+    .page-sub { font-size: clamp(12px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.6); font-weight: 300; letter-spacing: 0.03em; }
 
     .contact-layout {
       display: grid;
@@ -33,7 +33,7 @@
     }
 
     .info-block {}
-    .info-label { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(var(--text-rgb),0.2); margin-bottom: 12px; }
+    .info-label { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(var(--text-rgb),0.6); margin-bottom: 12px; }
     .info-value { font-size: clamp(11px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.45); font-weight: 300; line-height: 1.8; }
     .info-value a { color: var(--accent); text-decoration: none; }
     .info-value a:hover { text-decoration: underline; }
@@ -43,7 +43,7 @@
       padding: 12px 16px;
       background: rgba(var(--accent-rgb),0.03);
     }
-    .response-note p { font-size: clamp(10px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.3); line-height: 1.8; font-weight: 300; }
+    .response-note p { font-size: clamp(10px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.6); line-height: 1.8; font-weight: 300; }
 
     /* RIGHT FORM */
     .contact-form-wrap {
@@ -59,14 +59,14 @@
 
     .field label {
       font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
-      color: rgba(var(--text-rgb),0.3); font-weight: 400;
+      color: rgba(var(--text-rgb),0.6); font-weight: 400;
     }
 
     .field input,
     .field select,
     .field textarea {
       background: rgba(var(--text-rgb),0.03);
-      border: 0.5px solid rgba(var(--text-rgb),0.12);
+      border: 0.5px solid rgba(var(--text-rgb),0.35);
       color: var(--text-page);
       font-family: var(--font);
       font-size: clamp(12px, 1.2vw, 13px);
@@ -87,7 +87,7 @@
     }
 
     .field input::placeholder,
-    .field textarea::placeholder { color: rgba(var(--text-rgb),0.18); }
+    .field textarea::placeholder { color: rgba(var(--text-rgb),0.45); }
 
     .field select option { background: #111; color: var(--text-page); }
 
@@ -99,7 +99,7 @@
       padding-top: 8px;
     }
 
-    .submit-note { font-size: 10px; color: rgba(var(--text-rgb),0.2); font-weight: 300; letter-spacing: 0.04em; }
+    .submit-note { font-size: 10px; color: rgba(var(--text-rgb),0.6); font-weight: 300; letter-spacing: 0.04em; }
 
     .btn-submit {
       font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
@@ -147,7 +147,8 @@
     <div class="nav-brand">
       <div class="nav-logo">
         <a href="../">
-          <img src="../assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img">
+          <img src="../assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-dark">
+        <img src="../assets/images/logo-nav-color.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-light">
         </a>
       </div>
       <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>

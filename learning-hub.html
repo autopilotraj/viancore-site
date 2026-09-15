@@ -65,8 +65,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 24px 6vw;
-    border-bottom: 0.5px solid rgba(255,255,255,0.08);
-    background: #000000;
+    border-bottom: 0.5px solid rgba(var(--text-rgb),0.08);
+    background: var(--bg);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -74,11 +74,14 @@
   .nav-brand { display: flex; flex-direction: column; gap: 5px; }
   .nav-logo { display: flex; align-items: center; gap: 0; }
   .nav-logo-img { height: clamp(44px, 5.2vw, 58px); width: auto; display: block; }
+.nav-logo-light { display: none; }
+html[data-theme="light"] .nav-logo-dark { display: none; }
+html[data-theme="light"] .nav-logo-light { display: block; }
   .nav-tagline {
     font-size: clamp(7px, 0.8vw, 9.5px);
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.7);
+    color: rgba(var(--text-rgb),0.7);
     padding-left: 52px;
   }
   .nav-links {
@@ -91,12 +94,12 @@
     font-size: clamp(11px, 1.1vw, 13px);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.85);
+    color: rgba(var(--text-rgb),0.85);
     text-decoration: none;
     transition: color 0.2s;
   }
-  .nav-links a:hover { color: #fff; }
-  .nav-links a.active { color: #20b2aa; border-bottom: 1px solid #20b2aa; padding-bottom: 2px; }
+  .nav-links a:hover { color: var(--text-page); }
+  .nav-links a.active { color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 2px; }
   .nav-right { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 28px); }
 
   @media (max-width: 900px) {
@@ -369,13 +372,13 @@
   display: block;
   width: 22px;
   height: 1px;
-  background: rgba(255,255,255,0.7);
+  background: rgba(var(--text-rgb),0.7);
 }
 .nav-mobile {
   display: none;
   flex-direction: column;
-  background: #0a0a0a;
-  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+  background: var(--bg);
+  border-bottom: 0.5px solid rgba(var(--text-rgb),0.08);
   padding: 16px 6vw;
   gap: 0;
 }
@@ -383,9 +386,9 @@
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
+  color: rgba(var(--text-rgb),0.6);
   padding: 14px 0;
-  border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  border-bottom: 0.5px solid rgba(var(--text-rgb),0.06);
   display: block;
   text-decoration: none;
 }
@@ -445,7 +448,8 @@ html[data-theme="light"] .theme-toggle:hover .tt-track { border-color: rgba(12,1
     <div class="nav-brand">
       <div class="nav-logo">
         <a href="index.html">
-          <img src="assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img">
+          <img src="assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-dark">
+        <img src="assets/images/logo-nav-color.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-light">
         </a>
       </div>
       <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
