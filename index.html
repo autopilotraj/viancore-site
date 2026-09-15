@@ -17,13 +17,17 @@
   <link rel="stylesheet" href="assets/style.css"/>
   <style>
     /* ── HOME PAGE STYLES ── */
+    /* Both themes share one layout now: left-aligned, accent border,
+       narrower column, single highlighted word in the heading. Only the
+       background treatment differs between them (see below) — dark keeps
+       the moody photo, light drops it for a flat/gradient background. */
     .hero {
       min-height: clamp(380px, 55vh, 520px);
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      text-align: center;
+      text-align: left;
       padding: clamp(48px, 8vw, 96px) 6vw clamp(48px, 6vw, 72px);
       position: relative;
       background-image: url('/assets/images/hero-bg.jpg');
@@ -51,11 +55,10 @@
     /* Light theme: the moody photo was shot for a black overlay and doesn't
        hold up lightened (source is near-black with two thin highlights, no
        real midtones) — tried twice, rejected twice. Light mode drops the
-       photo entirely and goes typographic instead: left-aligned, larger
-       type, one accent word, layered glow instead of a flat one. */
+       photo entirely and goes typographic instead: layered glow instead of
+       a flat photo, everything else (alignment, border, accent word) now
+       matches dark theme's layout. */
     html[data-theme="light"] .hero {
-      align-items: flex-start;
-      text-align: left;
       background-image:
         radial-gradient(rgba(11,18,32,0.05) 1px, transparent 1px),
         radial-gradient(circle at 82% -8%, rgba(12,143,134,0.24) 0%, rgba(12,143,134,0) 50%),
@@ -66,17 +69,15 @@
     }
     html[data-theme="light"] .hero::before { background: none; }
 
-    .hero-inner { max-width: 100%; }
-    html[data-theme="light"] .hero-inner {
+    .hero-inner {
       max-width: 620px;
       padding-left: 22px;
-      border-left: 2px solid rgba(12,143,134,0.55);
+      border-left: 2px solid rgba(var(--accent-rgb),0.55);
     }
     @media (min-width: 560px) {
-      html[data-theme="light"] .hero-tag { white-space: nowrap; }
+      .hero-tag { white-space: nowrap; }
     }
-    .hero-title em { font-style: normal; }
-    html[data-theme="light"] .hero-title em { color: var(--accent); }
+    .hero-title em { font-style: normal; color: var(--accent); }
 
     .hero-tag {
       font-size: clamp(10px, 1vw, 12px);
@@ -102,15 +103,9 @@
       letter-spacing: 0.03em;
       max-width: 460px;
       line-height: 1.85;
-      margin: 0 auto 40px;
+      margin-bottom: 40px;
       font-weight: 400;
     }
-    /* .hero-inner has no fixed width here, so it stretches to the width of
-       its widest child (.hero-title). .hero-sub's own max-width is narrower
-       than that, and without margin:auto it just sits flush against
-       .hero-inner's left edge instead of centering within it - which reads
-       as "off-center" under the centered title above it. */
-    html[data-theme="light"] .hero-sub { margin-left: 0; margin-right: 0; }
 
     .stats-row {
       display: grid;
