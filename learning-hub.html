@@ -115,11 +115,34 @@ html[data-theme="light"] .nav-logo-light { display: block; }
 
   /* ── Page header ── */
   .page-header {
-    border-bottom: 1px solid var(--border);
-    padding: 52px 24px 44px;
-    max-width: 1100px;
-    margin: 0 auto;
+    padding: clamp(56px, 8vw, 96px) 6vw clamp(48px, 5vw, 68px);
+    position: relative;
+    background-image: url('assets/images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center right;
+    background-repeat: no-repeat;
   }
+  .page-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0,0,0,0.95) 0%,
+      rgba(0,0,0,0.85) 55%,
+      rgba(0,0,0,0.97) 100%
+    );
+    z-index: 0;
+  }
+  .page-header > * { position: relative; z-index: 1; }
+  html[data-theme="light"] .page-header {
+    background-image:
+      radial-gradient(rgba(11,18,32,0.07) 1px, transparent 1px),
+      radial-gradient(circle at 88% 20%, rgba(12,143,134,0.16) 0%, rgba(12,143,134,0) 55%),
+      radial-gradient(circle at 8% 85%, rgba(12,143,134,0.10) 0%, rgba(12,143,134,0) 50%),
+      linear-gradient(180deg, #ffffff 0%, #f2f5f9 100%);
+    background-size: 24px 24px, auto, auto, auto;
+  }
+  html[data-theme="light"] .page-header::before { background: none; }
   .eyebrow {
     font-size: 10px;
     font-weight: 600;
