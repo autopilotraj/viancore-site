@@ -66,7 +66,7 @@ img { max-width: 100%; display: block; }
 .nav-brand { display: flex; flex-direction: column; gap: 5px; }
 
 .nav-logo { display: flex; align-items: center; gap: 0; }
-.nav-logo svg { width: clamp(220px, 28vw, 300px); height: auto; }
+.nav-logo-img { height: clamp(44px, 5.2vw, 58px); width: auto; display: block; }
 
 .nav-tagline {
   font-size: clamp(7px, 0.8vw, 9.5px);
@@ -283,7 +283,7 @@ html[data-theme="light"] .theme-toggle:hover .tt-track { border-color: rgba(12,1
   .nav-tagline { display: none; }
 
   body { font-size: 16px; }
-  .nav-logo svg { width: 180px !important; }
+  .nav-logo-img { height: 34px !important; width: auto !important; }
 
   h1 { font-size: 26px !important; line-height: 1.25; }
 

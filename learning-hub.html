@@ -59,52 +59,55 @@
     min-height: 100vh;
   }
 
-  /* ── Nav ── */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(0,0,0,0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
+  /* ── Nav — matches the sitewide nav in assets/style.css ── */
+  .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 58px;
+    padding: 24px 6vw;
+    border-bottom: 0.5px solid rgba(255,255,255,0.08);
+    background: #000000;
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
-  .logo {
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: 0.09em;
+  .nav-brand { display: flex; flex-direction: column; gap: 5px; }
+  .nav-logo { display: flex; align-items: center; gap: 0; }
+  .nav-logo-img { height: clamp(44px, 5.2vw, 58px); width: auto; display: block; }
+  .nav-tagline {
+    font-size: clamp(7px, 0.8vw, 9.5px);
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #fff;
-    text-decoration: none;
+    color: rgba(255,255,255,0.7);
+    padding-left: 52px;
   }
-  .logo span { color: var(--accent); }
-
   .nav-links {
     display: flex;
+    gap: clamp(16px, 3vw, 36px);
     align-items: center;
-    gap: 28px;
     list-style: none;
   }
   .nav-links a {
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
+    font-size: clamp(11px, 1.1vw, 13px);
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: rgba(255,255,255,0.85);
     text-decoration: none;
-    transition: color 0.15s;
+    transition: color 0.2s;
   }
-  .nav-links a:hover,
-  .nav-links a.active { color: var(--accent); }
+  .nav-links a:hover { color: #fff; }
+  .nav-links a.active { color: #20b2aa; border-bottom: 1px solid #20b2aa; padding-bottom: 2px; }
+  .nav-right { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 28px); }
 
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+  }
   @media (max-width: 620px) {
-    .nav-links { gap: 16px; }
-    .nav-links .hide-mobile { display: none; }
+    .nav { padding: 18px 5vw; }
+    .nav-tagline { display: none; }
+  }
+  @media (max-width: 480px) {
+    .nav-logo-img { height: 34px !important; width: auto !important; }
   }
 
   /* ── Page header ── */
@@ -353,6 +356,44 @@
   }
   footer a { color: var(--accent); text-decoration: none; }
 
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+}
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: rgba(255,255,255,0.7);
+}
+.nav-mobile {
+  display: none;
+  flex-direction: column;
+  background: #0a0a0a;
+  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+  padding: 16px 6vw;
+  gap: 0;
+}
+.nav-mobile a {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  padding: 14px 0;
+  border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  display: block;
+  text-decoration: none;
+}
+.nav-mobile a.active { color: var(--accent); }
+.nav-mobile.open { display: flex; }
+@media (max-width: 900px) {
+  .nav-hamburger { display: flex; }
+}
 
 .theme-toggle {
   display: inline-flex; align-items: center; justify-content: center;
@@ -400,25 +441,23 @@ html[data-theme="light"] .theme-toggle:hover .tt-track { border-color: rgba(12,1
 <body>
 
 <!-- ── Navigation ── -->
-<nav>
-  <a class="logo" href="index.html">
-    <svg viewBox="0 0 340 52" xmlns="http://www.w3.org/2000/svg" aria-label="VianCore home" style="height:28px;width:auto;display:block;">
-      <circle cx="26" cy="26" r="20" fill="none" stroke="#ffffff" stroke-width="1.8"/>
-      <circle cx="26" cy="26" r="12" fill="none" stroke="#aaaaaa" stroke-width="1.4"/>
-      <circle cx="26" cy="26" r="4" fill="#20b2aa"/>
-      <line x1="26" y1="2"  x2="26" y2="14" stroke="#ffffff" stroke-width="1.5"/>
-      <line x1="26" y1="38" x2="26" y2="50" stroke="#ffffff" stroke-width="1.5"/>
-      <line x1="2"  y1="26" x2="14" y2="26" stroke="#ffffff" stroke-width="1.5"/>
-      <line x1="38" y1="26" x2="50" y2="26" stroke="#ffffff" stroke-width="1.5"/>
-      <text x="58" y="38" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="300" letter-spacing="9" fill="white">VIAN<tspan fill="#20b2aa">C</tspan>ORE</text>
-    </svg>
-  </a>
-  <ul class="nav-links">
-    <li class="hide-mobile"><a href="index.html">Home</a></li>
-    <li class="hide-mobile"><a href="knowledge-base.html">Knowledge Base</a></li>
-    <li><a href="learning-hub.html" class="active">Learning Hub</a></li>
-    <li class="hide-mobile"><a href="index.html#contact">Contact</a></li>
-  <li class="theme-toggle-item" style="display:flex;align-items:center;"><button class="theme-toggle" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Switch to light mode" title="Switch to light mode">
+<nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <a href="index.html">
+          <img src="assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img">
+        </a>
+      </div>
+      <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
+    </div>
+    <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="knowledge/">Knowledge Base</a></li>
+      <li><a href="learning-hub.html" class="active">Learning Hub</a></li>
+      <li><a href="about/">About</a></li>
+      <li><a href="contact/">Contact</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Switch to light mode" title="Switch to light mode">
       <span class="tt-track">
         <span class="tt-thumb">
           <svg class="tt-icon tt-icon-sun" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
@@ -439,8 +478,18 @@ html[data-theme="light"] .theme-toggle:hover .tt-track { border-color: rgba(12,1
           </svg>
         </span>
       </span>
-    </button></li></ul>
-</nav>
+    </button>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  </nav>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="knowledge/">Knowledge Base</a>
+    <a href="learning-hub.html" class="active">Learning Hub</a>
+    <a href="about/">About</a>
+    <a href="contact/">Contact</a>
+  </div>
 
 <!-- ── Page Header ── -->
 <div class="page-header">
@@ -592,6 +641,26 @@ html[data-theme="light"] .theme-toggle:hover .tt-track { border-color: rgba(12,1
   // ── Make non-anchor cards with data-href clickable ──
   document.querySelectorAll('.hub-card[data-href]').forEach(card => {
     card.addEventListener('click', () => window.location.href = card.dataset.href);
+  });
+
+  // ── Hamburger — use addEventListener for iOS PWA compatibility ──
+  document.getElementById('hamburger').addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.getElementById('mobileMenu').classList.toggle('open');
+  });
+  document.querySelectorAll('#mobileMenu a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      document.getElementById('mobileMenu').classList.remove('open');
+    });
+  });
+  document.addEventListener('click', function(e) {
+    var menu = document.getElementById('mobileMenu');
+    var hamburger = document.getElementById('hamburger');
+    if (menu.classList.contains('open') &&
+        !menu.contains(e.target) &&
+        !hamburger.contains(e.target)) {
+      menu.classList.remove('open');
+    }
   });
 </script>
 

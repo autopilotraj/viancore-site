@@ -55,29 +55,81 @@
     min-height: 100vh;
   }
 
-  /* ── Header ── */
-  header {
-    border-bottom: 1px solid var(--border);
-    padding: 16px 20px;
+  /* ── Nav — matches the sitewide nav in assets/style.css ── */
+  .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 24px 6vw;
+    border-bottom: 0.5px solid rgba(255,255,255,0.08);
+    background: #000000;
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(0,0,0,0.94);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
   }
-  .logo {
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: 0.09em;
+  .nav-brand { display: flex; flex-direction: column; gap: 5px; }
+  .nav-logo { display: flex; align-items: center; gap: 0; }
+  .nav-logo-img { height: clamp(44px, 5.2vw, 58px); width: auto; display: block; }
+  .nav-tagline {
+    font-size: clamp(7px, 0.8vw, 9.5px);
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #fff;
-    text-decoration: none;
+    color: rgba(255,255,255,0.7);
+    padding-left: 52px;
   }
-  .logo span { color: var(--accent); }
+  .nav-links {
+    display: flex;
+    gap: clamp(16px, 3vw, 36px);
+    align-items: center;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: clamp(11px, 1.1vw, 13px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-links a.active { color: #20b2aa; border-bottom: 1px solid #20b2aa; padding-bottom: 2px; }
+  .nav-right { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 28px); }
+  .nav-hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    background: none; border: none; padding: 4px; cursor: pointer;
+  }
+  .nav-hamburger span { display: block; width: 22px; height: 1px; background: rgba(255,255,255,0.7); }
+  .nav-mobile {
+    display: none; flex-direction: column; background: #0a0a0a;
+    border-bottom: 0.5px solid rgba(255,255,255,0.08); padding: 16px 6vw; gap: 0;
+  }
+  .nav-mobile a {
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,255,255,0.6); padding: 14px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06); display: block; text-decoration: none;
+  }
+  .nav-mobile a.active { color: var(--accent); }
+  .nav-mobile.open { display: flex; }
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+  }
+  @media (max-width: 620px) {
+    .nav { padding: 18px 5vw; }
+    .nav-tagline { display: none; }
+  }
+  @media (max-width: 480px) {
+    .nav-logo-img { height: 34px !important; width: auto !important; }
+  }
+
+  /* ── Quiz sub-bar (back link + badge) ── */
+  .quiz-subbar {
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   .header-right {
     display: flex;
     align-items: center;
@@ -88,7 +140,7 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.5);
+    color: var(--text-muted);
     text-decoration: none;
     transition: color 0.15s;
   }
@@ -662,9 +714,22 @@ html[data-theme="light"] .theme-toggle:hover .tt-track { border-color: rgba(12,1
 </head>
 <body>
 
-<header>
-  <a class="logo" href="index.html">Vian<span>C</span>ore</a>
-  <div class="header-right">
+<nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <a href="index.html">
+          <img src="assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img">
+        </a>
+      </div>
+      <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
+    </div>
+    <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="knowledge/">Knowledge Base</a></li>
+      <li><a href="learning-hub.html" class="active">Learning Hub</a></li>
+      <li><a href="about/">About</a></li>
+      <li><a href="contact/">Contact</a></li>
+    </ul>
     <button class="theme-toggle" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Switch to light mode" title="Switch to light mode">
       <span class="tt-track">
         <span class="tt-thumb">
@@ -678,7 +743,6 @@ html[data-theme="light"] .theme-toggle:hover .tt-track { border-color: rgba(12,1
               <line x1="4.4" y1="4.4" x2="6.3" y2="6.3"/>
               <line x1="17.7" y1="17.7" x2="19.6" y2="19.6"/>
               <line x1="4.4" y1="19.6" x2="6.3" y2="17.7"/>
-              <line x1="17.7" y1="6.3" x2="19.6" y2="4.4"/>
             </g>
           </svg>
           <svg class="tt-icon tt-icon-moon" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
@@ -687,10 +751,21 @@ html[data-theme="light"] .theme-toggle:hover .tt-track { border-color: rgba(12,1
         </span>
       </span>
     </button>
-    <a class="back-link" href="learning-hub.html">← Learning Hub</a>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  </nav>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="knowledge/">Knowledge Base</a>
+    <a href="learning-hub.html" class="active">Learning Hub</a>
+    <a href="about/">About</a>
+    <a href="contact/">Contact</a>
+  </div>
+  <div class="quiz-subbar">
+    <a class="back-link" href="learning-hub.html">&larr; Learning Hub</a>
     <span class="badge">Quiz</span>
   </div>
-</header>
 
 <main>
 
@@ -1593,6 +1668,26 @@ function showResults() {
 }
 </script>
 
+  <script>
+    document.getElementById('hamburger').addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.getElementById('mobileMenu').classList.toggle('open');
+    });
+    document.querySelectorAll('#mobileMenu a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        document.getElementById('mobileMenu').classList.remove('open');
+      });
+    });
+    document.addEventListener('click', function(e) {
+      var menu = document.getElementById('mobileMenu');
+      var hamburger = document.getElementById('hamburger');
+      if (menu.classList.contains('open') &&
+          !menu.contains(e.target) &&
+          !hamburger.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+  </script>
   <script src="assets/theme-toggle.js"></script>
 </body>
 </html>
