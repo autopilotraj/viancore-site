@@ -332,3 +332,25 @@ html[data-theme="light"] .theme-toggle:hover .tt-track { border-color: rgba(12,1
 /* Knowledge base articles: keep sidebar + content together and centered on wide monitors.
    Pages that define their own .layout max-width (e.g. ai-prompts) override this inline. */
 .layout { max-width: 1120px; margin-left: auto; margin-right: auto; }
+
+/* Wide monitors: article font sizes are capped (clamp max ~14px), which reads small on large screens.
+   Scale the whole article block up in steps so text, figures and spacing grow together.
+   Phones and laptops (under 1600px) are unchanged. */
+@media (min-width: 1600px) { .layout { zoom: 1.12; } }
+@media (min-width: 1900px) { .layout { zoom: 1.25; } }
+@media (min-width: 2400px) { .layout { zoom: 1.4; } }
+
+/* Keep the sticky article sidebar below the sticky nav (~124px tall) while scrolling.
+   Values are divided by the zoom step, because zoom also scales these lengths. */
+@media (min-width: 769px) {
+  .layout > .sidebar:has(> .sidebar-meta) { top: 124px; max-height: calc(100vh - 124px); }
+}
+@media (min-width: 1600px) {
+  .layout > .sidebar:has(> .sidebar-meta) { top: calc(124px / 1.12); max-height: calc((100vh - 124px) / 1.12); }
+}
+@media (min-width: 1900px) {
+  .layout > .sidebar:has(> .sidebar-meta) { top: calc(124px / 1.25); max-height: calc((100vh - 124px) / 1.25); }
+}
+@media (min-width: 2400px) {
+  .layout > .sidebar:has(> .sidebar-meta) { top: calc(124px / 1.4); max-height: calc((100vh - 124px) / 1.4); }
+}
