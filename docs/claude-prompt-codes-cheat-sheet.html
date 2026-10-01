@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('viancore-theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Short codes to type at the start of a Claude prompt, grouped by purpose, with what each one does and when to use it. VianCore Knowledge Base."/>
+  <title>Claude Prompt Codes Cheat Sheet · VianCore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/style.css"/>
+  <style>
+    .breadcrumb {
+      padding: 14px 6vw;
+      border-bottom: 0.5px solid rgba(var(--text-rgb),0.06);
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .breadcrumb span { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--text-rgb),0.85); font-weight: 500; }
+    .breadcrumb a { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--text-rgb),0.58); transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb .sep { color: rgba(var(--text-rgb),0.25); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: clamp(160px, 18vw, 220px) 1fr;
+      min-height: 70vh;
+    }
+
+    .sidebar {
+      border-right: 0.5px solid rgba(var(--text-rgb),0.06);
+      padding: clamp(24px, 3vw, 36px) clamp(16px, 2vw, 28px);
+      display: flex; flex-direction: column; gap: 32px;
+      position: sticky; top: 77px; align-self: start;
+      max-height: calc(100vh - 77px); overflow-y: auto;
+    }
+
+    .sidebar-section-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(var(--text-rgb),0.42); margin-bottom: 14px; font-weight: 500; }
+    .sidebar-link { font-size: clamp(11px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.62); padding: 7px 0; border-bottom: 0.5px solid rgba(var(--text-rgb),0.06); cursor: pointer; display: block; transition: color 0.2s; font-weight: 400; }
+    .sidebar-link:hover, .sidebar-link.active { color: var(--accent); }
+
+    .sidebar-meta { display: flex; flex-direction: column; gap: 12px; }
+    .meta-row { display: flex; flex-direction: column; gap: 2px; }
+    .meta-label { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(var(--text-rgb),0.42); font-weight: 500; }
+    .meta-value { font-size: clamp(11px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.72); font-weight: 400; }
+    .sidebar-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .content {
+      padding: clamp(36px, 5vw, 56px) clamp(32px, 6vw, 72px) clamp(48px, 6vw, 72px);
+      max-width: 860px;
+    }
+
+    .doc-category { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .doc-title { font-size: clamp(20px, 2.8vw, 28px); font-weight: 300; letter-spacing: 0.03em; color: var(--text-page); line-height: 1.3; margin-bottom: 12px; }
+    .doc-subtitle { font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.38); line-height: 1.8; margin-bottom: 32px; font-weight: 300; }
+    .doc-divider { height: 0.5px; background: rgba(var(--text-rgb),0.07); margin-bottom: 36px; }
+    .doc-body { display: flex; flex-direction: column; gap: 32px; }
+
+    .doc-section { display: flex; flex-direction: column; gap: 14px; }
+    .doc-section-title { font-size: clamp(8px, 1vw, 10px); letter-spacing: 0.2em; text-transform: uppercase; color: rgba(var(--text-rgb),0.4); margin-bottom: 4px; }
+
+    .doc-para { font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.52); line-height: 1.9; font-weight: 300; }
+
+    .doc-subhead { font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.78); font-weight: 500; letter-spacing: 0.01em; margin-top: 8px; }
+
+    .doc-refs { font-size: clamp(10px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.4); line-height: 1.8; }
+    .doc-refs a { color: var(--accent); transition: color 0.2s; }
+    .doc-refs a:hover { color: #5fd4cc; text-decoration: underline; }
+
+    .match-strong { color: #3ddc97; border: 0.5px solid rgba(61,220,151,0.4); background: rgba(61,220,151,0.08); }
+    .match-closest { color: #f0c674; border: 0.5px solid rgba(240,198,116,0.4); background: rgba(240,198,116,0.08); }
+    .match-concept { color: #e08283; border: 0.5px solid rgba(224,130,131,0.4); background: rgba(224,130,131,0.08); }
+
+    .doc-subtitle code, .doc-para code, .doc-list code, .doc-refs code, td code, th code, .doc-callout code, .doc-subhead code {
+      font-family: 'Courier New', Courier, monospace;
+      background: rgba(var(--text-rgb),0.06);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.92em;
+      color: rgba(var(--text-rgb),0.75);
+    }
+
+    .doc-callout {
+      border-left: 2px solid var(--accent);
+      padding: 16px 20px;
+      background: rgba(var(--accent-rgb),0.04);
+    }
+    .doc-callout p { font-size: clamp(11px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.45); line-height: 1.85; font-weight: 300; }
+
+    .doc-list { display: flex; flex-direction: column; gap: 10px; padding-left: 0; }
+    .doc-list li {
+      font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.48);
+      line-height: 1.8; padding-left: 20px; position: relative; font-weight: 300;
+    }
+    .doc-list li::before { content: "—"; position: absolute; left: 0; color: var(--accent); font-size: 11px; top: 2px; }
+    ol.doc-list { counter-reset: doclist; list-style: none; }
+    ol.doc-list li { counter-increment: doclist; }
+    ol.doc-list li::before { content: counter(doclist) "."; font-size: 11px; }
+
+    .doc-table { width: 100%; border-collapse: collapse; margin: 4px 0; }
+    .doc-table th, .doc-table td {
+      text-align: left; padding: 10px 14px; font-size: clamp(11px, 1.2vw, 13px);
+      font-weight: 300; color: rgba(var(--text-rgb),0.52); border-bottom: 0.5px solid rgba(var(--text-rgb),0.08);
+      vertical-align: top; line-height: 1.6;
+    }
+    .doc-table th {
+      font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; border-bottom: 1px solid rgba(var(--accent-rgb),0.3);
+    }
+    .doc-table-wrap { overflow-x: auto; }
+    .doc-table td.code-cell { font-family: 'Courier New', Courier, monospace; color: var(--accent); font-weight: 500; white-space: nowrap; letter-spacing: 0.02em; }
+
+    .doc-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 56px; padding-top: 24px;
+      border-top: 0.5px solid rgba(var(--text-rgb),0.07);
+      flex-wrap: wrap; gap: 12px;
+    }
+    .doc-nav-btn {
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 8px 14px; border: 0.5px solid rgba(var(--text-rgb),0.12);
+      color: rgba(var(--text-rgb),0.35); cursor: pointer; background: transparent;
+      display: flex; flex-direction: column; gap: 3px; font-family: var(--font);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .doc-nav-btn:hover { border-color: rgba(var(--text-rgb),0.3); color: rgba(var(--text-rgb),0.7); }
+    .doc-nav-btn .nav-dir { font-size: 8px; color: rgba(var(--text-rgb),0.6); }
+    .doc-nav-btn .nav-title { font-size: 10px; color: rgba(var(--text-rgb),0.42); }
+    .back-btn {
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(var(--text-rgb),0.6); cursor: pointer; background: transparent;
+      border: none; font-family: var(--font); transition: color 0.2s;
+    }
+    .back-btn:hover { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; max-height: none; border-right: none; border-bottom: 0.5px solid rgba(var(--text-rgb),0.06); flex-direction: row; flex-wrap: wrap; gap: 16px; padding: 16px 6vw; }
+      .content { padding: 32px 6vw 48px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <a href="../">
+          <img src="../assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-dark">
+        <img src="../assets/images/logo-nav-color.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-light">
+        </a>
+      </div>
+      <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
+    </div>
+    <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="../knowledge/" class="active">Knowledge Base</a></li>
+      <li><a href="../learning-hub.html">Learning Hub</a></li>
+    <li><a href="../about/">About</a></li>
+      <li><a href="../contact/">Contact</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Switch to light mode" title="Switch to light mode">
+      <span class="tt-track">
+        <span class="tt-thumb">
+          <svg class="tt-icon tt-icon-sun" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.3" fill="currentColor"/>
+            <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <line x1="12" y1="1.6" x2="12" y2="4.4"/>
+              <line x1="12" y1="19.6" x2="12" y2="22.4"/>
+              <line x1="1.6" y1="12" x2="4.4" y2="12"/>
+              <line x1="19.6" y1="12" x2="22.4" y2="12"/>
+              <line x1="4.4" y1="4.4" x2="6.3" y2="6.3"/>
+              <line x1="17.7" y1="17.7" x2="19.6" y2="19.6"/>
+              <line x1="4.4" y1="19.6" x2="6.3" y2="17.7"/>
+              <line x1="17.7" y1="6.3" x2="19.6" y2="4.4"/>
+            </g>
+          </svg>
+          <svg class="tt-icon tt-icon-moon" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
+            <path fill="currentColor" d="M20.4 14.9A8.4 8.4 0 1 1 9.1 3.6a6.7 6.7 0 0 0 11.3 11.3z"/>
+          </svg>
+        </span>
+      </span>
+    </button>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  </nav>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="../knowledge/" class="active">Knowledge Base</a>
+    <a href="../learning-hub.html">Learning Hub</a>
+    <a href="../about/">About</a>
+    <a href="../contact/">Contact</a>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="../knowledge/">Knowledge Base</a>
+    <span class="sep">&rsaquo;</span>
+    <a href="../knowledge/#documentation">Reference</a>
+    <span class="sep">&rsaquo;</span>
+    <span>Claude Prompt Codes Cheat Sheet</span>
+  </div>
+
+  <div class="layout">
+
+    <div class="sidebar">
+      <div>
+        <div class="sidebar-section-label">In this document</div>
+        <a class="sidebar-link active" href="#top-10">Top 10 Codes to Learn First</a>
+        <a class="sidebar-link" href="#thinking">Thinking &amp; Reasoning</a>
+        <a class="sidebar-link" href="#learning">Learning &amp; Explaining</a>
+        <a class="sidebar-link" href="#output">Output &amp; Format</a>
+        <a class="sidebar-link" href="#writing">Writing &amp; Tone</a>
+        <a class="sidebar-link" href="#critique">Critique &amp; Decisions</a>
+        <a class="sidebar-link" href="#combos">Power Combos</a>
+      </div>
+
+      <div class="sidebar-meta">
+        <div class="sidebar-section-label">Document info</div>
+        <div class="meta-row"><span class="meta-label">Category</span><span class="meta-value">Reference</span></div>
+        <div class="meta-row"><span class="meta-label">Published</span><span class="meta-value">Oct 2026</span></div>
+        <div class="meta-row"><span class="meta-label">Read time</span><span class="meta-value">Reference: browse by section</span></div>
+        <div class="meta-row"><span class="meta-label">Version</span><span class="meta-value">1.0</span></div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-label">Tags</div>
+        <div class="sidebar-tags">
+          <span class="tag">AI</span>
+          <span class="tag">Claude</span>
+          <span class="tag">Prompting</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="doc-category">Reference &middot; AI Prompting</div>
+      <h1 class="doc-title">Claude Prompt Codes Cheat Sheet</h1>
+      <p class="doc-subtitle">Short codes you type at the start of a prompt to change how Claude responds, grouped by purpose. Example: <code>BLUF NOFLUFF What is the difference between a Roth and a traditional IRA?</code></p>
+      <div class="doc-divider"></div>
+
+      <div class="doc-body">
+
+        <div class="doc-section" id="top-10">
+          <div class="doc-section-title">Top 10 Codes to Learn First</div>
+<div class="doc-table-wrap"><table class="doc-table"><tr><th>Code</th><th>What it does</th><th>Use it for</th></tr><tr><td class="code-cell">TLDR</td><td>Puts a one or two line summary at the top</td><td>Long answers you want to skim</td></tr><tr><td class="code-cell">ELI5</td><td>Explains simply, with an analogy and no jargon</td><td>Unfamiliar topics</td></tr><tr><td class="code-cell">L99</td><td>Expert-level depth that commits to one recommendation</td><td>Decisions where you want a clear call</td></tr><tr><td class="code-cell">OODA</td><td>Structures the answer as Observe, Orient, Decide, Act</td><td>Messy or fast-moving situations</td></tr><tr><td class="code-cell">BLUF</td><td>Bottom line up front, then the supporting detail</td><td>Status updates and executive answers</td></tr><tr><td class="code-cell">STEPBYSTEP</td><td>Reasons through the problem step by step before answering</td><td>Logic, math and troubleshooting</td></tr><tr><td class="code-cell">REDTEAM</td><td>Attacks your idea or plan to expose weak points</td><td>Plans before you commit</td></tr><tr><td class="code-cell">PERSONA</td><td>Answers as a named expert (PERSONA: tax attorney)</td><td>Specialist viewpoints</td></tr><tr><td class="code-cell">BLINDSPOT</td><td>Points out what you haven't considered or asked</td><td>Big decisions</td></tr><tr><td class="code-cell">GHOST</td><td>Rewrites in natural, human-sounding prose</td><td>Drafts that sound machine-written</td></tr></table></div>
+        </div>
+
+        <div class="doc-section" id="thinking">
+          <div class="doc-section-title">Thinking &amp; Reasoning</div>
+<div class="doc-table-wrap"><table class="doc-table"><tr><th>Code</th><th>What it does</th><th>Use it for</th></tr><tr><td class="code-cell">DEEPTHINK</td><td>Slows down and reasons thoroughly before answering</td><td>Hard or high-stakes questions</td></tr><tr><td class="code-cell">FIRSTPRINCIPLES</td><td>Breaks the problem down to fundamentals and rebuilds</td><td>Challenging conventional wisdom</td></tr><tr><td class="code-cell">SECONDORDER</td><td>Maps the knock-on effects of a decision</td><td>Strategy, policy, career moves</td></tr><tr><td class="code-cell">INVERT</td><td>Asks how this would fail and works backwards</td><td>Problem-solving when stuck</td></tr><tr><td class="code-cell">PARETO</td><td>Finds the 20% of actions driving 80% of results</td><td>Prioritizing</td></tr><tr><td class="code-cell">UNPACK</td><td>Breaks a complex idea into its parts</td><td>Dense topics</td></tr><tr><td class="code-cell">LAYERED</td><td>Gives a basic, intermediate and expert answer</td><td>Mixed audiences</td></tr><tr><td class="code-cell">MECE</td><td>Splits a topic into non-overlapping, complete buckets</td><td>Structuring problems and decks</td></tr><tr><td class="code-cell">ASSUME</td><td>Lists the assumptions behind the answer first</td><td>Estimates and business cases</td></tr><tr><td class="code-cell">STEELMAN</td><td>Gives the strongest form of the opposing view</td><td>Before arguing a position</td></tr></table></div>
+        </div>
+
+        <div class="doc-section" id="learning">
+          <div class="doc-section-title">Learning &amp; Explaining</div>
+<div class="doc-table-wrap"><table class="doc-table"><tr><th>Code</th><th>What it does</th><th>Use it for</th></tr><tr><td class="code-cell">ELI10</td><td>Plain language with a bit more detail than ELI5</td><td>Non-technical audiences</td></tr><tr><td class="code-cell">SCAFFOLD</td><td>Teaches in layers (basics, concepts, advanced) and checks understanding at each step</td><td>Learning a subject properly</td></tr><tr><td class="code-cell">TEACHME</td><td>Turns the answer into a structured lesson</td><td>Self-study</td></tr><tr><td class="code-cell">SOCRATIC</td><td>Teaches by asking you questions instead of telling</td><td>Really owning an idea</td></tr><tr><td class="code-cell">ANALOGY</td><td>Explains through a comparison to something familiar</td><td>Bridging to a new field</td></tr><tr><td class="code-cell">EXAMPLE</td><td>Adds a concrete, realistic worked example</td><td>Abstract explanations</td></tr><tr><td class="code-cell">CRASHCOURSE</td><td>The essentials in about five minutes of reading</td><td>Getting up to speed fast</td></tr><tr><td class="code-cell">GAPFINDER</td><td>Probes what you know and finds the gaps</td><td>Exam or interview prep</td></tr><tr><td class="code-cell">DRILL</td><td>Generates practice exercises</td><td>Retention</td></tr><tr><td class="code-cell">QUIZ</td><td>Ends with 3 to 5 questions to test you</td><td>Checking understanding</td></tr></table></div>
+        </div>
+
+        <div class="doc-section" id="output">
+          <div class="doc-section-title">Output &amp; Format</div>
+<div class="doc-table-wrap"><table class="doc-table"><tr><th>Code</th><th>What it does</th><th>Use it for</th></tr><tr><td class="code-cell">BRIEF</td><td>Under 100 words, no preamble</td><td>Quick answers, mobile</td></tr><tr><td class="code-cell">NOFLUFF</td><td>No intro, recap, disclaimers or filler</td><td>Answers that feel padded</td></tr><tr><td class="code-cell">TABLE</td><td>Puts the answer in a comparison table</td><td>Options, products, vendors</td></tr><tr><td class="code-cell">CHECKLIST</td><td>Ordered [ ] action items</td><td>Projects, audits, launches</td></tr><tr><td class="code-cell">STEPS</td><td>Numbered how-to with exact actions</td><td>Setup and configuration</td></tr><tr><td class="code-cell">COMPARE</td><td>Side-by-side comparison that names a winner</td><td>Buying and tool decisions</td></tr><tr><td class="code-cell">DIGEST</td><td>Summarizes the essentials of long content</td><td>Reports, articles, transcripts</td></tr><tr><td class="code-cell">EXTRACT</td><td>Pulls only specific facts from a document</td><td>Contracts, data, research</td></tr><tr><td class="code-cell">SOURCES</td><td>Cites a link for every factual claim</td><td>Anything you'll repeat to others</td></tr><tr><td class="code-cell">RAW</td><td>Plain text, no markdown formatting</td><td>Pasting into other apps</td></tr></table></div>
+        </div>
+
+        <div class="doc-section" id="writing">
+          <div class="doc-section-title">Writing &amp; Tone</div>
+<div class="doc-table-wrap"><table class="doc-table"><tr><th>Code</th><th>What it does</th><th>Use it for</th></tr><tr><td class="code-cell">POLISH</td><td>Lifts a rough draft to professional quality</td><td>Emails, reports, posts</td></tr><tr><td class="code-cell">TRIM</td><td>Cuts length while keeping the meaning</td><td>Wordy drafts</td></tr><tr><td class="code-cell">PUNCH</td><td>Makes sentences more direct and forceful</td><td>Weak or hedging copy</td></tr><tr><td class="code-cell">MIRROR</td><td>Matches your writing style from a sample you paste</td><td>Writing in your own voice</td></tr><tr><td class="code-cell">DRAFT</td><td>Returns only ready-to-send text</td><td>Emails and messages</td></tr><tr><td class="code-cell">HOOK</td><td>Writes a strong opening line</td><td>Posts, articles, talks</td></tr><tr><td class="code-cell">REPHRASE</td><td>Says the same thing in completely new words</td><td>Repetitive text</td></tr><tr><td class="code-cell">FORMAL / CASUAL</td><td>Shifts the register up or down</td><td>Matching the audience</td></tr></table></div>
+        </div>
+
+        <div class="doc-section" id="critique">
+          <div class="doc-section-title">Critique &amp; Decisions</div>
+<div class="doc-table-wrap"><table class="doc-table"><tr><th>Code</th><th>What it does</th><th>Use it for</th></tr><tr><td class="code-cell">PREMORTEM</td><td>Assumes the plan failed in a year and explains why</td><td>Projects and launches</td></tr><tr><td class="code-cell">DEVIL</td><td>Argues against your current leaning</td><td>Checking confirmation bias</td></tr><tr><td class="code-cell">SWOT</td><td>Strengths, weaknesses, opportunities, threats</td><td>Business and career options</td></tr><tr><td class="code-cell">DECIDE</td><td>Picks one option and defends it, with a runner-up</td><td>Breaking a deadlock</td></tr><tr><td class="code-cell">SCORE</td><td>Rates your work 1 to 10 against clear criteria, with fixes</td><td>Resumes, proposals, pitches</td></tr><tr><td class="code-cell">AUDIT</td><td>Reviews your work and flags issues</td><td>Documents, code, processes</td></tr><tr><td class="code-cell">FACTCHECK</td><td>Checks claims and flags anything doubtful</td><td>Before publishing</td></tr><tr><td class="code-cell">BOTTLENECK</td><td>Finds the one constraint holding things back</td><td>Stalled projects</td></tr><tr><td class="code-cell">WARGAME</td><td>Simulates how a competitor or counterpart would respond</td><td>Negotiations and strategy</td></tr><tr><td class="code-cell">CONFIDENCE</td><td>Ends with a confidence level and what would change it</td><td>Uncertain topics</td></tr></table></div>
+        </div>
+
+        <div class="doc-section" id="combos">
+          <div class="doc-section-title">Power Combos</div>
+<div class="doc-table-wrap"><table class="doc-table"><tr><th>Combo</th><th>What you get</th></tr><tr><td class="code-cell">OODA L99</td><td>A committed, expert-level decision on a messy situation</td></tr><tr><td class="code-cell">ELI5 SCAFFOLD QUIZ</td><td>Learn a new topic in layers, then test yourself</td></tr><tr><td class="code-cell">BLUF NOFLUFF</td><td>The shortest useful answer</td></tr><tr><td class="code-cell">REDTEAM PREMORTEM</td><td>A full stress test before you commit</td></tr><tr><td class="code-cell">PERSONA TABLE</td><td>An expert's side-by-side comparison</td></tr><tr><td class="code-cell">POLISH TRIM</td><td>A tighter, cleaner version of your draft</td></tr><tr><td class="code-cell">DEEPTHINK SOURCES</td><td>A careful answer you can verify</td></tr></table></div>
+<div class="doc-callout"><p>Stick to two or three codes per prompt. Avoid pairs that pull in opposite directions, such as BRIEF with DEEPTHINK or ELI5 with L99.</p></div>
+        </div>
+
+        <div class="doc-nav">
+          <button class="doc-nav-btn" onclick="location.href='../knowledge/'">
+            <span class="nav-dir">&lsaquo; Back to library</span>
+            <span class="nav-title">Knowledge Base</span>
+          </button>
+          <button class="back-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">&uarr; Top of page</button>
+          <button class="doc-nav-btn" style="text-align:right" onclick="location.href='multi-cloud-terminology-cheat-sheet.html'">
+            <span class="nav-dir">Next &rsaquo;</span>
+            <span class="nav-title">Multi-Cloud Terminology Cheat Sheet</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span class="footer-copy">&copy; 2026 VianCore. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#">RSS</a>
+      <a href="../contact/">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    const sections = document.querySelectorAll('.doc-body [id]');
+    const links = document.querySelectorAll('.sidebar-link');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      links.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+    });
+  </script>
+
+
+  <script src="../assets/theme-toggle.js"></script>
+</body>
+</html>
