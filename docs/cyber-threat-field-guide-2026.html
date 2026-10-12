@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('viancore-theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="A PeopleSoft admin's view of the 2026 threat landscape: six threats behind real breaches, the PeopleTools zero-day, protecting unsupported stacks, and defenses that hold up in an audit. VianCore Knowledge Base."/>
+  <title>2026 Threat Field Guide · VianCore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/style.css"/>
+  <style>
+    .breadcrumb {
+      padding: 14px 6vw;
+      border-bottom: 0.5px solid rgba(var(--text-rgb),0.06);
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .breadcrumb span { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--text-rgb),0.85); font-weight: 500; }
+    .breadcrumb a { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--text-rgb),0.58); transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb .sep { color: rgba(var(--text-rgb),0.25); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: clamp(160px, 18vw, 220px) 1fr;
+      min-height: 70vh;
+    }
+
+    .sidebar {
+      border-right: 0.5px solid rgba(var(--text-rgb),0.06);
+      padding: clamp(24px, 3vw, 36px) clamp(16px, 2vw, 28px);
+      display: flex; flex-direction: column; gap: 32px;
+      position: sticky; top: 77px; align-self: start;
+      max-height: calc(100vh - 77px); overflow-y: auto;
+    }
+
+    .sidebar-section-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(var(--text-rgb),0.42); margin-bottom: 14px; font-weight: 500; }
+    .sidebar-link { font-size: clamp(11px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.62); padding: 7px 0; border-bottom: 0.5px solid rgba(var(--text-rgb),0.06); cursor: pointer; display: block; transition: color 0.2s; font-weight: 400; }
+    .sidebar-link:hover, .sidebar-link.active { color: var(--accent); }
+
+    .sidebar-meta { display: flex; flex-direction: column; gap: 12px; }
+    .meta-row { display: flex; flex-direction: column; gap: 2px; }
+    .meta-label { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(var(--text-rgb),0.42); font-weight: 500; }
+    .meta-value { font-size: clamp(11px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.72); font-weight: 400; }
+    .sidebar-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .content {
+      padding: clamp(36px, 5vw, 56px) clamp(32px, 6vw, 72px) clamp(48px, 6vw, 72px);
+      max-width: 860px;
+    }
+
+    .doc-category { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .doc-title { font-size: clamp(20px, 2.8vw, 28px); font-weight: 300; letter-spacing: 0.03em; color: var(--text-page); line-height: 1.3; margin-bottom: 12px; }
+    .doc-subtitle { font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.38); line-height: 1.8; margin-bottom: 32px; font-weight: 300; }
+    .doc-divider { height: 0.5px; background: rgba(var(--text-rgb),0.07); margin-bottom: 36px; }
+    .doc-body { display: flex; flex-direction: column; gap: 32px; }
+
+    .doc-section { display: flex; flex-direction: column; gap: 14px; }
+    .doc-section-title { font-size: clamp(8px, 1vw, 10px); letter-spacing: 0.2em; text-transform: uppercase; color: rgba(var(--text-rgb),0.4); margin-bottom: 4px; }
+
+    .doc-para { font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.52); line-height: 1.9; font-weight: 300; }
+
+    .doc-subhead { font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.78); font-weight: 500; letter-spacing: 0.01em; margin-top: 8px; }
+
+    .doc-refs { font-size: clamp(10px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.4); line-height: 1.8; }
+    .doc-refs a { color: var(--accent); transition: color 0.2s; }
+    .doc-refs a:hover { color: #5fd4cc; text-decoration: underline; }
+
+    .match-strong { color: #3ddc97; border: 0.5px solid rgba(61,220,151,0.4); background: rgba(61,220,151,0.08); }
+    .match-closest { color: #f0c674; border: 0.5px solid rgba(240,198,116,0.4); background: rgba(240,198,116,0.08); }
+    .match-concept { color: #e08283; border: 0.5px solid rgba(224,130,131,0.4); background: rgba(224,130,131,0.08); }
+
+    .doc-subtitle code, .doc-para code, .doc-list code, .doc-refs code, td code, th code, .doc-callout code, .doc-subhead code {
+      font-family: 'Courier New', Courier, monospace;
+      background: rgba(var(--text-rgb),0.06);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.92em;
+      color: rgba(var(--text-rgb),0.75);
+    }
+
+    .doc-callout {
+      border-left: 2px solid var(--accent);
+      padding: 16px 20px;
+      background: rgba(var(--accent-rgb),0.04);
+    }
+    .doc-callout p { font-size: clamp(11px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.45); line-height: 1.85; font-weight: 300; }
+
+    .doc-list { display: flex; flex-direction: column; gap: 10px; padding-left: 0; }
+    .doc-list li {
+      font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.48);
+      line-height: 1.8; padding-left: 20px; position: relative; font-weight: 300;
+    }
+    .doc-list li::before { content: "—"; position: absolute; left: 0; color: var(--accent); font-size: 11px; top: 2px; }
+    ol.doc-list { counter-reset: doclist; list-style: none; }
+    ol.doc-list li { counter-increment: doclist; }
+    ol.doc-list li::before { content: counter(doclist) "."; font-size: 11px; }
+
+    .doc-table { width: 100%; border-collapse: collapse; margin: 4px 0; }
+    .doc-table th, .doc-table td {
+      text-align: left; padding: 10px 14px; font-size: clamp(11px, 1.2vw, 13px);
+      font-weight: 300; color: rgba(var(--text-rgb),0.52); border-bottom: 0.5px solid rgba(var(--text-rgb),0.08);
+      vertical-align: top; line-height: 1.6;
+    }
+    .doc-table th {
+      font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; border-bottom: 1px solid rgba(var(--accent-rgb),0.3);
+    }
+    .doc-table-wrap { overflow-x: auto; }
+    .doc-table td.code-cell { font-family: 'Courier New', Courier, monospace; color: var(--accent); font-weight: 500; white-space: nowrap; letter-spacing: 0.02em; }
+
+    .doc-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 56px; padding-top: 24px;
+      border-top: 0.5px solid rgba(var(--text-rgb),0.07);
+      flex-wrap: wrap; gap: 12px;
+    }
+    .doc-nav-btn {
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 8px 14px; border: 0.5px solid rgba(var(--text-rgb),0.12);
+      color: rgba(var(--text-rgb),0.35); cursor: pointer; background: transparent;
+      display: flex; flex-direction: column; gap: 3px; font-family: var(--font);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .doc-nav-btn:hover { border-color: rgba(var(--text-rgb),0.3); color: rgba(var(--text-rgb),0.7); }
+    .doc-nav-btn .nav-dir { font-size: 8px; color: rgba(var(--text-rgb),0.6); }
+    .doc-nav-btn .nav-title { font-size: 10px; color: rgba(var(--text-rgb),0.42); }
+    .back-btn {
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(var(--text-rgb),0.6); cursor: pointer; background: transparent;
+      border: none; font-family: var(--font); transition: color 0.2s;
+    }
+    .back-btn:hover { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; max-height: none; border-right: none; border-bottom: 0.5px solid rgba(var(--text-rgb),0.06); flex-direction: row; flex-wrap: wrap; gap: 16px; padding: 16px 6vw; }
+      .content { padding: 32px 6vw 48px; }
+    }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: rgba(var(--text-rgb),0.08); border: 0.5px solid rgba(var(--text-rgb),0.08); }
+    .stat { background: var(--bg); padding: 18px 16px; display: flex; flex-direction: column; gap: 6px; }
+    .stat-num { font-size: clamp(22px, 2.6vw, 28px); font-weight: 300; color: var(--accent); letter-spacing: 0.01em; line-height: 1; }
+    .stat-label { font-size: clamp(10px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.55); line-height: 1.55; font-weight: 300; }
+    .stat-src { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--text-rgb),0.32); margin-top: 2px; }
+
+    .threat-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .threat-num { font-size: 10px; letter-spacing: 0.18em; color: var(--accent); font-weight: 500; }
+    .threat-title { font-size: clamp(15px, 1.7vw, 18px); color: var(--text-page); font-weight: 400; letter-spacing: 0.01em; }
+    .sev { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; font-weight: 500; }
+    .sev-crit { color: #e08283; border: 0.5px solid rgba(224,130,131,0.45); background: rgba(224,130,131,0.08); }
+    .sev-high { color: #d9a441; border: 0.5px solid rgba(217,164,65,0.45); background: rgba(217,164,65,0.08); }
+    html[data-theme="light"] .sev-crit { color: #b23a3c; border-color: rgba(178,58,60,0.4); background: rgba(178,58,60,0.06); }
+    html[data-theme="light"] .sev-high { color: #8a5a00; border-color: rgba(138,90,0,0.4); background: rgba(138,90,0,0.06); }
+
+    .case { border: 0.5px solid rgba(var(--text-rgb),0.1); padding: 16px 20px; display: flex; flex-direction: column; gap: 6px; }
+    .case-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(var(--text-rgb),0.42); font-weight: 500; }
+    .case p { font-size: clamp(11px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.55); line-height: 1.85; font-weight: 300; }
+
+    .doc-callout.warn { border-left-color: #d9a441; background: rgba(217,164,65,0.05); }
+    html[data-theme="light"] .doc-callout.warn { border-left-color: #8a5a00; }
+    .doc-callout p strong, .doc-para strong, .doc-list li strong { color: rgba(var(--text-rgb),0.8); font-weight: 500; }
+    .doc-para a, .doc-list a, .case a, .doc-callout a { color: var(--accent); }
+    .doc-para a:hover, .doc-list a:hover, .case a:hover { text-decoration: underline; }
+
+    .role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .role-card { border: 0.5px solid rgba(var(--text-rgb),0.1); border-top: 2px solid var(--accent); padding: 18px 18px 8px; }
+    .role-card .doc-subhead { margin-top: 0; margin-bottom: 10px; }
+    .role-card .doc-list li { font-size: clamp(11px, 1.15vw, 13px); }
+
+    .week { display: grid; grid-template-columns: 90px 1fr; gap: 16px; padding: 14px 0; border-bottom: 0.5px solid rgba(var(--text-rgb),0.08); }
+    .week:first-of-type { border-top: 0.5px solid rgba(var(--text-rgb),0.08); }
+    .week-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-weight: 500; padding-top: 3px; }
+    .week .doc-list li { font-size: clamp(11px, 1.2vw, 13px); }
+    @media (max-width: 560px) { .week { grid-template-columns: 1fr; gap: 6px; } }
+
+    /* Article-specific: round teal bullets instead of the default dash */
+    .doc-list li::before { content: "\2022"; font-size: 16px; top: -1px; }
+    ol.doc-list li::before { content: counter(doclist) "."; font-size: 11px; top: 2px; }
+    a.stat-src { text-decoration: none; transition: color 0.2s; }
+    a.stat-src:hover { color: var(--accent); }
+    .lens { border-left: 2px solid var(--accent); background: rgba(var(--accent-rgb),0.06); padding: 14px 20px; display: flex; flex-direction: column; gap: 6px; }
+    .lens-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+    .lens p { font-size: clamp(11px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.6); line-height: 1.85; font-weight: 300; }
+    .case p + p { margin-top: 6px; }
+    .lens a, .doc-table a { color: var(--accent); }
+  </style>
+  <link rel="stylesheet" href="../assets/polish.css"/>
+  <script src="../assets/polish.js" defer></script>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <a href="../">
+          <img src="../assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-dark">
+        <img src="../assets/images/logo-nav-color.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-light">
+        </a>
+      </div>
+      <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
+    </div>
+    <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="../knowledge/" class="active">Knowledge Base</a></li>
+      <li><a href="../learning-hub.html">Learning Hub</a></li>
+    <li><a href="../about/">About</a></li>
+      <li><a href="../contact/">Contact</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Switch to light mode" title="Switch to light mode">
+      <span class="tt-track">
+        <span class="tt-thumb">
+          <svg class="tt-icon tt-icon-sun" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.3" fill="currentColor"/>
+            <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <line x1="12" y1="1.6" x2="12" y2="4.4"/>
+              <line x1="12" y1="19.6" x2="12" y2="22.4"/>
+              <line x1="1.6" y1="12" x2="4.4" y2="12"/>
+              <line x1="19.6" y1="12" x2="22.4" y2="12"/>
+              <line x1="4.4" y1="4.4" x2="6.3" y2="6.3"/>
+              <line x1="17.7" y1="17.7" x2="19.6" y2="19.6"/>
+              <line x1="4.4" y1="19.6" x2="6.3" y2="17.7"/>
+              <line x1="17.7" y1="6.3" x2="19.6" y2="4.4"/>
+            </g>
+          </svg>
+          <svg class="tt-icon tt-icon-moon" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
+            <path fill="currentColor" d="M20.4 14.9A8.4 8.4 0 1 1 9.1 3.6a6.7 6.7 0 0 0 11.3 11.3z"/>
+          </svg>
+        </span>
+      </span>
+    </button>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  </nav>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="../knowledge/" class="active">Knowledge Base</a>
+    <a href="../learning-hub.html">Learning Hub</a>
+    <a href="../about/">About</a>
+    <a href="../contact/">Contact</a>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="../knowledge/">Knowledge Base</a>
+    <span class="sep">&rsaquo;</span>
+    <a href="../knowledge/#security">Security</a>
+    <span class="sep">&rsaquo;</span>
+    <span>2026 Threat Field Guide</span>
+  </div>
+
+  <div class="layout">
+
+    <div class="sidebar">
+      <div>
+        <div class="sidebar-section-label">In this document</div>
+        <a class="sidebar-link active" href="#why">Why This Guide</a>
+        <a class="sidebar-link" href="#numbers">The Numbers</a>
+        <a class="sidebar-link" href="#edge">Edge Devices</a>
+        <a class="sidebar-link" href="#identity">Identity and MFA</a>
+        <a class="sidebar-link" href="#supply-chain">Vendors and Supply Chain</a>
+        <a class="sidebar-link" href="#ransomware">Ransomware and Wipers</a>
+        <a class="sidebar-link" href="#clickfix">ClickFix</a>
+        <a class="sidebar-link" href="#ai">AI Threats</a>
+        <a class="sidebar-link" href="#apps-db">ERP and Databases</a>
+        <a class="sidebar-link" href="#legacy">Unsupported Stacks</a>
+        <a class="sidebar-link" href="#by-role">Best Practices by Role</a>
+        <a class="sidebar-link" href="#plan">30-Day Action Plan</a>
+        <a class="sidebar-link" href="#sources">Sources</a>
+      </div>
+
+      <div class="sidebar-meta">
+        <div class="sidebar-section-label">Document info</div>
+        <div class="meta-row"><span class="meta-label">Category</span><span class="meta-value">Security</span></div>
+        <div class="meta-row"><span class="meta-label">Published</span><span class="meta-value">Oct 2026</span></div>
+        <div class="meta-row"><span class="meta-label">Read time</span><span class="meta-value">23 min</span></div>
+        <div class="meta-row"><span class="meta-label">Version</span><span class="meta-value">1.0</span></div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-label">Tags</div>
+        <div class="sidebar-tags">
+          <span class="tag">PeopleSoft</span>
+          <span class="tag">Threats</span>
+          <span class="tag">Compliance</span>
+          <span class="tag">Best Practices</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="doc-category">Security &middot; Threat Landscape</div>
+      <h1 class="doc-title">The 2026 Threat Field Guide: A PeopleSoft Admin's View of What Attackers Are Doing Now</h1>
+      <p class="doc-subtitle">Six threats behind this year's real breaches, what each one looks like inside a PeopleSoft shop, and the defenses that hold up in front of an auditor. Written from the ERP side of the house, but every lesson carries over to any application you run.</p>
+      <div class="doc-divider"></div>
+
+      <div class="doc-body">
+
+        <div class="doc-section" id="why">
+          <div class="doc-section-title">01 &middot; Why a PeopleSoft Admin Is Writing This</div>
+          <p class="doc-para">I came up through PeopleSoft. PSADMIN, Process Scheduler, role design, PUM images, and more audit walkthroughs than I can count. Security was never a separate job for me. It showed up one domain at a time: a locked-out operator ID, an Integration Broker node that stopped trusting a certificate, an auditor asking who can see Social Security numbers and how I can prove it.</p>
+          <p class="doc-para">That is exactly why I started paying close attention to the threat reports. The data attackers want most (payroll, bank accounts, student records, financials) lives in systems like ours. And this year the threat stopped being theoretical for our community. In June 2026, an extortion group exploited a brand-new PeopleTools vulnerability against more than a hundred organizations. I cover it in detail in section 09.</p>
+          <p class="doc-para">So this guide reads the 2026 threat landscape through an ERP admin's eyes. Every statistic and incident links to its source. Where a detail is still unconfirmed, I say so. If you run any business application, not just PeopleSoft, the patterns are the same. Swap in your own product names as you read.</p>
+          <div class="doc-callout"><p><strong>How to use this.</strong> Each threat ends with a <strong>PeopleSoft lens</strong> box showing where it lands in a typical PeopleSoft environment. If you are stuck on an older PeopleTools release or an operating system your vendor no longer supports, jump straight to section 10.</p></div>
+        </div>
+
+        <div class="doc-section" id="numbers">
+          <div class="doc-section-title">02 &middot; The Numbers That Set the Agenda</div>
+          <p class="doc-para">The <a href="https://www.verizon.com/business/resources/reports/dbir/" target="_blank" rel="noopener noreferrer">2026 Verizon Data Breach Investigations Report</a> analyzed more than 22,000 confirmed breaches from 2025. For the first time, exploiting a software vulnerability beat stolen credentials as the top way in. For those of us who live by quarterly patch cycles and change windows, that is the headline.</p>
+          <div class="stat-grid">
+            <div class="stat"><div class="stat-num">31%</div><div class="stat-label">of breaches started with an exploited vulnerability, now the top entry point</div><a class="stat-src" href="https://www.verizon.com/business/resources/reports/dbir/" target="_blank" rel="noopener noreferrer">Verizon DBIR 2026</a></div>
+            <div class="stat"><div class="stat-num">48%</div><div class="stat-label">involved a third party, up from 30% the year before</div><a class="stat-src" href="https://www.verizon.com/business/resources/reports/dbir/" target="_blank" rel="noopener noreferrer">Verizon DBIR 2026</a></div>
+            <div class="stat"><div class="stat-num">48%</div><div class="stat-label">of breaches included ransomware</div><a class="stat-src" href="https://www.verizon.com/business/resources/reports/dbir/" target="_blank" rel="noopener noreferrer">Verizon DBIR 2026</a></div>
+            <div class="stat"><div class="stat-num">43 days</div><div class="stat-label">median time to fully patch, up from 32. Only 26% of CISA KEV flaws were fully fixed</div><a class="stat-src" href="https://www.verizon.com/business/resources/reports/dbir/" target="_blank" rel="noopener noreferrer">Verizon DBIR 2026</a></div>
+            <div class="stat"><div class="stat-num">1.7B</div><div class="stat-label">credentials stolen by infostealer malware in the first half of 2026 alone</div><a class="stat-src" href="https://flashpoint.io/resources/report/flashpoint-global-threat-intelligence-report-midyear-2026/information-stealing-malware-threats/" target="_blank" rel="noopener noreferrer">Flashpoint, midyear 2026</a></div>
+            <div class="stat"><div class="stat-num">$20B+</div><div class="stat-label">in reported cybercrime losses for 2025, a record</div><a class="stat-src" href="https://www.ic3.gov/" target="_blank" rel="noopener noreferrer">FBI IC3 2025 report</a></div>
+          </div>
+          <p class="doc-para">That 43-day median should make every ERP admin uncomfortable, because most of us would love to hit 43 days. Between regression testing, customization retrofits, and freeze periods around payroll and year-end, a quarterly Critical Patch Update often takes longer than that to reach production. Attackers know it. Two more DBIR findings matter here: a human was involved in 62% of breaches, and 67% of employees reached AI services from company devices using personal accounts.</p>
+          <div class="doc-callout"><p><strong>The auditor angle.</strong> When an auditor tests vulnerability management, they are not asking whether you patch. They are asking whether you can show, with dates, how long critical fixes took and why any exceptions were acceptable. Numbers like the DBIR's 43 days are the benchmark they increasingly compare you against.</p></div>
+        </div>
+
+        <div class="doc-section" id="edge">
+          <div class="doc-section-title">03 &middot; Edge Devices</div>
+          <div class="threat-head"><span class="threat-num">THREAT 1</span><span class="threat-title">The Edge Is the Front Door</span><span class="sev sev-crit">Critical</span></div>
+          <p class="doc-para">VPN gateways, firewalls, remote access appliances, and device management servers sit on the internet by design, hold privileged access by design, and usually cannot run endpoint protection. That makes them the favorite targets on any network. 2026 has been relentless.</p>
+          <ul class="doc-list">
+            <li><strong>Ivanti EPMM</strong> (<a href="https://nvd.nist.gov/vuln/detail/CVE-2026-1281" target="_blank" rel="noopener noreferrer">CVE-2026-1281</a> and <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-1340" target="_blank" rel="noopener noreferrer">CVE-2026-1340</a>). Unauthenticated remote code execution, published January 29. CISA added it to the Known Exploited Vulnerabilities catalog the same day.</li>
+            <li><strong>Fortinet FortiOS</strong> (<a href="https://nvd.nist.gov/vuln/detail/CVE-2026-24858" target="_blank" rel="noopener noreferrer">CVE-2026-24858</a>). A FortiCloud SSO authentication bypass that was exploited before it was disclosed.</li>
+            <li><strong>Cisco Firewall Management Center</strong> (<a href="https://nvd.nist.gov/vuln/detail/CVE-2026-20131" target="_blank" rel="noopener noreferrer">CVE-2026-20131</a>). Exploitation traced back to at least January 26. The patch arrived March 4, more than five weeks later.</li>
+            <li><strong>Citrix</strong> (<a href="https://nvd.nist.gov/vuln/detail/CVE-2026-3055" target="_blank" rel="noopener noreferrer">CVE-2026-3055</a>). Another unauthenticated memory leak in the same family as the earlier "Citrix Bleed" bugs, which let attackers lift live session tokens.</li>
+          </ul>
+          <p class="doc-para">Several of these were exploited before a fix existed. Patching speed still matters, but it is no longer enough on its own. You also have to shrink what is exposed and assume the box may already be compromised.</p>
+          <div class="lens">
+            <div class="lens-label">PeopleSoft lens</div>
+            <p>Your PIA web servers, the Integration Broker gateway, and any self-service portal for employees, students, or suppliers are edge systems too, even if the network team does not call them that. Find out which PeopleSoft URLs are reachable from the internet and which ones actually need to be. Self-service pages usually do. The WebLogic admin console, the Environment Management Hub, and Integration Broker listening connectors almost never do.</p>
+          </div>
+          <div class="doc-subhead">What actually works</div>
+          <ul class="doc-list">
+            <li>Never expose management interfaces to the internet. Admin consoles for firewalls, VPNs, WebLogic, hypervisors, and MDM belong behind a jump host or a separate management network.</li>
+            <li>Watch the <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener noreferrer">CISA KEV catalog</a> and treat any listed product you own as a same-week emergency, not a next-quarter ticket.</li>
+            <li>When a critical edge advisory drops, patch and then hunt. Check for new local accounts, config changes, and unexpected outbound connections. A patch does not evict an attacker who is already inside.</li>
+            <li>Ship logs to somewhere the device cannot erase them. Attackers routinely clear local logs on appliances.</li>
+            <li>Keep an accurate inventory of every internet-facing URL and service. You cannot patch what you forgot you deployed.</li>
+          </ul>
+        </div>
+
+        <div class="doc-section" id="identity">
+          <div class="doc-section-title">04 &middot; Identity</div>
+          <div class="threat-head"><span class="threat-num">THREAT 2</span><span class="threat-title">Identity Attacks That Walk Past MFA</span><span class="sev sev-crit">Critical</span></div>
+          <p class="doc-para">Credential abuse dropped to 13% of breach entry points in the DBIR, but do not read that as good news. Attackers did not stop going after identities. They got better at it. Three techniques dominate.</p>
+          <p class="doc-para"><strong>Voice phishing against SSO.</strong> In January 2026, Okta described phishing kits built for live phone calls. The caller poses as IT support while a control panel changes what the victim sees in real time, walking them through approving a push or typing a one-time code into a fake company login page. The ShinyHunters group <a href="https://www.bleepingcomputer.com/news/security/shinyhunters-claim-to-be-behind-sso-account-data-theft-attacks/" target="_blank" rel="noopener noreferrer">claimed it was using this method</a> against Okta, Microsoft Entra, and Google SSO accounts, then raiding every app on the victim's SSO dashboard. Remember that group name. It comes back in section 09.</p>
+          <p class="doc-para"><strong>Infostealers and session theft.</strong> Commodity malware such as Lumma, Vidar, and StealC grabs saved passwords and live browser session cookies. A stolen session cookie skips the password and the MFA prompt entirely, because the login already happened. <a href="https://flashpoint.io/resources/report/flashpoint-global-threat-intelligence-report-midyear-2026/information-stealing-malware-threats/" target="_blank" rel="noopener noreferrer">Flashpoint counted 7.4 million infected devices</a> in the first half of 2026.</p>
+          <p class="doc-para"><strong>Forgotten credentials.</strong> According to <a href="https://techcrunch.com/2026/09/15/the-worst-hacks-and-breaches-of-2026-so-far/" target="_blank" rel="noopener noreferrer">TechCrunch's reporting</a>, the June 2026 breach of the competitive-intelligence vendor Klue, which exposed data tied to roughly 200 customer companies, traced back to a credential issued in 2022 for a limited pilot. Nobody turned it off.</p>
+          <div class="doc-callout warn"><p><strong>The uncomfortable truth.</strong> SMS codes, authenticator app codes, and push approvals can all be phished in real time. NIST's current digital identity guidance, <a href="https://pages.nist.gov/800-63-4/sp800-63b.html" target="_blank" rel="noopener noreferrer">SP 800-63B-4</a>, says passwords are not phishing-resistant, and systems at the moderate assurance level must offer at least one phishing-resistant option. That means passkeys, FIDO2 security keys, or certificate-based login.</p></div>
+          <div class="lens">
+            <div class="lens-label">PeopleSoft lens</div>
+            <p>That Klue story is a user access review finding waiting to happen. Every PeopleSoft shop has them: operator IDs for consultants who left years ago, generic IDs created for a conversion, Integration Broker node passwords nobody has rotated, and the access ID that half the team knows. When I prepare for an access review, the question I ask is not "who has access?" but "who still needs it?" Also look hard at your password reset path. If the help desk can reset a PeopleSoft password with a phone call, that is the same door ShinyHunters walked through at SSO providers.</p>
+          </div>
+          <div class="doc-subhead">What actually works</div>
+          <ul class="doc-list">
+            <li>Put SSO with phishing-resistant MFA in front of your applications, starting with admins, payroll, and finance staff. They are the highest value targets and the smallest group to roll out to.</li>
+            <li>Lock down the help desk. Require a verified callback to a number already on file, or a manager's confirmation, before any password or MFA reset.</li>
+            <li>Shorten session lifetimes for sensitive applications and tie sessions to managed devices where your identity platform allows it.</li>
+            <li>Run a quarterly sweep for dormant accounts, generic IDs, API keys, OAuth grants, and service credentials. Anything without a current owner gets disabled, and the sweep itself becomes audit evidence.</li>
+            <li>Alert on new MFA methods registered right after a password reset, logins from unusual locations, and bulk data exports.</li>
+          </ul>
+        </div>
+
+        <div class="doc-section" id="supply-chain">
+          <div class="doc-section-title">05 &middot; Supply Chain</div>
+          <div class="threat-head"><span class="threat-num">THREAT 3</span><span class="threat-title">Your Vendors Are Your Attack Surface</span><span class="sev sev-crit">Critical</span></div>
+          <p class="doc-para">Third-party involvement jumped from 30% to 48% of breaches in a single year. Two incidents explain why better than any chart.</p>
+          <div class="case">
+            <div class="case-label">Case &middot; August 2025</div>
+            <p>A threat actor Google tracks as UNC6395 stole OAuth tokens from the Salesloft Drift chat integration and used them to export data from customers' Salesforce instances. <a href="https://cloud.google.com/blog/topics/threat-intelligence/data-theft-salesforce-instances-via-salesloft-drift" target="_blank" rel="noopener noreferrer">Salesforce itself was never breached.</a> The attackers then searched the stolen records for AWS keys, Snowflake tokens, passwords, and VPN login URLs that people had pasted into support cases. One integration became a key ring to hundreds of other systems.</p>
+          </div>
+          <div class="case">
+            <div class="case-label">Case &middot; April 2026</div>
+            <p>On April 22, attackers pushed trojanized releases of two popular developer tools within hours of each other: the Checkmarx KICS scanner and the Bitwarden command-line client on npm. <a href="https://www.sophos.com/blog/supply-chain-attacks-hit-checkmarx-and-bitwarden-developer-tools" target="_blank" rel="noopener noreferrer">The malicious Bitwarden package was live for about 90 minutes.</a> That was enough to harvest GitHub and npm tokens, SSH keys, cloud credentials, and even AI coding assistant configuration files from developer machines. Bitwarden's apps and user vaults were not affected.</p>
+          </div>
+          <div class="lens">
+            <div class="lens-label">PeopleSoft lens</div>
+            <p>The Drift case hit close to home for me because ERP data is full of pasted secrets. Think about what lives in your ticketing system, your change records, and your runbooks: Integration Broker node passwords, database connect strings, and screenshots of configuration pages. Then think about the bolt-ons around PeopleSoft (document imaging, tax engines, scheduling tools, SFTP partners). Each one holds a credential into your system. A vendor's breach becomes your breach through exactly those connections.</p>
+          </div>
+          <div class="doc-subhead">What actually works</div>
+          <ul class="doc-list">
+            <li>Keep an inventory of every integration, its credential, its owner, and when that credential was last rotated. Auditors ask for this, and you will want it the day a vendor calls.</li>
+            <li>Remove unused connected apps and OAuth grants, and cut scopes to the minimum. A chat widget does not need full API access to your CRM.</li>
+            <li>Never store secrets in tickets, case notes, chat, or wiki pages. Run a secret scanner across those systems, because someone already has.</li>
+            <li>Pin dependency versions in build pipelines and wait a short while before adopting brand-new releases. Many poisoned packages are pulled within hours, as the Bitwarden case shows.</li>
+            <li>Ask vendors how fast they will notify you of a breach. Put the answer in the contract.</li>
+          </ul>
+        </div>
+
+        <div class="doc-section" id="ransomware">
+          <div class="doc-section-title">06 &middot; Ransomware</div>
+          <div class="threat-head"><span class="threat-num">THREAT 4</span><span class="threat-title">Ransomware and Destructive Attacks</span><span class="sev sev-crit">Critical</span></div>
+          <p class="doc-para">Ransomware showed up in 48% of breaches in the 2026 DBIR. The economics are shifting, though. <a href="https://www.securityweek.com/verizon-dbir-2026-vulnerability-exploitation-overtakes-credential-theft-as-top-breach-vector/" target="_blank" rel="noopener noreferrer">Only 31% of victims paid, and the median payment fell below $140,000.</a> Most groups also steal data before encrypting it, so restoring from backup no longer ends the extortion. The more alarming trend is attacks that skip the ransom note and simply destroy things.</p>
+          <div class="case">
+            <div class="case-label">Case &middot; March 2026</div>
+            <p>On March 11, medical technology maker Stryker lost its global Windows environment. Laptops, servers, and company phones were wiped, and manufacturing in Ireland stopped. The Handala group, which the U.S. government links to Iranian intelligence, claimed responsibility. <a href="https://censys.com/blog/iranian-wiper-attack-global-medtech-firm-stryker/" target="_blank" rel="noopener noreferrer">Researchers and reporting point to the company's own device management platform</a> (Microsoft Intune) as the likely wipe mechanism, used with stolen admin access. Neither Stryker nor Microsoft has confirmed that detail, but the lesson stands either way: the tool built to manage every device can also erase every device.</p>
+          </div>
+          <div class="lens">
+            <div class="lens-label">PeopleSoft lens</div>
+            <p>Ask yourself what payroll looks like if the database server, the batch server, and the file share holding your bank files all disappear on a Thursday before pay day. Your backup strategy should answer that question with a tested restore time, not an assumption. Also check who can delete those backups. In many environments, the same domain admin account that ransomware crews steal can wipe the backup catalog too.</p>
+          </div>
+          <div class="doc-subhead">What actually works</div>
+          <ul class="doc-list">
+            <li>Keep at least one backup copy that is immutable or offline, and that your normal admin accounts cannot delete.</li>
+            <li>Test restores on a schedule, including a full database restore and an application smoke test. A backup you have never restored is a hope, not a plan, and auditors increasingly ask for restore evidence.</li>
+            <li>Treat device management, hypervisor, backup, and identity consoles as tier-zero systems. Use separate admin accounts, phishing-resistant MFA, and second-person approval for destructive bulk actions where the platform supports it.</li>
+            <li>Alert on mass actions such as bulk device wipes, mass VM deletion, backup policy changes, and large exports.</li>
+            <li>Write the incident response plan now, including who can authorize taking payroll offline at 2 a.m. on a holiday weekend.</li>
+          </ul>
+        </div>
+
+        <div class="doc-section" id="clickfix">
+          <div class="doc-section-title">07 &middot; Social Engineering</div>
+          <div class="threat-head"><span class="threat-num">THREAT 5</span><span class="threat-title">ClickFix: Tricking People Into Hacking Themselves</span><span class="sev sev-high">High</span></div>
+          <p class="doc-para">This one fools people who would never open a sketchy attachment. A compromised but legitimate website shows a fake "verify you are human" check. The instructions say to press the Windows key and R, then paste and press Enter. Behind the scenes, the page has already copied a malicious PowerShell command to the clipboard. The victim runs it themselves, so many email and download protections never see it.</p>
+          <p class="doc-para"><a href="https://informationsecurity.mcmaster.ca/it-notice-increase-in-clickfix-social-engineering-attacks/" target="_blank" rel="noopener noreferrer">Universities</a> and security vendors issued repeated warnings about it through 2026. The same trick now appears as fake browser error fixes, fake meeting software updates, and versions that ask Mac users to paste a command into Terminal.</p>
+          <div class="lens">
+            <div class="lens-label">PeopleSoft lens</div>
+            <p>Think about who in your organization is most comfortable pasting commands: us. Admins and developers paste PSADMIN commands, SQL, and shell snippets all day, and our workstations hold saved database connections, SSH keys, and browser sessions into production. A fake "fix" page is far more convincing to a technical person than to anyone else. Admin workstations deserve the strictest controls in the building, not the loosest.</p>
+          </div>
+          <div class="doc-subhead">What actually works</div>
+          <ul class="doc-list">
+            <li>Teach one simple rule: no legitimate website, CAPTCHA, or support page will ever ask you to paste something into Run, PowerShell, or Terminal.</li>
+            <li>For managed Windows fleets, consider removing the Run dialog for standard users through Group Policy, and use application control (such as App Control for Business or AppLocker) to restrict script execution.</li>
+            <li>Do admin work from a dedicated admin workstation or jump host, separate from the machine you use for email and web browsing.</li>
+            <li>Monitor for PowerShell or mshta launched from explorer.exe with encoded or download commands. That pairing is rare in normal business use.</li>
+          </ul>
+        </div>
+
+        <div class="doc-section" id="ai">
+          <div class="doc-section-title">08 &middot; Artificial Intelligence</div>
+          <div class="threat-head"><span class="threat-num">THREAT 6</span><span class="threat-title">AI on Both Sides of the Fight</span><span class="sev sev-high">High</span></div>
+          <p class="doc-para">AI has not invented new attacks so much as made old ones cheaper and more convincing. The FBI's <a href="https://www.alstonprivacy.com/cybercrime-trends-to-watch-takeaways-from-the-fbis-2025-ic3-annual-report/" target="_blank" rel="noopener noreferrer">2025 internet crime report</a> was the first to track AI use directly. It logged more than 22,000 complaints referencing AI, with losses above $893 million, covering polished phishing, synthetic video, and cloned voices.</p>
+          <p class="doc-para">The reference case is still the 2024 fraud at engineering firm <a href="https://fortune.com/europe/2024/05/17/arup-deepfake-fraud-scam-victim-hong-kong-25-million-cfo/" target="_blank" rel="noopener noreferrer">Arup</a>, where an employee in Hong Kong joined a video call with what looked like the CFO and several colleagues. All of them were deepfakes. The employee transferred about $25 million.</p>
+          <p class="doc-para">The second front is our own AI use. In August 2026, <a href="https://sdtimes.com/security/prompt-injection-tops-2026-owasp-genai-llm-top-ten-vulnerabilities/" target="_blank" rel="noopener noreferrer">OWASP kept prompt injection at the top of its LLM risk list</a> for a third straight year, and "excessive agency" climbed to third. That is the risk of giving an AI agent more access than it needs, such as letting a document summarizer also send email or delete files. A malicious instruction hidden in a web page or document can then turn your assistant against you.</p>
+          <div class="lens">
+            <div class="lens-label">PeopleSoft lens</div>
+            <p>Two places this shows up for ERP teams. First, vendor bank account changes and direct deposit changes are the classic targets for AI-polished fraud, so the approval workflow in Accounts Payable and HR self-service matters more than ever. Second, when someone pastes an App Engine trace, a SQL statement with real employee data, or a PSADMIN config into a personal AI account to "get help fast," that data has left your control. The DBIR's 67% shadow AI figure tells me this is already happening in most shops.</p>
+          </div>
+          <div class="doc-subhead">What actually works</div>
+          <ul class="doc-list">
+            <li>For any payment change, wire request, or bank account update, verify through a second channel you initiate, using contact details you already had.</li>
+            <li>Agree on a code phrase with your team and family for urgent money requests. It sounds old-fashioned. It works.</li>
+            <li>Give staff an approved AI tool with enterprise data protections, and a clear rule about what data never goes into any AI tool.</li>
+            <li>Scope AI agents like service accounts: read-only by default, human approval for anything that sends, spends, or deletes, and logs of everything they do.</li>
+          </ul>
+        </div>
+
+        <div class="doc-section" id="apps-db">
+          <div class="doc-section-title">09 &middot; ERP and Databases: Now a Primary Target</div>
+          <p class="doc-para">For years, ERP systems felt protected by obscurity and by sitting deep inside the network. That comfort is gone. In the last twelve months, attackers went straight after enterprise applications and databases with zero-day exploits, and our own platform was one of them.</p>
+          <div class="case">
+            <div class="case-label">Case &middot; PeopleSoft PeopleTools, June 2026</div>
+            <p><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-35273" target="_blank" rel="noopener noreferrer">CVE-2026-35273</a> is an unauthenticated remote code execution flaw in the Updates Environment Management component of PeopleTools, the piece behind the Environment Management Hub (PSEMHUB). It scores 9.8 and needs nothing but network access over HTTP. <a href="https://www.oracle.com/security-alerts/alert-cve-2026-35273.html" target="_blank" rel="noopener noreferrer">Oracle's Security Alert</a> came out June 10, 2026, and lists PeopleTools 8.61 and 8.62 as affected. By then it had already been exploited. <a href="https://thehackernews.com/2026/06/shinyhunters-exploits-oracle-peoplesoft.html" target="_blank" rel="noopener noreferrer">Mandiant tracked the activity from May 27 to June 9</a> and tied it to ShinyHunters, the same group behind the SSO voice phishing in section 04. Mandiant notified more than 100 organizations with exposed, vulnerable endpoints, and 68% of them were in higher education.</p>
+            <p>The details are a PeopleSoft admin's checklist in reverse. <a href="https://arcticwolf.com/resources/blog/critical-oracle-peoplesoft-vulnerability-actively-exploited-in-shinyhunters-campaign/" target="_blank" rel="noopener noreferrer">Attackers pulled credentials out of psappsrv.cfg</a>, mapped the web, application, and batch tiers, and sprayed SSH passwords across hosts listed in /etc/hosts. Oracle's advisory also states that unsupported releases are not tested and that earlier versions are likely affected too. If you are on an older PeopleTools release, read section 10 next.</p>
+          </div>
+          <div class="case">
+            <div class="case-label">Case &middot; Oracle E-Business Suite, 2025</div>
+            <p><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-61882" target="_blank" rel="noopener noreferrer">CVE-2025-61882</a> (CVSS 9.8) allowed remote code execution on E-Business Suite 12.2.3 through 12.2.14 with no username or password. <a href="https://www.crowdstrike.com/en-us/blog/crowdstrike-identifies-campaign-targeting-oracle-e-business-suite-zero-day-CVE-2025-61882/" target="_blank" rel="noopener noreferrer">CrowdStrike observed exploitation as early as August 9, 2025</a>, weeks before <a href="https://www.oracle.com/security-alerts/alert-cve-2025-61882.html" target="_blank" rel="noopener noreferrer">Oracle's emergency alert</a> on October 4. The Cl0p extortion group then emailed victim companies demanding payment for stolen data. Many of the exposed portals were reachable from the internet with local logins that had no MFA.</p>
+          </div>
+          <div class="case">
+            <div class="case-label">Case &middot; MongoDB "MongoBleed", December 2025</div>
+            <p><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-14847" target="_blank" rel="noopener noreferrer">CVE-2025-14847</a> let an unauthenticated attacker read chunks of MongoDB server memory through a flaw in zlib network compression. Leaked memory can contain passwords, API keys, and session tokens. <a href="https://arcticwolf.com/resources/blog/cve-2025-14847" target="_blank" rel="noopener noreferrer">It was exploited within days</a> of the December 19 advisory. The exposure was worst for databases reachable directly from the internet, which they never should have been.</p>
+          </div>
+          <div class="doc-subhead">Immediate steps for PeopleSoft on CVE-2026-35273</div>
+          <p class="doc-para">These come from the Oracle and Mandiant guidance reported at the time. Confirm against <a href="https://www.oracle.com/security-alerts/alert-cve-2026-35273.html" target="_blank" rel="noopener noreferrer">Oracle's alert</a> and the patch availability document on My Oracle Support before acting.</p>
+          <ul class="doc-list">
+            <li>Apply Oracle's fix for your PeopleTools release.</li>
+            <li>If you do not use Environment Management, disable the Hub service on multi-server installs or remove the PSEMHUB application on single-server installs.</li>
+            <li>Block external access to <code>/PSEMHUB/*</code> and <code>/PSIGW/HttpListeningConnector</code> at the perimeter. Mandiant noted that WAF body-inspection rules alone can be bypassed, so block the paths outright.</li>
+            <li>Hunt in WebLogic access logs for external POST requests to those paths, look for unexpected .jsp files under the PSEMHUB directory, and watch for outbound SMB (port 445) from PeopleSoft hosts.</li>
+          </ul>
+          <div class="doc-subhead">What actually works for any ERP or database</div>
+          <ul class="doc-list">
+            <li>Keep database listeners and ERP admin pages off the public internet. Users reach the application through a reverse proxy or gateway, never the database directly.</li>
+            <li>Plan vendor patch cycles ahead of time. Oracle's quarterly Critical Patch Updates are predictable, so the testing window can be booked before the patch arrives.</li>
+            <li>Enforce MFA on every login path, including local application accounts that bypass your SSO. Those are exactly what attackers look for.</li>
+            <li>Run application service accounts with least privilege, keep them out of interactive logins, and never leave their passwords in plain text in configuration files.</li>
+            <li>Encrypt data at rest and in transit, and turn on database auditing for sensitive tables so you can answer the question every auditor and lawyer will ask: what did they take?</li>
+          </ul>
+        </div>
+
+        <div class="doc-section" id="legacy">
+          <div class="doc-section-title">10 &middot; When the Vendor Says "Not Supported"</div>
+          <p class="doc-para">Let's be honest about how most of us end up here. A heavily customized application that takes a year to retrofit. A third-party bolt-on certified only on an older release. A database or operating system that cannot move until the hardware refresh. A budget that went to something else. Plenty of well-run PeopleSoft shops are running at least one component past its support date right now.</p>
+          <p class="doc-para">Here is what that really means. Oracle provides patches "only for product versions that are covered under the Premier Support or Extended Support phases," according to its <a href="https://www.oracle.com/security-alerts/alert-cve-2026-35273.html" target="_blank" rel="noopener noreferrer">CVE-2026-35273 advisory</a>. The same advisory says releases outside support are not tested for the vulnerability. So when the next 9.8 lands, you will not get a fix, and you will not even get a clear answer about whether you are exposed. You have to assume you are.</p>
+          <div class="doc-subhead">Know your clock</div>
+          <p class="doc-para">Before you can defend an older stack, you need the dates. These are the ones that matter for a typical PeopleSoft environment, as published in October 2026. Always confirm against Oracle's Lifetime Support Policy and your own My Oracle Support certifications.</p>
+          <div class="doc-table-wrap"><table class="doc-table">
+            <tr><th>Component</th><th>What the vendor commits</th><th>Source</th></tr>
+            <tr><td>PeopleTools minor release</td><td>Patches and platform certifications for 12 months after the next minor release is generally available. Critical Patch Updates for up to 24 months after that next release.</td><td><a href="https://blogs.oracle.com/peopletools/post/staying-current-on-peopletools" target="_blank" rel="noopener noreferrer">Oracle PeopleTools blog</a></td></tr>
+            <tr><td>PeopleSoft applications (9.2)</td><td>Supported through at least 2036 under Oracle's rolling ten-year commitment, later extended to at least 2037.</td><td><a href="https://blogs.oracle.com/peoplesoft/post/peoplesoft-support-2036" target="_blank" rel="noopener noreferrer">Oracle PeopleSoft blog</a></td></tr>
+            <tr><td>Oracle Database 19c</td><td>Premier Support through December 31, 2029. Extended Support through December 31, 2032.</td><td><a href="https://www.theregister.com/2025/02/18/oracle_extends_19c_support/" target="_blank" rel="noopener noreferrer">The Register, Feb 2025</a></td></tr>
+            <tr><td>Oracle Linux 7</td><td>Extended Support through June 2028. Included at no extra cost with an Oracle Cloud Infrastructure subscription.</td><td><a href="https://blogs.oracle.com/linux/post/extend-your-os-upgrade-timeline-oracle-linux-7s-extended-support-with-expanded-coverage" target="_blank" rel="noopener noreferrer">Oracle Linux blog</a></td></tr>
+            <tr><td>Windows Server 2012 and 2012 R2</td><td>Final year of Extended Security Updates ends October 14, 2026. No further patches after that.</td><td><a href="https://learn.microsoft.com/en-us/lifecycle/products/windows-server-2012-r2" target="_blank" rel="noopener noreferrer">Microsoft Lifecycle</a></td></tr>
+          </table></div>
+          <div class="doc-callout"><p><strong>Read the PeopleSoft rows together.</strong> The applications are supported for a decade, but each PeopleTools release has a much shorter clock. "PeopleSoft is supported until 2036" does not mean your PeopleTools release is. Most legacy risk in our world lives in the tools layer, the database, and the operating system underneath, not in the application itself.</p></div>
+
+          <div class="doc-subhead">Compensating controls, layer by layer</div>
+          <p class="doc-para">None of these replace a vendor patch. What they do is shrink the number of people who can reach the vulnerable code, and make sure you notice quickly if someone tries. That is also exactly what an auditor wants to see when you document an exception.</p>
+          <p class="doc-para"><strong>Application and web tier</strong></p>
+          <ul class="doc-list">
+            <li>Put a modern reverse proxy in front of WebLogic and expose only the paths users actually need. Everything else, including <code>/PSEMHUB/</code>, the WebLogic console, and Integration Broker listeners, stays internal or gets allowlisted to specific partner IPs.</li>
+            <li>Remove or disable components you do not use. Environment Management Hub, unused Integration Broker nodes, demo sites, and sample servlets are all attack surface with no business value.</li>
+            <li>Put SSO with MFA in front of PIA, and make sure there is no local login page reachable from the internet that skips it.</li>
+            <li>Lock or delete default and demo operator IDs, and change default passwords on every delivered account, including the connect ID and access ID.</li>
+            <li>Terminate TLS at the proxy with current protocols and ciphers, even if the older WebLogic behind it cannot support them.</li>
+          </ul>
+          <p class="doc-para"><strong>Database</strong></p>
+          <ul class="doc-list">
+            <li>Restrict the listener so only your application and batch servers can connect. Oracle Net's valid node checking (<code>tcp.validnode_checking</code> with <code>tcp.invited_nodes</code> in <code>sqlnet.ora</code>) does this at the database itself.</li>
+            <li>No direct end-user database access. Reporting goes through PeopleSoft Query with query security, or through a reporting copy.</li>
+            <li>Audit changes to security tables such as PSOPRDEFN and PSROLEUSER, and access to the records that hold national IDs, bank accounts, and salary.</li>
+            <li>Encrypt data at rest where you are licensed to, and make sure backups are encrypted too.</li>
+          </ul>
+          <p class="doc-para"><strong>Operating system</strong></p>
+          <ul class="doc-list">
+            <li>Isolate legacy servers in their own network segment with firewall rules that allow only the traffic the application needs, inbound and outbound.</li>
+            <li>Block outbound internet access from PeopleSoft servers by default. In the CVE-2026-35273 campaign, outbound SMB and SSH were part of the attack.</li>
+            <li>Disable SSH password authentication and use keys. The attackers' lateral movement script sprayed SSH passwords across hosts.</li>
+            <li>Confirm that passwords in <code>psappsrv.cfg</code> and <code>psprcs.cfg</code> are stored encrypted, and that only the PeopleSoft service account can read those files.</li>
+            <li>Run endpoint detection on the host if the vendor still supports your OS version, and enable application allowlisting if it does not.</li>
+          </ul>
+          <p class="doc-para"><strong>Users' sensitive information</strong></p>
+          <ul class="doc-list">
+            <li>Scramble or mask national IDs, bank accounts, birth dates, and salaries in every non-production refresh. Test and dev copies are the least protected place your production data lives.</li>
+            <li>Review who can query sensitive records, and remove PeopleSoft Query access to those records from anyone who does not need it.</li>
+            <li>Purge data you no longer need under your retention policy. Old applicant and terminated employee records are pure risk once the retention period ends.</li>
+          </ul>
+          <p class="doc-para"><strong>Monitoring</strong></p>
+          <ul class="doc-list">
+            <li>Send WebLogic access logs, application server logs, and database audit logs to a system the server itself cannot change.</li>
+            <li>Alert on new .jsp files under the web root, changes to security tables, unexpected new operator IDs, and unusually large Query or export activity.</li>
+          </ul>
+
+          <div class="doc-subhead">Your real options when the answer is "no more patches"</div>
+          <ol class="doc-list">
+            <li><strong>Upgrade the tools layer first.</strong> A PeopleTools-only upgrade can be done separately from an application upgrade and is usually far smaller. It is often the fastest way back into patch coverage.</li>
+            <li><strong>Buy time from the platform vendor.</strong> Paid extended support exists for some components. For Oracle Linux 7, Oracle includes Extended Support with an OCI subscription.</li>
+            <li><strong>Consider third-party support, with clear eyes.</strong> Independent support providers can offer guidance and network-level virtual patching, but they cannot ship Oracle's code fixes. Weigh that against your licensing and audit obligations.</li>
+            <li><strong>Document the risk formally.</strong> List each unsupported component, the compensating controls, a named owner, and a dated exit plan, and get it signed by someone with the authority to accept the risk.</li>
+          </ol>
+          <div class="doc-callout warn"><p><strong>What auditors will ask.</strong> Running unsupported software is not automatically a finding. Running it without a documented plan usually is. PCI DSS 4.0, for example, requires an annual review of the hardware and software technologies in use, including a plan to remediate those reaching end of life (requirement 12.3.4). For SOC 2, expect the same question in your risk assessment and vulnerability management testing. Bring the inventory, the controls, and the exit date, and the conversation goes much better.</p></div>
+          <div class="doc-callout"><p><strong>My honest take.</strong> An unsupported stack is a timer, not a strategy. Compensating controls buy you time to plan the upgrade properly. They are not a reason to stop planning it.</p></div>
+        </div>
+
+        <div class="doc-section" id="by-role">
+          <div class="doc-section-title">11 &middot; Best Practices by Role</div>
+          <p class="doc-para">Same threats, different levers. Each list is ordered by impact for the effort.</p>
+          <div class="role-grid">
+            <div class="role-card">
+              <div class="doc-subhead">PeopleSoft and ERP Admins</div>
+              <ul class="doc-list">
+                <li>Apply each quarterly CPU, and patch anything on the CISA KEV list within days</li>
+                <li>Take PSEMHUB, the WebLogic console, and IB listeners off the internet</li>
+                <li>Encrypt and lock down psappsrv.cfg and other config files</li>
+                <li>Remove dormant and generic operator IDs every quarter</li>
+                <li>Scramble sensitive data in every non-production refresh</li>
+                <li>Test a full restore of the database and application each quarter</li>
+              </ul>
+            </div>
+            <div class="role-card">
+              <div class="doc-subhead">Security and Compliance</div>
+              <ul class="doc-list">
+                <li>Prioritize by exploitation evidence (KEV), not CVSS score alone</li>
+                <li>Keep a register of unsupported components with owners and exit dates</li>
+                <li>Harden help desk verification for password and MFA resets</li>
+                <li>Inventory integrations and third-party credentials</li>
+                <li>Publish an approved AI tool policy with a real alternative</li>
+                <li>Keep evidence as you go: patch dates, access reviews, restore tests</li>
+              </ul>
+            </div>
+            <div class="role-card">
+              <div class="doc-subhead">Individual Users</div>
+              <ul class="doc-list">
+                <li>Use passkeys wherever offered, and a password manager everywhere else</li>
+                <li>Use long passphrases. NIST now favors length over symbol rules</li>
+                <li>Never paste commands from a website into Run or Terminal</li>
+                <li>Hang up and call back on a known number for any urgent request</li>
+                <li>Add a port-out PIN with your mobile carrier and freeze your credit</li>
+                <li>Keep devices on a supported OS with automatic updates on</li>
+              </ul>
+            </div>
+          </div>
+          <div class="doc-callout warn"><p><strong>Still on Windows 10?</strong> In June 2026, <a href="https://www.bleepingcomputer.com/news/microsoft/microsoft-quietly-extends-free-windows-10-esu-support-to-october-2027/" target="_blank" rel="noopener noreferrer">Microsoft extended consumer Extended Security Updates</a> through October 12, 2027 for enrolled personal devices. Company-managed PCs are excluded and rely on the paid commercial program, whose first year ends in mid-October 2026. Either way, Windows 10 is on borrowed time. Plan the move to Windows 11 or new hardware now.</p></div>
+          <div class="doc-subhead">A note on password policy</div>
+          <p class="doc-para">If your organization still forces 90-day password changes and demands a capital, number, and symbol, it is following advice NIST has explicitly reversed. Under <a href="https://pages.nist.gov/800-63-4/sp800-63b.html" target="_blank" rel="noopener noreferrer">SP 800-63B-4</a>, a password used as the only factor must be at least 15 characters. Systems must not impose composition rules, must not force periodic changes without evidence of compromise, must check new passwords against a list of known breached ones, must allow password managers, and should allow paste. When an auditor asks why your PeopleSoft password controls changed, this is the document to hand them.</p>
+        </div>
+
+        <div class="doc-section" id="plan">
+          <div class="doc-section-title">12 &middot; A 30-Day Action Plan</div>
+          <p class="doc-para">If you only have a month and a small team, this sequence gets the most risk off the table first.</p>
+          <div>
+            <div class="week"><div class="week-label">Week 1</div><ul class="doc-list"><li>List every internet-facing URL and system, PeopleSoft included, and check each against the CISA KEV catalog</li><li>Patch or isolate anything listed. Block <code>/PSEMHUB/*</code> and admin consoles from outside</li></ul></div>
+            <div class="week"><div class="week-label">Week 2</div><ul class="doc-list"><li>Enroll admins, payroll, and finance staff in passkeys or security keys</li><li>Write and enforce a help desk verification procedure for password and MFA resets</li></ul></div>
+            <div class="week"><div class="week-label">Week 3</div><ul class="doc-list"><li>Audit operator IDs, integration credentials, and service accounts. Disable anything without an owner</li><li>List every unsupported component with an owner, controls, and an exit date</li></ul></div>
+            <div class="week"><div class="week-label">Week 4</div><ul class="doc-list"><li>Confirm one backup copy is immutable or offline, then run a real restore test</li><li>Brief everyone on ClickFix and callback verification. Fifteen minutes is enough</li></ul></div>
+          </div>
+          <div class="doc-callout"><p><strong>The bottom line.</strong> None of this year's biggest incidents needed a genius attacker. They needed an unpatched appliance, a help desk that trusted a voice, a token nobody revoked, an ERP endpoint that should never have faced the internet, or a person who pasted one command. Close those doors and you are ahead of most of the organizations in this year's breach headlines. And you will have a much easier conversation with your auditors.</p></div>
+        </div>
+
+        <div class="doc-section" id="sources">
+          <div class="doc-section-title">13 &middot; Sources and Further Reading</div>
+          <p class="doc-para">Every figure and incident above was checked against these sources in October 2026. Threat details change quickly, so verify against the original before quoting.</p>
+          <div class="doc-callout"><p><strong>About external links.</strong> Links are provided for reference and open in a new tab. VianCore does not control third-party websites and is not responsible for their content, availability, or security. If a link looks broken or suspicious, please let us know through the Contact page.</p></div>
+          <ul class="doc-list doc-refs">
+            <li><a href="https://www.verizon.com/business/resources/reports/dbir/" target="_blank" rel="noopener noreferrer">Verizon: 2026 Data Breach Investigations Report</a></li>
+            <li><a href="https://www.securityweek.com/verizon-dbir-2026-vulnerability-exploitation-overtakes-credential-theft-as-top-breach-vector/" target="_blank" rel="noopener noreferrer">SecurityWeek: DBIR 2026, vulnerability exploitation overtakes credential theft</a></li>
+            <li><a href="https://flashpoint.io/resources/report/flashpoint-global-threat-intelligence-report-midyear-2026/information-stealing-malware-threats/" target="_blank" rel="noopener noreferrer">Flashpoint: Midyear 2026 report, information-stealing malware</a></li>
+            <li><a href="https://www.ic3.gov/" target="_blank" rel="noopener noreferrer">FBI Internet Crime Complaint Center (IC3)</a> and <a href="https://www.alstonprivacy.com/cybercrime-trends-to-watch-takeaways-from-the-fbis-2025-ic3-annual-report/" target="_blank" rel="noopener noreferrer">Alston &amp; Bird's summary of the 2025 report</a></li>
+            <li><a href="https://www.oracle.com/security-alerts/alert-cve-2026-35273.html" target="_blank" rel="noopener noreferrer">Oracle Security Alert: CVE-2026-35273 (PeopleTools)</a></li>
+            <li><a href="https://thehackernews.com/2026/06/shinyhunters-exploits-oracle-peoplesoft.html" target="_blank" rel="noopener noreferrer">The Hacker News: ShinyHunters exploits Oracle PeopleSoft zero-day</a></li>
+            <li><a href="https://arcticwolf.com/resources/blog/critical-oracle-peoplesoft-vulnerability-actively-exploited-in-shinyhunters-campaign/" target="_blank" rel="noopener noreferrer">Arctic Wolf: Critical PeopleSoft vulnerability exploited in ShinyHunters campaign</a></li>
+            <li><a href="https://blogs.oracle.com/peopletools/post/staying-current-on-peopletools" target="_blank" rel="noopener noreferrer">Oracle: Staying current on PeopleTools (support policy)</a></li>
+            <li><a href="https://blogs.oracle.com/peoplesoft/post/peoplesoft-support-2036" target="_blank" rel="noopener noreferrer">Oracle: PeopleSoft support through 2036</a></li>
+            <li><a href="https://blogs.oracle.com/linux/post/extend-your-os-upgrade-timeline-oracle-linux-7s-extended-support-with-expanded-coverage" target="_blank" rel="noopener noreferrer">Oracle: Oracle Linux 7 Extended Support</a></li>
+            <li><a href="https://learn.microsoft.com/en-us/lifecycle/products/windows-server-2012-r2" target="_blank" rel="noopener noreferrer">Microsoft Lifecycle: Windows Server 2012 R2</a></li>
+            <li><a href="https://www.theregister.com/2025/02/18/oracle_extends_19c_support/" target="_blank" rel="noopener noreferrer">The Register: Oracle extends Database 19c support to 2032</a></li>
+            <li><a href="https://www.bleepingcomputer.com/news/microsoft/microsoft-quietly-extends-free-windows-10-esu-support-to-october-2027/" target="_blank" rel="noopener noreferrer">BleepingComputer: Windows 10 consumer ESU extended to October 2027</a></li>
+            <li><a href="https://www.team-cymru.com/post/cyber-security-intelligence-edge-device-analysis" target="_blank" rel="noopener noreferrer">Team Cymru: Edge device analysis, April 2026</a></li>
+            <li><a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener noreferrer">CISA: Known Exploited Vulnerabilities catalog</a></li>
+            <li><a href="https://www.bleepingcomputer.com/news/security/shinyhunters-claim-to-be-behind-sso-account-data-theft-attacks/" target="_blank" rel="noopener noreferrer">BleepingComputer: ShinyHunters SSO voice phishing attacks</a></li>
+            <li><a href="https://techcrunch.com/2026/09/15/the-worst-hacks-and-breaches-of-2026-so-far/" target="_blank" rel="noopener noreferrer">TechCrunch: The worst hacks and breaches of 2026 so far</a></li>
+            <li><a href="https://cloud.google.com/blog/topics/threat-intelligence/data-theft-salesforce-instances-via-salesloft-drift" target="_blank" rel="noopener noreferrer">Google Threat Intelligence: Salesloft Drift data theft campaign</a></li>
+            <li><a href="https://www.sophos.com/blog/supply-chain-attacks-hit-checkmarx-and-bitwarden-developer-tools" target="_blank" rel="noopener noreferrer">Sophos: Supply chain attacks hit Checkmarx and Bitwarden developer tools</a></li>
+            <li><a href="https://censys.com/blog/iranian-wiper-attack-global-medtech-firm-stryker/" target="_blank" rel="noopener noreferrer">Censys: Iranian-linked wiper attack on Stryker</a></li>
+            <li><a href="https://informationsecurity.mcmaster.ca/it-notice-increase-in-clickfix-social-engineering-attacks/" target="_blank" rel="noopener noreferrer">McMaster University: Notice on ClickFix social engineering</a></li>
+            <li><a href="https://sdtimes.com/security/prompt-injection-tops-2026-owasp-genai-llm-top-ten-vulnerabilities/" target="_blank" rel="noopener noreferrer">SD Times: Prompt injection tops the 2026 OWASP LLM Top 10</a></li>
+            <li><a href="https://fortune.com/europe/2024/05/17/arup-deepfake-fraud-scam-victim-hong-kong-25-million-cfo/" target="_blank" rel="noopener noreferrer">Fortune: Arup confirmed as $25 million deepfake scam victim</a></li>
+            <li><a href="https://www.oracle.com/security-alerts/alert-cve-2025-61882.html" target="_blank" rel="noopener noreferrer">Oracle Security Alert: CVE-2025-61882 (E-Business Suite)</a></li>
+            <li><a href="https://www.crowdstrike.com/en-us/blog/crowdstrike-identifies-campaign-targeting-oracle-e-business-suite-zero-day-CVE-2025-61882/" target="_blank" rel="noopener noreferrer">CrowdStrike: Campaign targeting the Oracle E-Business Suite zero-day</a></li>
+            <li><a href="https://arcticwolf.com/resources/blog/cve-2025-14847" target="_blank" rel="noopener noreferrer">Arctic Wolf: MongoBleed (CVE-2025-14847)</a></li>
+            <li><a href="https://pages.nist.gov/800-63-4/sp800-63b.html" target="_blank" rel="noopener noreferrer">NIST SP 800-63B-4: Authentication and Authenticator Management</a></li>
+          </ul>
+        </div>
+
+        <div class="doc-nav">
+          <button class="doc-nav-btn" onclick="location.href='../knowledge/'">
+            <span class="nav-dir">&lsaquo; Back to library</span>
+            <span class="nav-title">Knowledge Base</span>
+          </button>
+          <button class="back-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">&uarr; Top of page</button>
+          <button class="doc-nav-btn" style="text-align:right" onclick="location.href='multi-cloud-terminology-cheat-sheet.html'">
+            <span class="nav-dir">Next &rsaquo;</span>
+            <span class="nav-title">Multi-Cloud Terminology Cheat Sheet</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span class="footer-copy">&copy; 2026 VianCore. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="#">RSS</a>
+      <a href="../contact/">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    const sections = document.querySelectorAll('.doc-body [id]');
+    const links = document.querySelectorAll('.sidebar-link');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      links.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+    });
+  </script>
+
+
+  <script src="../assets/theme-toggle.js"></script>
+</body>
+</html>
