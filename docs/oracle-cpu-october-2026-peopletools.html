@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('viancore-theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="A PeopleSoft admin brief on the Oracle October 2026 Critical Patch Update: 89 PeopleTools fixes, each priority CVE in plain language with its impact and a workaround, plus guidance for PeopleTools 8.60 and older. VianCore Knowledge Base."/>
+  <title>Oracle October 2026 CPU for PeopleTools · VianCore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/style.css"/>
+  <style>
+    .breadcrumb {
+      padding: 14px 6vw;
+      border-bottom: 0.5px solid rgba(var(--text-rgb),0.06);
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .breadcrumb span { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--text-rgb),0.85); font-weight: 500; }
+    .breadcrumb a { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--text-rgb),0.58); transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb .sep { color: rgba(var(--text-rgb),0.25); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: clamp(160px, 18vw, 220px) 1fr;
+      min-height: 70vh;
+    }
+
+    .sidebar {
+      border-right: 0.5px solid rgba(var(--text-rgb),0.06);
+      padding: clamp(24px, 3vw, 36px) clamp(16px, 2vw, 28px);
+      display: flex; flex-direction: column; gap: 32px;
+      position: sticky; top: 77px; align-self: start;
+      max-height: calc(100vh - 77px); overflow-y: auto;
+    }
+
+    .sidebar-section-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(var(--text-rgb),0.42); margin-bottom: 14px; font-weight: 500; }
+    .sidebar-link { font-size: clamp(11px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.62); padding: 7px 0; border-bottom: 0.5px solid rgba(var(--text-rgb),0.06); cursor: pointer; display: block; transition: color 0.2s; font-weight: 400; }
+    .sidebar-link:hover, .sidebar-link.active { color: var(--accent); }
+
+    .sidebar-meta { display: flex; flex-direction: column; gap: 12px; }
+    .meta-row { display: flex; flex-direction: column; gap: 2px; }
+    .meta-label { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(var(--text-rgb),0.42); font-weight: 500; }
+    .meta-value { font-size: clamp(11px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.72); font-weight: 400; }
+    .sidebar-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .content {
+      padding: clamp(36px, 5vw, 56px) clamp(32px, 6vw, 72px) clamp(48px, 6vw, 72px);
+      max-width: 860px;
+    }
+
+    .doc-category { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .doc-title { font-size: clamp(20px, 2.8vw, 28px); font-weight: 300; letter-spacing: 0.03em; color: var(--text-page); line-height: 1.3; margin-bottom: 12px; }
+    .doc-subtitle { font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.38); line-height: 1.8; margin-bottom: 32px; font-weight: 300; }
+    .doc-divider { height: 0.5px; background: rgba(var(--text-rgb),0.07); margin-bottom: 36px; }
+    .doc-body { display: flex; flex-direction: column; gap: 32px; }
+
+    .doc-section { display: flex; flex-direction: column; gap: 14px; }
+    .doc-section-title { font-size: clamp(8px, 1vw, 10px); letter-spacing: 0.2em; text-transform: uppercase; color: rgba(var(--text-rgb),0.4); margin-bottom: 4px; }
+
+    .doc-para { font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.52); line-height: 1.9; font-weight: 300; }
+
+    .doc-subhead { font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.78); font-weight: 500; letter-spacing: 0.01em; margin-top: 8px; }
+
+    .doc-refs { font-size: clamp(10px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.4); line-height: 1.8; }
+    .doc-refs a { color: var(--accent); transition: color 0.2s; }
+    .doc-refs a:hover { color: #5fd4cc; text-decoration: underline; }
+
+    .match-strong { color: #3ddc97; border: 0.5px solid rgba(61,220,151,0.4); background: rgba(61,220,151,0.08); }
+    .match-closest { color: #f0c674; border: 0.5px solid rgba(240,198,116,0.4); background: rgba(240,198,116,0.08); }
+    .match-concept { color: #e08283; border: 0.5px solid rgba(224,130,131,0.4); background: rgba(224,130,131,0.08); }
+
+    .doc-subtitle code, .doc-para code, .doc-list code, .doc-refs code, td code, th code, .doc-callout code, .doc-subhead code {
+      font-family: 'Courier New', Courier, monospace;
+      background: rgba(var(--text-rgb),0.06);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.92em;
+      color: rgba(var(--text-rgb),0.75);
+    }
+
+    .doc-callout {
+      border-left: 2px solid var(--accent);
+      padding: 16px 20px;
+      background: rgba(var(--accent-rgb),0.04);
+    }
+    .doc-callout p { font-size: clamp(11px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.45); line-height: 1.85; font-weight: 300; }
+
+    .doc-list { display: flex; flex-direction: column; gap: 10px; padding-left: 0; }
+    .doc-list li {
+      font-size: clamp(12px, 1.3vw, 14px); color: rgba(var(--text-rgb),0.48);
+      line-height: 1.8; padding-left: 20px; position: relative; font-weight: 300;
+    }
+    .doc-list li::before { content: "—"; position: absolute; left: 0; color: var(--accent); font-size: 11px; top: 2px; }
+    ol.doc-list { counter-reset: doclist; list-style: none; }
+    ol.doc-list li { counter-increment: doclist; }
+    ol.doc-list li::before { content: counter(doclist) "."; font-size: 11px; }
+
+    .doc-table { width: 100%; border-collapse: collapse; margin: 4px 0; }
+    .doc-table th, .doc-table td {
+      text-align: left; padding: 10px 14px; font-size: clamp(11px, 1.2vw, 13px);
+      font-weight: 300; color: rgba(var(--text-rgb),0.52); border-bottom: 0.5px solid rgba(var(--text-rgb),0.08);
+      vertical-align: top; line-height: 1.6;
+    }
+    .doc-table th {
+      font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; border-bottom: 1px solid rgba(var(--accent-rgb),0.3);
+    }
+    .doc-table-wrap { overflow-x: auto; }
+    .doc-table td.code-cell { font-family: 'Courier New', Courier, monospace; color: var(--accent); font-weight: 500; white-space: nowrap; letter-spacing: 0.02em; }
+
+    .doc-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 56px; padding-top: 24px;
+      border-top: 0.5px solid rgba(var(--text-rgb),0.07);
+      flex-wrap: wrap; gap: 12px;
+    }
+    .doc-nav-btn {
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 8px 14px; border: 0.5px solid rgba(var(--text-rgb),0.12);
+      color: rgba(var(--text-rgb),0.35); cursor: pointer; background: transparent;
+      display: flex; flex-direction: column; gap: 3px; font-family: var(--font);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .doc-nav-btn:hover { border-color: rgba(var(--text-rgb),0.3); color: rgba(var(--text-rgb),0.7); }
+    .doc-nav-btn .nav-dir { font-size: 8px; color: rgba(var(--text-rgb),0.6); }
+    .doc-nav-btn .nav-title { font-size: 10px; color: rgba(var(--text-rgb),0.42); }
+    .back-btn {
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(var(--text-rgb),0.6); cursor: pointer; background: transparent;
+      border: none; font-family: var(--font); transition: color 0.2s;
+    }
+    .back-btn:hover { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; max-height: none; border-right: none; border-bottom: 0.5px solid rgba(var(--text-rgb),0.06); flex-direction: row; flex-wrap: wrap; gap: 16px; padding: 16px 6vw; }
+      .content { padding: 32px 6vw 48px; }
+    }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: rgba(var(--text-rgb),0.08); border: 0.5px solid rgba(var(--text-rgb),0.08); }
+    .stat { background: var(--bg); padding: 18px 16px; display: flex; flex-direction: column; gap: 6px; }
+    .stat-num { font-size: clamp(22px, 2.6vw, 28px); font-weight: 300; color: var(--accent); letter-spacing: 0.01em; line-height: 1; }
+    .stat-label { font-size: clamp(10px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.55); line-height: 1.55; font-weight: 300; }
+    .stat-src { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--text-rgb),0.32); margin-top: 2px; }
+
+    .threat-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .threat-num { font-size: 10px; letter-spacing: 0.18em; color: var(--accent); font-weight: 500; }
+    .threat-title { font-size: clamp(15px, 1.7vw, 18px); color: var(--text-page); font-weight: 400; letter-spacing: 0.01em; }
+    .sev { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; font-weight: 500; }
+    .sev-crit { color: #e08283; border: 0.5px solid rgba(224,130,131,0.45); background: rgba(224,130,131,0.08); }
+    .sev-high { color: #d9a441; border: 0.5px solid rgba(217,164,65,0.45); background: rgba(217,164,65,0.08); }
+    html[data-theme="light"] .sev-crit { color: #b23a3c; border-color: rgba(178,58,60,0.4); background: rgba(178,58,60,0.06); }
+    html[data-theme="light"] .sev-high { color: #8a5a00; border-color: rgba(138,90,0,0.4); background: rgba(138,90,0,0.06); }
+
+    .case { border: 0.5px solid rgba(var(--text-rgb),0.1); padding: 16px 20px; display: flex; flex-direction: column; gap: 6px; }
+    .case-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(var(--text-rgb),0.42); font-weight: 500; }
+    .case p { font-size: clamp(11px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.55); line-height: 1.85; font-weight: 300; }
+
+    .doc-callout.warn { border-left-color: #d9a441; background: rgba(217,164,65,0.05); }
+    html[data-theme="light"] .doc-callout.warn { border-left-color: #8a5a00; }
+    .doc-callout p strong, .doc-para strong, .doc-list li strong { color: rgba(var(--text-rgb),0.8); font-weight: 500; }
+    .doc-para a, .doc-list a, .case a, .doc-callout a { color: var(--accent); }
+    .doc-para a:hover, .doc-list a:hover, .case a:hover { text-decoration: underline; }
+
+    .role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .role-card { border: 0.5px solid rgba(var(--text-rgb),0.1); border-top: 2px solid var(--accent); padding: 18px 18px 8px; }
+    .role-card .doc-subhead { margin-top: 0; margin-bottom: 10px; }
+    .role-card .doc-list li { font-size: clamp(11px, 1.15vw, 13px); }
+
+    .week { display: grid; grid-template-columns: 90px 1fr; gap: 16px; padding: 14px 0; border-bottom: 0.5px solid rgba(var(--text-rgb),0.08); }
+    .week:first-of-type { border-top: 0.5px solid rgba(var(--text-rgb),0.08); }
+    .week-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-weight: 500; padding-top: 3px; }
+    .week .doc-list li { font-size: clamp(11px, 1.2vw, 13px); }
+    @media (max-width: 560px) { .week { grid-template-columns: 1fr; gap: 6px; } }
+
+    /* Article-specific: round teal bullets instead of the default dash */
+    .doc-list li::before { content: "\2022"; font-size: 16px; top: -1px; }
+    ol.doc-list li::before { content: counter(doclist) "."; font-size: 11px; top: 2px; }
+    a.stat-src { text-decoration: none; transition: color 0.2s; }
+    a.stat-src:hover { color: var(--accent); }
+    .lens { border-left: 2px solid var(--accent); background: rgba(var(--accent-rgb),0.06); padding: 14px 20px; display: flex; flex-direction: column; gap: 6px; }
+    .lens-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+    .lens p { font-size: clamp(11px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.6); line-height: 1.85; font-weight: 300; }
+    .case p + p { margin-top: 6px; }
+    .lens a, .doc-table a { color: var(--accent); }
+
+    /* Article-specific: CVE cards */
+    .layout > * { min-width: 0; }
+    .stat-grid.six { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 560px) { .stat-grid.six { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .doc-list li, .cve-rows dd li { font-size: 15px !important; line-height: 1.8; } .cve-also { font-size: 13px !important; } }
+    .tier-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-top: 10px; }
+    .cve { border: 0.5px solid rgba(var(--text-rgb),0.12); border-left: 2px solid var(--accent); }
+    .cve.crit { border-left-color: #e08283; }
+    .cve.high { border-left-color: #d9a441; }
+    html[data-theme="light"] .cve.crit { border-left-color: #b23a3c; }
+    html[data-theme="light"] .cve.high { border-left-color: #8a5a00; }
+    .cve-head { padding: 14px 18px 10px; display: flex; flex-direction: column; gap: 6px; border-bottom: 0.5px solid rgba(var(--text-rgb),0.08); }
+    .cve-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .cve-id { font-family: 'Courier New', Courier, monospace; font-size: clamp(12px, 1.3vw, 14px); color: var(--accent); font-weight: 600; letter-spacing: 0.02em; }
+    .cve-comp { font-size: clamp(13px, 1.4vw, 15px); color: var(--text-page); font-weight: 400; }
+    .cve-meta { font-size: clamp(10px, 1.1vw, 12px); color: rgba(var(--text-rgb),0.5); line-height: 1.6; font-weight: 300; }
+    .sev-med { color: var(--accent); border: 0.5px solid rgba(var(--accent-rgb),0.45); background: rgba(var(--accent-rgb),0.08); }
+    .cve-rows { display: grid; grid-template-columns: 120px 1fr; margin: 0; }
+    .cve-rows dt { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(var(--text-rgb),0.5); font-weight: 500; padding: 12px 0 12px 18px; border-bottom: 0.5px solid rgba(var(--text-rgb),0.06); }
+    .cve-rows dd { margin: 0; padding: 10px 18px 10px 0; border-bottom: 0.5px solid rgba(var(--text-rgb),0.06); }
+    .cve-rows dt:last-of-type, .cve-rows dd:last-of-type { border-bottom: none; }
+    .cve-rows dd p, .cve-rows dd li { font-size: clamp(11px, 1.2vw, 13px); color: rgba(var(--text-rgb),0.6); line-height: 1.8; font-weight: 300; }
+    .cve-rows dd p + p { margin-top: 6px; }
+    .cve-rows dd .doc-list { gap: 6px; }
+    .cve-rows strong { color: rgba(var(--text-rgb),0.85); font-weight: 500; }
+    .cve-rows code { font-family: 'Courier New', Courier, monospace; background: rgba(var(--text-rgb),0.06); padding: 1px 6px; border-radius: 3px; font-size: 0.92em; color: rgba(var(--text-rgb),0.78); }
+    .cve-also { font-size: clamp(10px, 1.1vw, 12px) !important; color: rgba(var(--text-rgb),0.45) !important; }
+    html[data-theme="light"] .cve-rows dd p, html[data-theme="light"] .cve-rows dd li, html[data-theme="light"] .cve-meta { color: var(--text-page); }
+    @media (max-width: 560px) {
+      .cve-rows { grid-template-columns: 1fr; }
+      .cve-rows dt { padding: 12px 18px 2px; border-bottom: none; }
+      .cve-rows dd { padding: 0 18px 12px; }
+    }
+    .cve-list { font-family: 'Courier New', Courier, monospace; font-size: 11px; color: rgba(var(--text-rgb),0.62); white-space: nowrap; line-height: 1.7; }
+    .doc-table td strong { color: rgba(var(--text-rgb),0.82); font-weight: 500; }
+    html[data-theme="light"] .doc-table td, html[data-theme="light"] .cve-list { color: var(--text-page); }
+  </style>
+  <link rel="stylesheet" href="../assets/polish.css"/>
+  <script src="../assets/polish.js" defer></script>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <a href="../">
+          <img src="../assets/images/logo-nav-white.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-dark">
+        <img src="../assets/images/logo-nav-color.png" alt="VianCore Technologies" class="nav-logo-img nav-logo-light">
+        </a>
+      </div>
+      <div class="nav-tagline">Where Enterprise Knowledge Gets Serious</div>
+    </div>
+    <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="../knowledge/" class="active">Knowledge Base</a></li>
+      <li><a href="../learning-hub.html">Learning Hub</a></li>
+    <li><a href="../about/">About</a></li>
+      <li><a href="../contact/">Contact</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Switch to light mode" title="Switch to light mode">
+      <span class="tt-track">
+        <span class="tt-thumb">
+          <svg class="tt-icon tt-icon-sun" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.3" fill="currentColor"/>
+            <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <line x1="12" y1="1.6" x2="12" y2="4.4"/>
+              <line x1="12" y1="19.6" x2="12" y2="22.4"/>
+              <line x1="1.6" y1="12" x2="4.4" y2="12"/>
+              <line x1="19.6" y1="12" x2="22.4" y2="12"/>
+              <line x1="4.4" y1="4.4" x2="6.3" y2="6.3"/>
+              <line x1="17.7" y1="17.7" x2="19.6" y2="19.6"/>
+              <line x1="4.4" y1="19.6" x2="6.3" y2="17.7"/>
+              <line x1="17.7" y1="6.3" x2="19.6" y2="4.4"/>
+            </g>
+          </svg>
+          <svg class="tt-icon tt-icon-moon" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
+            <path fill="currentColor" d="M20.4 14.9A8.4 8.4 0 1 1 9.1 3.6a6.7 6.7 0 0 0 11.3 11.3z"/>
+          </svg>
+        </span>
+      </span>
+    </button>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  </nav>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="../knowledge/" class="active">Knowledge Base</a>
+    <a href="../learning-hub.html">Learning Hub</a>
+    <a href="../about/">About</a>
+    <a href="../contact/">Contact</a>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="../knowledge/">Knowledge Base</a>
+    <span class="sep">&rsaquo;</span>
+    <a href="../knowledge/#security">Security</a>
+    <span class="sep">&rsaquo;</span>
+    <span>October 2026 CPU for PeopleTools</span>
+  </div>
+
+  <div class="layout">
+
+    <div class="sidebar">
+      <div>
+        <div class="sidebar-section-label">In this document</div>
+        <a class="sidebar-link active" href="#summary">Summary</a>
+        <a class="sidebar-link" href="#numbers">The Numbers</a>
+        <a class="sidebar-link" href="#context">Why Not Routine</a>
+        <a class="sidebar-link" href="#priority">Priority CVEs</a>
+        <a class="sidebar-link" href="#legacy">8.60 and Older</a>
+        <a class="sidebar-link" href="#compromise">Compromise Check</a>
+        <a class="sidebar-link" href="#patching">Patching Checklist</a>
+        <a class="sidebar-link" href="#other">Other CVEs</a>
+        <a class="sidebar-link" href="#sources">Sources</a>
+      </div>
+
+      <div class="sidebar-meta">
+        <div class="sidebar-section-label">Document info</div>
+        <div class="meta-row"><span class="meta-label">Category</span><span class="meta-value">Security</span></div>
+        <div class="meta-row"><span class="meta-label">Published</span><span class="meta-value">Oct 2026</span></div>
+        <div class="meta-row"><span class="meta-label">Last reviewed</span><span class="meta-value">21 Oct 2026</span></div>
+        <div class="meta-row"><span class="meta-label">Read time</span><span class="meta-value">14 min</span></div>
+        <div class="meta-row"><span class="meta-label">Version</span><span class="meta-value">1.0</span></div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-label">Tags</div>
+        <div class="sidebar-tags">
+          <span class="tag">PeopleTools</span>
+          <span class="tag">Oracle CPU</span>
+          <span class="tag">Patching</span>
+          <span class="tag">Security</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="doc-category">Security &middot; Patch Brief</div>
+      <h1 class="doc-title">Oracle October 2026 CPU: What PeopleTools Admins Need to Do</h1>
+      <p class="doc-subtitle">89 PeopleTools fixes for releases 8.61 to 8.63. Each priority CVE in plain language, what it can do, and a workaround until you patch, including guidance for 8.60 and older.</p>
+      <div class="doc-divider"></div>
+
+      <div class="doc-body">
+
+        <div class="doc-section" id="summary">
+          <div class="doc-section-title">01 &middot; Summary</div>
+          <p class="doc-para">The Oracle October 2026 Critical Patch Update, released 20 October 2026, includes <strong>89 security fixes for PeopleTools 8.61 to 8.63</strong>. PeopleTools was hit by a zero-day in June 2026, so this cycle needs more urgency than a routine quarterly patch.</p><p class="doc-para">This brief lists each high-priority CVE with a plain description, its impact, and a workaround for systems that cannot be patched yet. That includes PeopleTools 8.60 and older, which receive no fix for any of these.</p><div class="doc-callout"><p><strong>Key actions.</strong></p><ul class="doc-list"><li>Patch internet-facing PIA, Integration Broker and Report Repository web servers first, within 14 days.</li><li>The highest risks are Logstash (9.8, no login) and SQR (9.6, any signed-in user).</li><li>Block /PSEMHUB/* and /PSIGW/HttpListeningConnector from the internet now. These paths were used in the June attacks.</li><li>On 8.60 or older, no patch is available. See section 05.</li></ul></div>
+        </div>
+        <div class="doc-section" id="numbers">
+          <div class="doc-section-title">02 &middot; The Numbers</div>
+          <div class="stat-grid six"><div class="stat"><div class="stat-num">89</div><div class="stat-label">PeopleTools fixes that can be exploited, plus 2 Oracle marks as not exploitable</div></div><div class="stat"><div class="stat-num">40</div><div class="stat-label">need no login at all</div></div><div class="stat"><div class="stat-num">23</div><div class="stat-label">need no login, work over the network and need no user click</div></div><div class="stat"><div class="stat-num">2 / 17</div><div class="stat-label">Critical (9.0 and up) and High (7.0 to 8.9)</div></div><div class="stat"><div class="stat-num">55 / 15</div><div class="stat-label">Medium (4.0 to 6.9) and Low (under 4.0)</div></div><div class="stat"><div class="stat-num">89 of 109</div><div class="stat-label">PeopleSoft patches in this CPU are in PeopleTools</div></div></div><p class="doc-para">Most of this CPU sits in the tools layer, not the applications. The components with the most fixes are Report Distribution (11), Portal (9), Business Interlink (7) and SQR (7).</p>
+        </div>
+        <div class="doc-section" id="context">
+          <div class="doc-section-title">03 &middot; Why Is This Cycle Not Routine?</div>
+          <div class="doc-table-wrap"><table class="doc-table"><tr><th>Date</th><th>Event</th></tr><tr><td>27 May to 9 Jun 2026</td><td>ShinyHunters (UNC6240) exploited CVE-2026-35273 through /PSEMHUB/hub and /PSIGW/HttpListeningConnector. Over 100 organizations were notified, about 68% of them universities.</td></tr><tr><td>10 Jun 2026</td><td>Oracle issued an out-of-band Security Alert for CVE-2026-35273 (CVSS 9.8, PeopleTools 8.61 and 8.62, Updates Environment Management).</td></tr><tr><td>12 Jun 2026</td><td>CISA added it to the Known Exploited Vulnerabilities catalog.</td></tr><tr><td>18 Aug 2026</td><td>The monthly security update fixed more PeopleTools issues, including an unauthenticated takeover in PIA.</td></tr><tr><td>20 Oct 2026</td><td>This CPU: 89 PeopleTools fixes, including four more in the same EMHub component.</td></tr></table></div><ul class="doc-list"><li><strong>Oracle now releases security fixes monthly.</strong> Expect the next updates on 17 Nov 2026 and 15 Dec 2026, then the quarterly CPU on 19 Jan 2027. A quarterly-only patch schedule leaves gaps of up to two months.</li><li><strong>The same components keep appearing.</strong> EMHub, Integration Broker and PIA web components were fixed in June, August and October. Harden them regardless of patch level.</li></ul>
+        </div>
+        <div class="doc-section" id="priority">
+          <div class="doc-section-title">04 &middot; Priority CVEs</div>
+          <p class="doc-para">Each card gives the CVE, what the component does, the impact, and a workaround to use until the patch is applied. Oracle does not publish exploit details for its own code, so impact notes are based on Oracle's scoring and how each component is used in a typical PeopleSoft environment.</p><div class="doc-callout warn"><p>Oracle's guidance is that blocking network access and removing unneeded privileges can reduce risk until patches are applied, but neither is a long-term solution. Test every workaround outside production first, since some can break features that are in use.</p></div><div class="tier-label">Tier 1 &middot; Fix first</div><div class="cve crit"><div class="cve-head"><div class="cve-top"><span class="cve-id">CVE-2026-33466</span><span class="cve-comp">Logstash (bundled)</span><span class="sev sev-crit">9.8 Critical</span></div><div class="cve-meta">No login · Network · 8.61 to 8.63</div></div><dl class="cve-rows"><dt>What it is</dt><dd><p >PeopleTools includes Logstash as part of the search and PeopleSoft Health Center stack. Logstash does not validate file paths when it extracts an archive, so a crafted archive can write files anywhere Logstash has access.</p></dd><dt>Impact</dt><dd><p >Full takeover of the server running Logstash. With automatic pipeline reload turned on, a planted file can run as code. The patch also fixes 31 other CVEs in Logstash libraries.</p></dd><dt>Workaround</dt><dd><ul class="doc-list"><li>If Health Center or Insights is not in use, stop Logstash and disable it at boot.</li><li>If it is in use, allow Logstash ports only from the search host and confirm it pulls only from sources you control.</li><li>Set <code>config.reload.automatic: false</code> in logstash.yml.</li></ul></dd></dl></div><div class="cve crit"><div class="cve-head"><div class="cve-top"><span class="cve-id">CVE-2026-101420, 101421, 101428</span><span class="cve-comp">SQR</span><span class="sev sev-crit">9.6 Critical</span></div><div class="cve-meta">101421 needs no login · 101420 and 101428 need any valid login · Network · 8.61 to 8.63</div></div><dl class="cve-rows"><dt>What it is</dt><dd><p >SQR is the batch reporting engine Process Scheduler runs for most delivered reports.</p></dd><dt>Impact</dt><dd><p ><strong>101420 (9.6):</strong> any user who can sign in, including employee, student or supplier self-service users, can read and change all data PeopleTools can reach. Oracle marks it as scope changed, so the impact can extend beyond PeopleTools.</p><p ><strong>101421 (7.5):</strong> read all accessible data without a login.</p><p ><strong>101428 (7.5):</strong> full takeover by a signed-in user. Harder to exploit.</p></dd><dt>Workaround</dt><dd><ul class="doc-list"><li>Remove SQR process groups from self-service, student, supplier and guest permission lists (PeopleTools &gt; Security &gt; Permissions &amp; Roles &gt; Permission Lists &gt; Process tab).</li><li>Review SQR runs by user for the last 90 days and remove access with no business need.</li><li>Keep Process Scheduler servers off network segments end users can reach directly.</li></ul><p class="cve-also">Also fixed in this component: CVE-2026-101429 (7.0), 101426 (6.9), 101419 (6.5), 101425 (2.5). 101429 and 101426 need local server access.</p></dd></dl></div><div class="cve high"><div class="cve-head"><div class="cve-top"><span class="cve-id">CVE-2026-101390, 101411</span><span class="cve-comp">Business Interlink</span><span class="sev sev-high">8.1 High</span></div><div class="cve-meta">No login · Network · Difficult to exploit · 8.61 to 8.63</div></div><dl class="cve-rows"><dt>What it is</dt><dd><p >Business Interlinks is the older way PeopleCode called external systems, before Integration Broker. Many sites no longer use it, but it is still delivered and deployed.</p></dd><dt>Impact</dt><dd><p >Full takeover without a login. Oracle rates both as difficult to exploit, which means specific conditions are needed. It does not mean they are safe to ignore.</p></dd><dt>Workaround</dt><dd><ul class="doc-list"><li>In Application Designer, Find In across all PeopleCode for <strong>GetInterlink</strong>. No hits usually mean Business Interlinks are not in use.</li><li>If unused, block Business Interlink traffic at the web tier or WAF.</li><li>If used, restrict which servers can reach the endpoints those interlinks call and plan the move to Integration Broker.</li></ul><p class="cve-also">Also fixed in this component: CVE-2026-101410 (7.5), 101488 (6.5, no login), 87345 (6.1, no login), 101389 (5.9, no login), 60814 (3.9).</p></dd></dl></div><div class="cve high"><div class="cve-head"><div class="cve-top"><span class="cve-id">CVE-2026-101409, 101422, 101427</span><span class="cve-comp">Report Distribution (Report Manager)</span><span class="sev sev-high">8.1 High</span></div><div class="cve-meta">101409 and 101427 need no login · 101422 needs a basic login · 8.61 to 8.63</div></div><dl class="cve-rows"><dt>What it is</dt><dd><p >Report Distribution posts reports to the Report Repository and serves them through Report Manager, usually under the /psreports/ path. It is often exposed to the same users as PIA.</p></dd><dt>Impact</dt><dd><p ><strong>101409 (7.5):</strong> read every report in the repository without a login, including payroll registers and vendor lists.</p><p ><strong>101427 (8.1):</strong> no login, but a user must click a crafted link. It can change or delete reports and crash the service.</p><p ><strong>101422 (8.1):</strong> the same impact with a basic login.</p></dd><dt>Workaround</dt><dd><ul class="doc-list"><li>Do not expose /psreports/ to the internet. Restrict it to internal, signed-in traffic at the load balancer or WAF.</li><li>Review Report Manager folder security and distribution lists. Reports distributed to broad roles such as PeopleSoft User are a common exposure.</li><li>Purge old reports from the repository on a schedule.</li></ul><p class="cve-also">Also fixed in this component: CVE-2026-87410 (6.8, no login), 101418 (6.5), 91519 (6.5), 101424 (5.8), 87415 (5.3, no login), 101423 (4.3), 87416 (3.7, no login), 87412 (2.7).</p></dd></dl></div><div class="cve high"><div class="cve-head"><div class="cve-top"><span class="cve-id">CVE-2026-101431, 101430, 101432, 101433</span><span class="cve-comp">PeopleSoft Test Framework</span><span class="sev sev-high">8.7 High</span></div><div class="cve-meta">101431 needs a login and a user click · 101430 and 101433 need no login · 8.61 to 8.63</div></div><dl class="cve-rows"><dt>What it is</dt><dd><p >PeopleSoft Test Framework (PTF) records and replays test scripts. It belongs in development and test, but its permissions are sometimes carried into production through cloned roles.</p></dd><dt>Impact</dt><dd><p ><strong>101431 (8.7):</strong> a signed-in user can plant content that runs when an admin opens it, then read and change all data.</p><p ><strong>101430 (6.2), 101432 (5.3), 101433 (5.3):</strong> expose or change smaller amounts of data.</p></dd><dt>Workaround</dt><dd><ul class="doc-list"><li>Remove PTF permission lists and roles from all production users.</li><li>Run PTF only in non-production environments.</li></ul></dd></dl></div><div class="tier-label">Tier 2 &middot; Fix in the same cycle</div><div class="cve med"><div class="cve-head"><div class="cve-top"><span class="cve-id">CVE-2026-91497, 60968, 87348, 87418</span><span class="cve-comp">Updates Environment Management (EMHub)</span><span class="sev sev-med">5.3 Medium</span></div><div class="cve-meta">91497 needs no login · The others need local or admin access · 8.61 to 8.63</div></div><dl class="cve-rows"><dt>What it is</dt><dd><p >The Environment Management Hub (PSEMHUB) tracks environment details for PUM and Change Assistant. CVE-2026-35273, exploited in June 2026, was in this same component.</p></dd><dt>Impact</dt><dd><p ><strong>91497:</strong> change some data without a login. The score is medium, but treat it as high because attackers already target this code.</p></dd><dt>Workaround</dt><dd><ul class="doc-list"><li>Block /PSEMHUB/* from outside your network at the load balancer or WAF. Mandiant reported this does not affect normal PIA use.</li><li>In production, disable the EMHub service, or remove the PSEMHUB application on single-server installs, unless it is in use.</li><li>If the June 2026 alert was applied late or not at all, run the compromise check in section 06.</li></ul></dd></dl></div><div class="cve high"><div class="cve-head"><div class="cve-top"><span class="cve-id">CVE-2026-101450, 70869</span><span class="cve-comp">Integration Broker</span><span class="sev sev-high">7.1 High</span></div><div class="cve-meta">No login, but a user must click · 8.61 to 8.63</div></div><dl class="cve-rows"><dt>What it is</dt><dd><p >Integration Broker exchanges messages between PeopleSoft and other systems. The gateway listener /PSIGW/HttpListeningConnector was also used in the June 2026 attacks.</p></dd><dt>Impact</dt><dd><p >Read all data and change some, if a user is led to a crafted request.</p></dd><dt>Workaround</dt><dd><ul class="doc-list"><li>Block /PSIGW/HttpListeningConnector from the internet. If partners need it, allow only their IP addresses.</li><li>Require authentication on every inbound node and review what the ANONYMOUS node is allowed to do.</li></ul></dd></dl></div><div class="cve high"><div class="cve-head"><div class="cve-top"><span class="cve-id">CVE-2026-55200</span><span class="cve-comp">libssh2 (file transfer)</span><span class="sev sev-high">8.3 High</span></div><div class="cve-meta">No login, but needs a connection to a hostile server · 8.61 to 8.63</div></div><dl class="cve-rows"><dt>What it is</dt><dd><p >PeopleTools uses libssh2 for SFTP: file attachments, Integration Broker file transfers and report posting. A packet length check is missing.</p></dd><dt>Impact</dt><dd><p >A malicious or spoofed SFTP server can corrupt memory on the app or batch server and may run code there. The patch also fixes 5 related CVEs.</p></dd><dt>Workaround</dt><dd><ul class="doc-list"><li>Connect only to known SFTP servers and pin their host keys.</li><li>Review SFTP URLs under PeopleTools &gt; Utilities &gt; Administration &gt; URLs and remove unused entries.</li></ul></dd></dl></div><div class="cve high"><div class="cve-head"><div class="cve-top"><span class="cve-id">CVE-2026-101416</span><span class="cve-comp">PsAdmin</span><span class="sev sev-high">7.5 High</span></div><div class="cve-meta">No login · Same network segment only · 8.61 to 8.63</div></div><dl class="cve-rows"><dt>What it is</dt><dd><p >PsAdmin is the utility used to configure and start application server, Process Scheduler and search domains.</p></dd><dt>Impact</dt><dd><p >Full takeover from a machine on the same local network.</p></dd><dt>Workaround</dt><dd><ul class="doc-list"><li>Place PeopleSoft servers and admin ports (PsAdmin, Tuxedo JSL/WSL, Push Notification) on an admin-only network segment.</li><li>Limit OS-level logins to the servers.</li></ul></dd></dl></div><div class="cve high"><div class="cve-head"><div class="cve-top"><span class="cve-id">CVE-2026-101434</span><span class="cve-comp">Database Server</span><span class="sev sev-high">7.6 High</span></div><div class="cve-meta">No login, but a user must click · 8.61 to 8.63</div></div><dl class="cve-rows"><dt>What it is</dt><dd><p >A flaw in the database component of PeopleTools. Oracle has not published further detail.</p></dd><dt>Impact</dt><dd><p >Crash of the database tier plus limited reading and changing of data.</p></dd><dt>Workaround</dt><dd><ul class="doc-list"><li>Allow database listener traffic only from app, batch and admin servers.</li><li>Admins should not open links from unknown senders while signed in to production.</li></ul></dd></dl></div><div class="cve high"><div class="cve-head"><div class="cve-top"><span class="cve-id">CVE-2026-9076, 9563</span><span class="cve-comp">OpenSSL and Eclipse Parsson (JSON)</span><span class="sev sev-high">7.5 High</span></div><div class="cve-meta">No login · Network · 8.61 to 8.63</div></div><dl class="cve-rows"><dt>What it is</dt><dd><p >Two libraries bundled with PeopleTools. Parsson parses JSON for REST services, Fluid and Integration Broker. OpenSSL handles encryption.</p></dd><dt>Impact</dt><dd><p >A crafted request can crash or overload a server. This is denial of service, not data access. The OpenSSL patch includes 14 more OpenSSL fixes.</p></dd><dt>Workaround</dt><dd><ul class="doc-list"><li>These libraries cannot be replaced separately. PeopleTools is certified only with the versions Oracle ships, so the PeopleTools patch is the fix.</li><li>Until patched, set request size and rate limits at the load balancer or WAF for REST and Integration Broker traffic.</li></ul></dd></dl></div>
+        </div>
+        <div class="doc-section" id="legacy">
+          <div class="doc-section-title">05 &middot; PeopleTools 8.60 and Older</div>
+          <div class="doc-callout warn"><p><strong>No patch is available.</strong> Oracle lists only 8.61, 8.62 and 8.63 as supported releases in this CPU. Oracle does not test older releases and states that earlier versions are likely affected. The June 2026 fix for CVE-2026-35273 was released for 8.61 and 8.62 only, so 8.60 systems never received it.</p></div><p class="doc-para">The workarounds in section 04 are the only protection until an upgrade. Apply them in this order:</p><div class="week"><div class="week-label">Today</div><div><ul class="doc-list"><li>Block /PSEMHUB/* and /PSIGW/HttpListeningConnector from outside your network and disable EMHub in production.</li><li>Run the compromise check in section 06.</li></ul></div></div><div class="week"><div class="week-label">This week</div><div><ul class="doc-list"><li>Apply the Tier 1 workarounds: Logstash, SQR, Business Interlink, Report Distribution and Test Framework.</li></ul></div></div><div class="week"><div class="week-label">This month</div><div><ul class="doc-list"><li>Apply the Tier 2 workarounds and put PIA behind a WAF or reverse proxy with SSO and MFA.</li></ul></div></div><div class="week"><div class="week-label">This quarter</div><div><ul class="doc-list"><li>Approve and schedule an upgrade to 8.62 or 8.63. Use Oracle's PeopleTools lifecycle note on My Oracle Support (KA585) for the support dates.</li></ul></div></div>
+        </div>
+        <div class="doc-section" id="compromise">
+          <div class="doc-section-title">06 &middot; Compromise Check</div>
+          <p class="doc-para">If the June 2026 alert was applied late or never applied, check web servers for the indicators Rapid7 published:</p><ul class="doc-list"><li>Unexpected .jsp files under PSEMHUB.war, or new files under envmetadata/transactions.</li><li>Unexpected folders named logs, persistantstorage or scratchpad under PSEMHUB paths.</li><li>Recently changed .xml files under envmetadata/data/environment.</li><li>MeshCentral agents (files named meshagent) or a file named README-IF-YOU-SEE-THIS-YOUVE-BEEN-HACKED.TXT.</li><li>Outbound SMB (TCP 445) from PeopleSoft servers, or POST requests to EMHub or the IB listener from outside.</li></ul><p class="doc-para">If any of these are found, involve your incident response team before patching. Patching a compromised system removes evidence and does not remove the attacker's access.</p>
+        </div>
+        <div class="doc-section" id="patching">
+          <div class="doc-section-title">07 &middot; Patching Checklist</div>
+          <p class="doc-para">The October PeopleTools patch for your release fixes all 89 CVEs. Patch numbers and download links are in Oracle's PeopleSoft patch availability document on My Oracle Support (CPU418).</p><ol class="doc-list"><li>Confirm your PeopleTools release and patch level under PeopleTools &gt; Utilities &gt; About PeopleTools. Below 8.61, see section 05.</li><li>Confirm the June alert and August update are covered. The October patch is cumulative, but verify it against CPU418.</li><li>Apply the patch to a DEV copy with Change Assistant using the Apply PeopleTools Patch job.</li><li>Test PIA sign-on, Fluid, Integration Broker, Process Scheduler, SQR, nVision, Report Manager and search.</li><li>Patch every tier: web, app, batch, search and every Change Assistant workstation. A missed tier keeps the vulnerable binaries.</li><li>Apply the separate October CPUs for WebLogic, Tuxedo, Java and Oracle Database in the same window. The PeopleTools patch does not cover them.</li><li>Move to TEST, then PROD. Target internet-facing environments within 14 days and internal ones within 30.</li><li>After go-live, scan the web tier and confirm the new patch level on every server.</li></ol>
+        </div>
+        <div class="doc-section" id="other">
+          <div class="doc-section-title">08 &middot; Other CVEs in This CPU</div>
+          <p class="doc-para">The remaining 48 PeopleTools fixes, grouped by component and sorted by highest score. Most need a login, local server access or a user click. Patching fixes all of them.</p><div class="doc-table-wrap"><table class="doc-table"><tr><th>Component</th><th>CVE (score)</th><th>What it is</th><th>Workaround</th></tr><tr><td><strong>Portal</strong></td><td class="cve-list">CVE-2026-101388 (7.1)<br>CVE-2026-101487 (5.4)<br>CVE-2026-83372 (5.4)<br>CVE-2026-87336 (5.3)<br>CVE-2026-87343 (4.8, no login)<br>CVE-2026-101489 (4.3)<br>CVE-2026-60874 (4.2)<br>CVE-2026-87340 (3.7, no login)<br>CVE-2026-83373 (3.0)</td><td>PIA navigation, homepages and content references. Most need a login, several need a user click.</td><td>Keep PIA behind SSO with MFA. Remove guest access from portal content not meant to be public. 101388 lets any user read all data.</td></tr><tr><td><strong>Application Data Sets</strong></td><td class="cve-list">CVE-2026-60869 (6.8)</td><td>ADS, used to copy configuration data between databases.</td><td>Give ADS access to admins only.</td></tr><tr><td><strong>Push Notifications</strong></td><td class="cve-list">CVE-2026-60885 (6.8)</td><td>Notifications between app and web servers. 8.61 and 8.62 only.</td><td>Allow these ports only between PeopleSoft servers.</td></tr><tr><td><strong>Porting</strong></td><td class="cve-list">CVE-2026-101435 (6.6)<br>CVE-2026-91505 (6.0)<br>CVE-2026-87353 (4.5, no login)<br>CVE-2026-101414 (2.9, no login)</td><td>Tools that move objects between databases. All need local access.</td><td>Limit App Designer and server access in production.</td></tr><tr><td><strong>Multichannel Framework</strong></td><td class="cve-list">CVE-2026-83427 (6.6)</td><td>MCF chat, email and queue features.</td><td>If MCF is not used, keep its servers shut down.</td></tr><tr><td><strong>WebLogic</strong></td><td class="cve-list">CVE-2026-60743 (6.5, no login)<br>CVE-2026-60809 (4.2, no login)</td><td>PeopleTools-delivered WebLogic components. 60743 needs no login.</td><td>Keep the WebLogic console off the user network and apply the separate WebLogic CPU.</td></tr><tr><td><strong>Meta Data</strong></td><td class="cve-list">CVE-2026-60881 (6.5)</td><td>PeopleTools object definitions. Needs an admin-level login.</td><td>Keep developer access out of production.</td></tr><tr><td><strong>Security</strong></td><td class="cve-list">CVE-2026-87342 (6.5, no login)<br>CVE-2026-87349 (6.5)<br>CVE-2026-87350 (4.5)</td><td>Core PeopleTools sign-on and security code. 87342 needs no login but is hard to exploit.</td><td>Use SSO with MFA and review sign-on logs.</td></tr><tr><td><strong>LDAP</strong></td><td class="cve-list">CVE-2026-87344 (6.5, no login)<br>CVE-2026-87352 (4.4)</td><td>Directory sign-on to Active Directory or another LDAP server.</td><td>Use LDAPS only and allow LDAP traffic only between app servers and the directory.</td></tr><tr><td><strong>nVision</strong></td><td class="cve-list">CVE-2026-87409 (6.5)</td><td>nVision financial reporting. Any login can read all accessible data.</td><td>Limit nVision access to finance roles.</td></tr><tr><td><strong>QAS</strong></td><td class="cve-list">CVE-2026-91468 (6.5, no login)</td><td>Query Access Services, which runs queries through web services. No login.</td><td>If QAS is not used, inactivate its service operations.</td></tr><tr><td><strong>Fluid Core</strong></td><td class="cve-list">CVE-2026-101490 (6.1, no login)<br>CVE-2026-101486 (5.4)</td><td>The Fluid user interface framework. Needs a user click.</td><td>No guest access to Fluid pages.</td></tr><tr><td><strong>Analytic Server</strong></td><td class="cve-list">CVE-2026-101412 (5.8)<br>CVE-2026-101413 (5.3)<br>CVE-2026-101415 (3.1)</td><td>The engine behind Analytic Calculation Engine models.</td><td>If ACE is not used, do not start Analytic Server. Otherwise limit server access.</td></tr><tr><td><strong>Web Server</strong></td><td class="cve-list">CVE-2026-60500 (5.8, no login)</td><td>The PIA web tier. No login, low impact.</td><td>Front PIA with a WAF or reverse proxy.</td></tr><tr><td><strong>Updates Change Assistant</strong></td><td class="cve-list">CVE-2026-101407 (5.5)<br>CVE-2024-20925 (3.1, no login)</td><td>Change Assistant. CVE-2024-20925 is a 2024 Java flaw in the JRE shipped with 8.61.</td><td>Keep Change Assistant workstations on the latest PeopleTools client and limit them to admins.</td></tr><tr><td><strong>Query</strong></td><td class="cve-list">CVE-2026-60839 (5.5)<br>CVE-2026-101491 (5.0)</td><td>PS Query and Query Manager.</td><td>Trim query access groups. Remove Query Manager from self-service roles.</td></tr><tr><td><strong>Security (Bouncy Castle)</strong></td><td class="cve-list">CVE-2026-12816 (5.3, no login)</td><td>A crypto library bundled with PeopleTools.</td><td>Patch. The library cannot be replaced separately.</td></tr><tr><td><strong>Search Framework</strong></td><td class="cve-list">CVE-2026-60882 (5.3, no login)<br>CVE-2026-60876 (4.2, no login)</td><td>The connection between PeopleSoft and the search engine.</td><td>Allow search ports only from app and web servers.</td></tr><tr><td><strong>Notification Configuration</strong></td><td class="cve-list">CVE-2026-91263 (4.9)</td><td>Notification framework settings.</td><td>Patch.</td></tr><tr><td><strong>Application Server - JRE</strong></td><td class="cve-list">CVE-2026-60745 (4.4)<br>CVE-2026-60819 (3.7, no login)</td><td>The Java runtime bundled with the application server.</td><td>Patch. Limit server logins.</td></tr><tr><td><strong>Process Scheduler</strong></td><td class="cve-list">CVE-2026-60878 (4.4)</td><td>The batch scheduler. Needs a login and a click.</td><td>Limit who can view other users' process output.</td></tr><tr><td><strong>Panel Processor</strong></td><td class="cve-list">CVE-2026-87355 (4.4)</td><td>Page rendering. Needs a login and a click.</td><td>Patch.</td></tr><tr><td><strong>Data Mover</strong></td><td class="cve-list">CVE-2026-60887 (3.8)</td><td>Data Mover scripts. Local, admin-level.</td><td>Keep Data Mover with DBAs and admins.</td></tr><tr><td><strong>Tuxedo</strong></td><td class="cve-list">CVE-2026-101417 (3.7, no login)</td><td>The middleware that runs app server domains. No login, low impact.</td><td>Keep JSL/WSL ports on the admin network.</td></tr><tr><td><strong>XML Publisher</strong></td><td class="cve-list">CVE-2026-87401 (3.3)</td><td>BI Publisher reports. Local access.</td><td>Limit who can upload report templates.</td></tr><tr><td><strong>Open Query</strong></td><td class="cve-list">CVE-2026-60964 (1.9)</td><td>Local query tool. Lowest score in this CPU.</td><td>Patch.</td></tr></table></div><p class="doc-para">Two more fixes are defense in depth: CVE-2026-87341 (PUM Automated Updates) and CVE-2026-87405 (SQR). Oracle states neither can be exploited as shipped.</p>
+        </div>
+        <div class="doc-section" id="sources">
+          <div class="doc-section-title">09 &middot; Sources</div>
+          <ul class="doc-list doc-refs"><li><a href="https://www.oracle.com/security-alerts/cpuoct2026verbose.html" target="_blank" rel="noopener noreferrer">Oracle: Text Form of Oracle CPU October 2026 Risk Matrices (PeopleSoft section)</a></li><li><a href="https://www.oracle.com/security-alerts/cspujun2026.html" target="_blank" rel="noopener noreferrer">Oracle: Critical Security Patch Update Advisory, June 2026</a></li><li><a href="https://www.oracle.com/security-alerts/alert-cve-2026-35273.html" target="_blank" rel="noopener noreferrer">Oracle Security Alert: CVE-2026-35273</a></li><li><a href="https://www.rapid7.com/blog/post/etr-active-exploitation-of-oracle-peoplesoft-zero-day-cve-2026-35273" target="_blank" rel="noopener noreferrer">Rapid7: Active exploitation of Oracle PeopleSoft zero-day CVE-2026-35273</a></li><li><a href="https://www.csa.gov.sg/alerts-and-advisories/alerts/al-2026-072/" target="_blank" rel="noopener noreferrer">CSA Singapore: Critical vulnerability in Oracle PeopleSoft Enterprise PeopleTools</a></li><li><a href="https://cveawg.mitre.org/api/cve/CVE-2026-33466" target="_blank" rel="noopener noreferrer">CVE.org record: CVE-2026-33466 (Logstash)</a></li><li>My Oracle Support: CPU418 (PeopleSoft patch availability) and KA585 (PeopleTools lifecycle). Login required.</li></ul><p class="doc-refs">This brief is independent analysis for PeopleSoft administrators and is not Oracle guidance.</p>
+        </div>
+
+        <div class="doc-nav">
+          <button class="doc-nav-btn" onclick="location.href='../knowledge/'">
+            <span class="nav-dir">&lsaquo; Back to library</span>
+            <span class="nav-title">Knowledge Base</span>
+          </button>
+          <button class="back-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">&uarr; Top of page</button>
+          <button class="doc-nav-btn" style="text-align:right" onclick="location.href='cyber-threat-field-guide-2026.html'">
+            <span class="nav-dir">Next &rsaquo;</span>
+            <span class="nav-title">2026 Threat Field Guide</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span class="footer-copy">&copy; 2026 VianCore. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="#">RSS</a>
+      <a href="../contact/">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    const sections = document.querySelectorAll('.doc-body [id]');
+    const links = document.querySelectorAll('.sidebar-link');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      links.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+    });
+  </script>
+
+
+  <script src="../assets/theme-toggle.js"></script>
+</body>
+</html>
+
