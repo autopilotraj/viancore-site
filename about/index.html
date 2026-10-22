@@ -65,12 +65,69 @@
     .principle-title { font-size: clamp(9px, 1vw, 11px); font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-page); margin-bottom: 10px; }
     .principle-body { font-size: clamp(10px, 1.1vw, 12px); font-weight: 300; color: rgba(var(--text-rgb),0.68); line-height: 1.85; }
 
-    .stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 0.5px solid rgba(var(--text-rgb),0.07); }
-    .stat { padding: clamp(28px, 3.5vw, 44px) clamp(16px, 2.5vw, 32px); border-right: 0.5px solid rgba(var(--text-rgb),0.07); }
-    .stat:last-child { border-right: none; }
-    .stat-num { font-size: clamp(24px, 3vw, 34px); font-weight: 300; color: var(--text-page); margin-bottom: 6px; }
-    .stat-num em { color: var(--accent); font-style: normal; }
-    .stat-label { font-size: clamp(8px, 0.9vw, 9px); color: rgba(var(--text-rgb),0.55); letter-spacing: 0.15em; text-transform: uppercase; }
+    .record { padding: clamp(40px, 5vw, 64px) 6vw; border-bottom: 0.5px solid rgba(var(--text-rgb),0.07); }
+    .record-title { font-size: clamp(22px, 3vw, 32px); font-weight: 300; color: var(--text-page); letter-spacing: 0.04em; margin: -16px 0 28px; }
+    .record-title em { color: var(--accent); font-style: normal; }
+    .rec-grid { display: grid; gap: 12px; }
+    .rec-top { grid-template-columns: 1.1fr 1fr; margin-bottom: 12px; }
+    .rec-bottom { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .rec-card {
+      position: relative; min-height: 250px; padding: 22px 24px 20px;
+      border: 0.5px solid rgba(var(--text-rgb),0.12); border-radius: 10px;
+      background: rgba(var(--text-rgb),0.02);
+      color: inherit; font: inherit; text-align: left; width: 100%;
+      display: flex; flex-direction: column;
+      transition: border-color .25s ease, background .25s ease;
+    }
+    button.rec-card { cursor: pointer; }
+    button.rec-card:hover, button.rec-card:focus-visible { border-color: rgba(var(--accent-rgb),0.6); background: rgba(var(--accent-rgb),0.04); outline: none; }
+    .rec-card::before, .rec-card::after { content: ''; position: absolute; width: 7px; height: 7px; border-color: rgba(var(--text-rgb),0.28); border-style: solid; }
+    .rec-card::before { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
+    .rec-card::after { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+    .rec-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(var(--text-rgb),0.7); display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .rec-label::before { content: ''; width: 14px; height: 1px; background: var(--accent); }
+    .rec-face { display: flex; flex-direction: column; flex: 1; transition: opacity .3s ease; }
+    .rec-back { position: absolute; inset: 0; padding: 22px 24px 20px; opacity: 0; pointer-events: none; }
+    .rec-card.flipped .rec-front { opacity: 0; pointer-events: none; }
+    .rec-card.flipped .rec-back { opacity: 1; }
+    .rec-back p { font-size: clamp(12px, 1.25vw, 14px); font-weight: 300; line-height: 1.85; color: rgba(var(--text-rgb),0.82); }
+    .rec-num { font-size: clamp(52px, 6.5vw, 92px); font-weight: 300; line-height: 0.95; color: var(--accent); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .rec-num.sm { font-size: clamp(44px, 5vw, 68px); }
+    .rec-text { font-size: clamp(13px, 1.4vw, 16px); font-weight: 300; line-height: 1.45; color: var(--text-page); margin-top: 10px; }
+    .rec-hint { margin-top: auto; padding-top: 14px; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(var(--text-rgb),0.45); }
+    .rec-hint::after { content: ' +'; color: var(--accent); }
+    .rec-card.flipped .rec-hint::after { content: ' \2212'; }
+    .rec-years-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: auto; }
+    .rec-ticks { display: grid; grid-template-columns: repeat(18, 1fr); gap: 4px; margin-bottom: 26px; max-width: 360px; }
+    .rec-ticks i { height: 18px; background: rgba(var(--text-rgb),0.1); border-radius: 1px; transition: background .3s ease; }
+    .rec-ticks i.on { background: var(--accent); }
+    .rec-why { justify-content: flex-end; }
+    .rec-why p { font-size: clamp(15px, 1.7vw, 20px); font-weight: 300; line-height: 1.5; color: var(--text-page); }
+    .rec-why p + p { margin-top: 14px; font-size: clamp(12px, 1.2vw, 14px); color: rgba(var(--text-rgb),0.65); }
+    .rec-lanes { display: grid; gap: 6px; margin-bottom: 20px; }
+    .rec-lane { height: 6px; border-radius: 3px; background: rgba(var(--text-rgb),0.08); overflow: hidden; }
+    .rec-lane span { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 3px; transition: width 1.2s cubic-bezier(.2,.7,.2,1); }
+    .record.live .rec-lane span { animation: recPulse 3.2s ease-in-out infinite; }
+    .rec-lane:nth-child(2) span { animation-delay: .5s !important; }
+    .rec-lane:nth-child(3) span { animation-delay: 1s !important; }
+    .rec-lane:nth-child(4) span { animation-delay: 1.5s !important; }
+    .rec-lane:nth-child(5) span { animation-delay: 2s !important; }
+    @keyframes recPulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+    .rec-dots { display: grid; grid-template-columns: repeat(5, 9px); gap: 8px; margin-bottom: 20px; }
+    .rec-dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(var(--text-rgb),0.1); transition: background .3s ease, transform .3s ease; }
+    .rec-dots i.on { background: var(--accent); }
+    .rec-dots i.faint.on { background: rgba(var(--accent-rgb),0.3); }
+    .rec-audit { display: flex; align-items: center; gap: 16px; }
+    .rec-ring { width: 64px; height: 64px; flex: none; transform: rotate(-90deg); }
+    .rec-ring circle { fill: none; stroke-width: 4; }
+    .rec-ring .bg { stroke: rgba(var(--text-rgb),0.1); }
+    .rec-ring .fg { stroke: var(--accent); stroke-linecap: round; stroke-dasharray: 176; stroke-dashoffset: 176; transition: stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1); }
+    .rec-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .rec-pills span { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; border: 0.5px solid rgba(var(--accent-rgb),0.6); color: var(--accent); padding: 4px 8px; border-radius: 3px; }
+    @media (prefers-reduced-motion: reduce) {
+      .rec-face, .rec-ticks i, .rec-dots i, .rec-lane span, .rec-ring .fg { transition: none !important; }
+      .record.live .rec-lane span { animation: none; }
+    }
 
     .contact-strip {
       padding: clamp(36px, 5vw, 56px) 6vw;
@@ -111,10 +168,8 @@
       .principles-grid { grid-template-columns: 1fr; }
       .principle { border-right: none; border-bottom: 0.5px solid rgba(var(--text-rgb),0.07); }
       .principle:last-child { border-bottom: none; }
-      .stats-strip { grid-template-columns: repeat(2, 1fr); }
-      .stat:nth-child(2) { border-right: none; }
-      .stat:nth-child(3) { border-top: 0.5px solid rgba(var(--text-rgb),0.07); }
-      .stat:nth-child(4) { border-top: 0.5px solid rgba(var(--text-rgb),0.07); border-right: none; }
+      .rec-top, .rec-bottom { grid-template-columns: 1fr; }
+      .rec-card { min-height: 210px; }
       .contact-strip { flex-direction: column; align-items: flex-start; }
     }
   </style>
@@ -183,8 +238,8 @@
   <div class="two-col">
     <div class="col-block">
       <div class="col-label">The origin</div>
-      <div class="col-title">18 years of questions nobody had good answers to.</div>
-      <p class="col-body">Over nearly two decades working across enterprise systems and security, the same gaps kept appearing, not in technology but in knowledge. Good documentation was rare. Honest accounts of what actually works were rarer. VianCore is the resource that didn't exist when it was needed most.</p>
+      <div class="col-title">The questions nobody had good answers to.</div>
+      <p class="col-body">Working across enterprise systems and security, the same gaps kept appearing, not in technology but in knowledge. Good documentation was rare. Honest accounts of what actually works were rarer. VianCore is the resource that didn't exist when it was needed most.</p>
     </div>
     <div class="col-block">
       <div class="col-label">The approach</div>
@@ -192,6 +247,92 @@
       <p class="col-body">Everything published here comes from direct, hands-on experience. The frameworks, checklists, and guides are battle-tested, not assembled from other people's blog posts. If something didn't work in the real world, it doesn't appear here. That's the only filter that matters.</p>
     </div>
   </div>
+
+  <section class="record" id="record" aria-labelledby="record-title">
+    <div class="section-label">The field record</div>
+    <h2 class="record-title" id="record-title">What sits behind <em>the writing</em></h2>
+
+    <div class="rec-grid rec-top">
+      <button class="rec-card" type="button" aria-expanded="false">
+        <div class="rec-face rec-front">
+          <div class="rec-label">Time in the field</div>
+          <div class="rec-ticks" aria-hidden="true"></div>
+          <div class="rec-years-row">
+            <div class="rec-text">Years inside enterprise systems</div>
+            <div class="rec-num"><span data-count="18">18</span>+</div>
+          </div>
+          <div class="rec-hint">The story</div>
+        </div>
+        <div class="rec-face rec-back">
+          <div class="rec-label">Time in the field</div>
+          <p>Hands-on across administration, security, and compliance. Every role added a layer to what gets written here.</p>
+          <div class="rec-hint">Back</div>
+        </div>
+      </button>
+
+      <div class="rec-card rec-why">
+        <div class="rec-label">Why this exists</div>
+        <p>Every guide here comes from someone who has kept the systems running, trained the people who run them, and sat across the table from the auditors.</p>
+        <p>Years of working notes, now being published one guide at a time.</p>
+      </div>
+    </div>
+
+    <div class="rec-grid rec-bottom">
+      <button class="rec-card" type="button" aria-expanded="false">
+        <div class="rec-face rec-front">
+          <div class="rec-label">In parallel</div>
+          <div class="rec-lanes" aria-hidden="true">
+            <div class="rec-lane"><span data-w="92"></span></div>
+            <div class="rec-lane"><span data-w="78"></span></div>
+            <div class="rec-lane"><span data-w="86"></span></div>
+            <div class="rec-lane"><span data-w="70"></span></div>
+            <div class="rec-lane"><span data-w="82"></span></div>
+          </div>
+          <div class="rec-num sm"><span data-count="5">5</span></div>
+          <div class="rec-text">ERP applications supported at the same time</div>
+          <div class="rec-hint">The story</div>
+        </div>
+        <div class="rec-face rec-back">
+          <div class="rec-label">In parallel</div>
+          <p>Five ERP applications at once, each with its own patch cycle, release calendar, and users who needed it working on Monday morning.</p>
+          <div class="rec-hint">Back</div>
+        </div>
+      </button>
+
+      <button class="rec-card" type="button" aria-expanded="false">
+        <div class="rec-face rec-front">
+          <div class="rec-label">People trained</div>
+          <div class="rec-dots" aria-hidden="true"></div>
+          <div class="rec-num sm"><span data-count="10">10</span>+</div>
+          <div class="rec-text">Admins trained from scratch</div>
+          <div class="rec-hint">The story</div>
+        </div>
+        <div class="rec-face rec-back">
+          <div class="rec-label">People trained</div>
+          <p>At least ten people taken from no ERP background to independent PSADMIN and security work. Many more mentored along the way.</p>
+          <div class="rec-hint">Back</div>
+        </div>
+      </button>
+
+      <button class="rec-card" type="button" aria-expanded="false">
+        <div class="rec-face rec-front">
+          <div class="rec-label">Audit ready</div>
+          <div class="rec-audit">
+            <svg class="rec-ring" viewBox="0 0 64 64" aria-hidden="true"><circle class="bg" cx="32" cy="32" r="28"/><circle class="fg" cx="32" cy="32" r="28"/></svg>
+            <div class="rec-num sm"><span data-count="10">10</span>+</div>
+          </div>
+          <div class="rec-text">Years leading compliance programs</div>
+          <div class="rec-pills"><span>SOX</span><span>SSAE</span><span>SOC 2 Type I</span><span>SOC 2 Type II</span></div>
+          <div class="rec-hint">The story</div>
+        </div>
+        <div class="rec-face rec-back">
+          <div class="rec-label">Audit ready</div>
+          <p>Over ten years supporting SOX for client environments. SSAE and SOC 2 Type I and Type II led internally, from control design and evidence to the auditor walkthrough.</p>
+          <div class="rec-hint">Back</div>
+        </div>
+      </button>
+    </div>
+  </section>
 
   <div class="not-section">
     <div class="not-inner">
@@ -236,13 +377,6 @@
     </div>
   </div>
 
-  <div class="stats-strip">
-    <div class="stat"><div class="stat-num">18<em>+</em></div><div class="stat-label">Years in the field</div></div>
-    <div class="stat"><div class="stat-num">100<em>+</em></div><div class="stat-label">Documented guides</div></div>
-    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Core focus areas</div></div>
-    <div class="stat"><div class="stat-num"><em>&#8734;</em></div><div class="stat-label">Continuously updated</div></div>
-  </div>
-
   <div class="contact-strip">
     <div>
       <div class="contact-title">Have a question or want to connect?</div>
@@ -266,6 +400,49 @@
     }
   </script>
 
+
+  <script>
+    (function () {
+      var rec = document.getElementById('record');
+      if (!rec) return;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var ticks = rec.querySelector('.rec-ticks');
+      for (var i = 0; i < 18; i++) ticks.appendChild(document.createElement('i'));
+      var dots = rec.querySelector('.rec-dots');
+      for (var j = 0; j < 15; j++) { var d = document.createElement('i'); if (j >= 10) d.className = 'faint'; dots.appendChild(d); }
+
+      rec.querySelectorAll('button.rec-card').forEach(function (card) {
+        card.addEventListener('click', function () {
+          var on = card.classList.toggle('flipped');
+          card.setAttribute('aria-expanded', on ? 'true' : 'false');
+        });
+      });
+
+      function stagger(list, cls, step) {
+        Array.prototype.forEach.call(list, function (el, k) {
+          if (reduce) el.classList.add(cls); else setTimeout(function () { el.classList.add(cls); }, k * step);
+        });
+      }
+      function play() {
+        rec.classList.add('live');
+        stagger(ticks.children, 'on', 60);
+        stagger(dots.children, 'on', 70);
+        rec.querySelectorAll('.rec-lane span').forEach(function (s) { s.style.width = s.getAttribute('data-w') + '%'; });
+        rec.querySelector('.rec-ring .fg').style.strokeDashoffset = String(176 - 176 * 10 / 18);
+        rec.querySelectorAll('[data-count]').forEach(function (el) {
+          var to = +el.getAttribute('data-count');
+          if (reduce) { el.textContent = to; return; }
+          var t0 = null;
+          function f(t) { if (!t0) t0 = t; var p = Math.min(1, (t - t0) / 1400); el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(f); }
+          el.textContent = '0'; requestAnimationFrame(f);
+        });
+      }
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { play(); io.disconnect(); } }); }, { threshold: 0.25 });
+        io.observe(rec);
+      } else { play(); }
+    })();
+  </script>
 
   <script src="../assets/theme-toggle.js"></script>
 </body>
